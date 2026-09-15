@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101426">
+<title>LitVerse — World of Literature</title>
+
+<style>
+:root{
+  --bg:#f7f3ec;
+  --card:#ffffff;
+  --text:#202033;
+  --muted:#707084;
+  --primary:#7657d9;
+  --secondary:#d9a441;
+  --accent:#c85b7c;
+  --border:#e9e3d8;
+  --shadow:0 15px 40px rgba(44,35,75,.10);
+}
+
+body.dark{
+  --bg:#0e1020;
+  --card:#171a2e;
+  --text:#f5f1ff;
+  --muted:#a9a6bb;
+  --primary:#a58cff;
+  --secondary:#e4b65c;
+  --accent:#ee799e;
+  --border:#292c45;
+  --shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:Georgia,"Times New Roman",serif;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(118,87,217,.10),transparent 25%),
+    radial-gradient(circle at 90% 80%,rgba(200,91,124,.09),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  transition:.4s;
+}
+
+button,input{font:inherit}
+
+button{cursor:pointer}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  backdrop-filter:blur(18px);
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  border-bottom:1px solid var(--border);
+}
+
+.nav{
+  max-width:1200px;
+  margin:auto;
+  padding:15px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-family:Georgia,serif;
+  font-size:1.65rem;
+  font-weight:bold;
+  letter-spacing:.5px;
+}
+
+.logo span{color:var(--primary)}
+
+.navBtns{
+  display:flex;
+  gap:8px;
+}
+
+.iconBtn{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  transition:.3s;
+}
+
+.iconBtn:hover{
+  transform:rotate(12deg) scale(1.08);
+  border-color:var(--primary);
+}
+
+.hero{
+  max-width:1200px;
+  margin:auto;
+  padding:70px 20px 45px;
+  text-align:center;
+  animation:fadeUp .8s ease;
+}
+
+.hero .eyebrow{
+  color:var(--primary);
+  font-family:Arial,sans-serif;
+  font-weight:bold;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  font-size:.78rem;
+}
+
+.hero h1{
+  font-size:clamp(3rem,9vw,6.5rem);
+  line-height:.9;
+  margin:20px 0;
+  background:linear-gradient(120deg,var(--primary),var(--accent),var(--secondary));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  max-width:720px;
+  margin:auto;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:1.08rem;
+}
+
+.search{
+  max-width:650px;
+  margin:30px auto 0;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:17px 55px 17px 20px;
+  border-radius:50px;
+  border:1px solid var(--border);
+  outline:none;
+  background:var(--card);
+  color:var(--text);
+  box-shadow:var(--shadow);
+}
+
+.search span{
+  position:absolute;
+  right:20px;
+  top:14px;
+  font-size:1.3rem;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.sectionTitle{
+  margin:35px 0 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+}
+
+.sectionTitle h2{font-size:1.8rem}
+
+.sectionTitle p{
+  color:var(--muted);
+  font-family:Arial,sans-serif;
+  font-size:.9rem;
+}
+
+.categories{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding-bottom:12px;
+  scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{display:none}
+
+.category{
+  flex:0 0 auto;
+  padding:10px 17px;
+  border-radius:30px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  transition:.3s;
+}
+
+.category:hover,
+.category.active{
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+  transform:translateY(-2px);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.card{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .35s,box-shadow .35s;
+  animation:fadeUp .6s ease both;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:var(--primary);
+  opacity:.08;
+  right:-35px;
+  top:-35px;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 22px 55px rgba(70,50,110,.18);
+}
+
+.initial{
+  width:52px;
+  height:52px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:white;
+  font-size:1.5rem;
+  margin-bottom:18px;
+}
+
+.card h3{font-size:1.3rem;margin-bottom:7px}
+
+.card .origin{
+  color:var(--secondary);
+  font-family:Arial,sans-serif;
+  font-size:.78rem;
+  font-weight:bold;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.6;
+  margin-top:13px;
+  font-size:.92rem;
+}
+
+.favorite{
+  position:absolute;
+  right:18px;
+  top:18px;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:1.25rem;
+}
+
+.favorite.saved{color:var(--accent)}
+
+.quoteBox{
+  margin:50px 0;
+  padding:45px 30px;
+  border-radius:30px;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb,var(--primary) 18%,var(--card)),
+      color-mix(in srgb,var(--accent) 10%,var(--card)));
+  border:1px solid var(--border);
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.quoteMark{
+  font-size:4rem;
+  color:var(--secondary);
+  line-height:.6;
+}
+
+#dailyQuote{
+  max-width:800px;
+  margin:20px auto;
+  font-size:clamp(1.2rem,3vw,1.7rem);
+  line-height:1.7;
+  font-style:italic;
+}
+
+#quoteAuthor{
+  color:var(--primary);
+  font-weight:bold;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(5,5,15,.72);
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:grid;
+  animation:fade .25s;
+}
+
+.modalContent{
+  width:min(850px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:32px;
+  position:relative;
+  animation:scaleIn .3s;
+}
+
+.close{
+  position:absolute;
+  right:20px;
+  top:18px;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+}
+
+.modalContent h2{
+  font-size:2.3rem;
+  margin-bottom:7px;
+}
+
+.bio{
+  color:var(--muted);
+  line-height:1.85;
+  margin:22px 0;
+}
+
+.infoGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:12px;
+  margin:20px 0;
+}
+
+.info{
+  padding:15px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:var(--bg);
+}
+
+.info strong{
+  display:block;
+  color:var(--primary);
+  margin-bottom:5px;
+}
+
+.quotes h3{
+  margin:25px 0 13px;
+}
+
+.miniQuote{
+  border-left:3px solid var(--secondary);
+  padding:12px 17px;
+  margin:12px 0;
+  background:var(--bg);
+  border-radius:0 12px 12px 0;
+  line-height:1.6;
+  font-style:italic;
+}
+
+footer{
+  margin-top:70px;
+  padding:40px 20px;
+  text-align:center;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+}
+
+footer strong{color:var(--primary)}
+
+.noResults{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--muted);
+  display:none;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes scaleIn{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+
+@media(max-width:600px){
+  .hero{padding-top:50px}
+  .hero h1{font-size:4rem}
+  .modalContent{padding:25px 20px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">Lit<span>Verse</span> ✦</div>
+
+    <div class="navBtns">
+      <button class="iconBtn" onclick="showFavorites()" title="Favorites">♡</button>
+      <button class="iconBtn" onclick="toggleTheme()" title="Theme">☾</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">The world of literature</div>
+
+  <h1>LitVerse</h1>
+
+  <p>
+    Enter a universe of poets, thinkers, stories and timeless words.
+    Explore literary voices from England, America, Persia, South Asia,
+    East Asia, Europe, Africa and Latin America.
+  </p>
+
+  <div class="search">
+    <input id="search" type="search"
+      placeholder="Search an author, country, movement..."
+      oninput="searchAuthors()">
+    <span>⌕</span>
+  </div>
+</section>
+
+<main class="container">
+
+  <div class="sectionTitle">
+    <div>
+      <h2>Explore Literature</h2>
+      <p>Choose a literary world</p>
+    </div>
+  </div>
+
+  <div class="categories" id="categories"></div>
+
+  <div class="grid" id="authors"></div>
+
+  <div class="noResults" id="noResults">
+    <h2>No author found</h2>
+    <p>Try another name, country or literary tradition.</p>
+  </div>
+
+  <section class="quoteBox">
+    <div class="quoteMark">“</div>
+    <div id="dailyQuote"></div>
+    <div id="quoteAuthor"></div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>LitVerse</strong>
+  <br><br>
+  A small universe for lovers of literature.
+  <br><br>
+  Read • Discover • Think • Remember
+</footer>
+
+<div class="modal" id="modal" onclick="closeOutside(event)">
+  <div class="modalContent">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+
+/* ============================================================
+   LITVERSE — COMPLETE AUTHOR DATABASE
+   ============================================================ */
+
+const authors = [
+
+{
+name:"William Shakespeare",
+origin:"England",
+category:"English & American",
+years:"1564–1616",
+works:"Hamlet, Macbeth, King Lear, Othello, Romeo and Juliet",
+themes:"Love, ambition, jealousy, power, identity",
+bio:"William Shakespeare was an English playwright and poet widely regarded as one of the most influential writers in the English language. His plays explore human ambition, love, betrayal, political power, family, madness and mortality. He transformed drama through complex characters and remarkably flexible language. His tragedies examine people confronting choices that ultimately destroy them. His comedies explore love, disguise and social confusion. His histories dramatize English political life. Shakespeare's sonnets remain central to the English poetic tradition. His vocabulary, memorable characters and dramatic techniques have influenced generations of writers. His works continue to be performed throughout the world. LitVerse studies Shakespeare as both a literary artist and a major cultural influence.",
+quotes:[
+"To be, or not to be: that is the question.",
+"All the world's a stage.",
+"Some are born great, some achieve greatness, and some have greatness thrust upon them.",
+"The course of true love never did run smooth.",
+"All that glisters is not gold."
+]
+},
+
+{
+name:"John Milton",
+origin:"England",
+category:"English & American",
+years:"1608–1674",
+works:"Paradise Lost, Paradise Regained, Areopagitica",
+themes:"Faith, free will, rebellion, morality",
+bio:"John Milton was an English poet and intellectual best known for Paradise Lost. He wrote during a period of enormous political and religious change in England. Milton's poetry combines classical learning with Christian theology and philosophical questions. Paradise Lost presents the biblical story of humanity's fall while exploring freedom, obedience and temptation. Milton's blank verse became a major model for later English poets. He was also a powerful prose writer who defended freedom of expression. His blindness did not end his literary ambition; he continued composing major poetry. Milton's work is intellectually demanding but deeply concerned with human choice. His Satan is one of the most discussed characters in English literature. Milton remains one of the central figures of seventeenth-century English poetry.",
+quotes:[
+"The mind is its own place, and in itself can make a Heaven of Hell.",
+"Better to reign in Hell, than serve in Heaven.",
+"Long is the way and hard, that out of darkness leads up to light."
+]
+},
+
+{
+name:"William Wordsworth",
+origin:"England",
+category:"English & American",
+years:"1770–1850",
+works:"Lyrical Ballads, The Prelude, Tintern Abbey",
+themes:"Nature, childhood, memory, imagination",
+bio:"William Wordsworth was one of the founders of English Romantic poetry. He believed poetry should speak in language connected to ordinary human experience. Nature occupies a central place in his poetry and often becomes a source of spiritual and emotional education. Wordsworth explored childhood memories and their influence on adult identity. Together with Samuel Taylor Coleridge, he helped launch the Romantic movement through Lyrical Ballads. His long autobiographical poem The Prelude examines the development of his mind. Wordsworth saw imagination as a powerful force connecting people with the natural world. His poetry often transforms simple landscapes into profound emotional experiences. He emphasized feeling recollected through reflection. His influence on nature poetry remains enormous. Wordsworth made ordinary rural life a serious subject of poetry.",
+quotes:[
+"Poetry is the spontaneous overflow of powerful feelings.",
+"Nature never did betray the heart that loved her.",
+"The child is father of the man."
+]
+},
+
+{
+name:"John Keats",
+origin:"England",
+category:"English & American",
+years:"1795–1821",
+works:"Ode to a Nightingale, Ode on a Grecian Urn, To Autumn",
+themes:"Beauty, mortality, imagination, art",
+bio:"John Keats was a major English Romantic poet whose career was tragically short. His poetry is celebrated for its sensual imagery, musical language and fascination with beauty. Keats repeatedly explores the tension between beautiful things and human mortality. His odes bring together art, nature, imagination and philosophical reflection. He developed the idea of negative capability, describing the ability to remain comfortable with uncertainty. Despite criticism during his lifetime, Keats eventually became one of the most admired English poets. His poetry often turns physical beauty into a meditation on death and permanence. He was deeply influenced by Greek mythology and classical art. His descriptions of autumn, birds and flowers are particularly famous. His poetic development was extraordinarily rapid. Keats died from tuberculosis at only twenty-five.",
+quotes:[
+"A thing of beauty is a joy for ever.",
+"Beauty is truth, truth beauty.",
+"I have been half in love with easeful Death."
+]
+},
+
+{
+name:"Percy Bysshe Shelley",
+origin:"England",
+category:"English & American",
+years:"1792–1822",
+works:"Ode to the West Wind, To a Skylark, Prometheus Unbound",
+themes:"Freedom, revolution, nature, imagination",
+bio:"Percy Bysshe Shelley was one of the great English Romantic poets. His poetry combines revolutionary political ideals with intense imagination and musical expression. Shelley believed poetry could influence society and encourage human freedom. Nature is often presented as a powerful force of transformation. His Ode to the West Wind connects natural energy with hopes for intellectual and political renewal. His poetry frequently challenges tyranny and conventional authority. Shelley was influenced by classical literature, philosophy and contemporary political movements. His idealism is central to his poetic identity. He also wrote lyrical poems of extraordinary musical beauty. His life was controversial because of his political and religious views. He drowned in Italy at the age of twenty-nine.",
+quotes:[
+"If Winter comes, can Spring be far behind?",
+"The world's great age begins anew.",
+"Rise like Lions after slumber."
+]
+},
+
+{
+name:"Lord Byron",
+origin:"England",
+category:"English & American",
+years:"1788–1824",
+works:"Don Juan, Childe Harold's Pilgrimage, She Walks in Beauty",
+themes:"Freedom, love, rebellion, individualism",
+bio:"George Gordon Byron, known as Lord Byron, was a major Romantic poet famous for his dramatic personality and powerful verse. His poetry often features rebellious, passionate and isolated characters. The Byronic hero became an influential literary type characterized by pride, mystery and emotional intensity. Byron's Don Juan combines satire, romance and social criticism. His poetry also reflects his fascination with travel and foreign cultures. He supported Greek independence and died while participating in the Greek struggle. Byron's writing can be both serious and humorous. He criticized social hypocrisy and political oppression. His life became almost as legendary as his poetry. His influence spread across European literature. Byron remains one of Romanticism's most recognizable figures.",
+quotes:[
+"She walks in beauty, like the night.",
+"Those who will not reason, are bigots; those who cannot, are fools.",
+"The best prophet of the future is the past."
+]
+},
+
+{
+name:"Emily Dickinson",
+origin:"United States",
+category:"English & American",
+years:"1830–1886",
+works:"Because I could not stop for Death, Hope is the thing with feathers",
+themes:"Death, immortality, nature, solitude",
+bio:"Emily Dickinson was an American poet whose unusual punctuation, compressed language and imaginative metaphors made her one of the most distinctive voices in American poetry. She spent much of her life in Amherst, Massachusetts. Her poems frequently examine death, immortality, faith, nature and private consciousness. Dickinson often used dashes and unexpected capitalization to create pauses and ambiguity. Her poems are usually short but intellectually dense. She transformed ordinary objects into mysterious symbols. Many of her poems were published only after her death. Her relationship with religion was complex and often questioning. She explored isolation while also possessing a remarkably expansive imagination. Modern poetry owes much to her compressed style. Dickinson is now considered one of America's greatest poets.",
+quotes:[
+"Hope is the thing with feathers.",
+"Because I could not stop for Death –",
+"Forever is composed of nows.",
+"That it will never come again is what makes life so sweet."
+]
+},
+
+{
+name:"Walt Whitman",
+origin:"United States",
+category:"English & American",
+years:"1819–1892",
+works:"Leaves of Grass, Song of Myself",
+themes:"Democracy, individuality, body, humanity",
+bio:"Walt Whitman revolutionized American poetry through free verse and expansive celebrations of individual and collective life. His major work Leaves of Grass developed throughout his lifetime. Whitman rejected many traditional poetic conventions and created long, rhythmic lines. He celebrated the human body, democracy, nature and the dignity of ordinary people. His poetry frequently moves between the personal and the universal. He saw the individual self as connected with humanity as a whole. His Civil War experiences deeply affected his later writing. Whitman's style influenced poets around the world. His poetry often sounds like a declaration of freedom. He helped establish a distinctly American poetic voice. He remains one of the most influential nineteenth-century poets.",
+quotes:[
+"I celebrate myself, and sing myself.",
+"Do I contradict myself? Very well then I contradict myself.",
+"Keep your face always toward the sunshine."
+]
+},
+
+{
+name:"Edgar Allan Poe",
+origin:"United States",
+category:"English & American",
+years:"1809–1849",
+works:"The Raven, The Tell-Tale Heart, Annabel Lee",
+themes:"Death, mystery, madness, beauty",
+bio:"Edgar Allan Poe was an American poet, short-story writer and critic who became famous for his dark imagination. He is strongly associated with Gothic literature, mystery and psychological horror. Poe explored grief, obsession, madness and death with unusual intensity. The Raven is among his most famous poems. His short stories helped develop detective fiction and psychological horror. Poe was also an important literary critic who valued craftsmanship and unity of effect. His writing often creates claustrophobic and dreamlike atmospheres. He frequently portrays narrators whose minds become unreliable. Poe's influence extends into horror, detective fiction and popular culture. His work became especially influential in France and later European symbolism. He remains one of America's most recognizable literary figures.",
+quotes:[
+"All that we see or seem is but a dream within a dream.",
+"Deep into that darkness peering.",
+"Quoth the Raven, Nevermore."
+]
+},
+
+{
+name:"Robert Frost",
+origin:"United States",
+category:"English & American",
+years:"1874–1963",
+works:"The Road Not Taken, Mending Wall, Stopping by Woods",
+themes:"Nature, choices, rural life, isolation",
+bio:"Robert Frost was an American poet famous for writing about rural New England landscapes while exploring difficult philosophical questions. His poetry often appears simple but contains deep ambiguity. He used traditional forms and conversational language to examine choices, relationships and human isolation. Nature in Frost is rarely merely beautiful; it can also be indifferent or dangerous. The Road Not Taken became one of the most famous poems about choices. Frost's poems often contain dramatic speakers whose words reveal more than they intend. His work balances accessibility with intellectual complexity. He received four Pulitzer Prizes for poetry. Frost became a major public literary figure in America. His poetry remains widely taught in schools and universities. His influence continues through his distinctive combination of simplicity and depth.",
+quotes:[
+"Two roads diverged in a wood, and I—",
+"The woods are lovely, dark and deep.",
+"Good fences make good neighbors."
+]
+},
+
+{
+name:"T. S. Eliot",
+origin:"United States / England",
+category:"English & American",
+years:"1888–1965",
+works:"The Waste Land, Four Quartets, The Love Song of J. Alfred Prufrock",
+themes:"Modernity, fragmentation, spirituality, alienation",
+bio:"T. S. Eliot was one of the most influential poets of literary Modernism. His poetry reflects the anxiety, fragmentation and cultural uncertainty of the modern world. The Waste Land became a landmark of twentieth-century literature. Eliot combined multiple languages, literary references and cultural traditions in his poems. His work can feel difficult because it creates deliberate fragmentation. He was also a major literary critic and dramatist. His later poetry increasingly explored spiritual questions. Four Quartets represents his mature meditation on time, memory and eternity. Eliot received the Nobel Prize in Literature in 1948. His influence transformed modern poetry and criticism. He remains essential for understanding twentieth-century literary Modernism.",
+quotes:[
+"April is the cruellest month.",
+"This is the way the world ends.",
+"Only those who will risk going too far can possibly find out how far one can go."
+]
+},
+
+{
+name:"Sylvia Plath",
+origin:"United States",
+category:"English & American",
+years:"1932–1963",
+works:"Ariel, The Bell Jar, Daddy",
+themes:"Identity, memory, death, alienation",
+bio:"Sylvia Plath was an American poet and novelist whose intense writing became associated with confessional poetry. Her poems frequently explore identity, memory, relationships, suffering and mortality. She used vivid imagery and powerful symbolic language. Ariel, published after her death, became one of the defining poetry collections of the twentieth century. Her novel The Bell Jar examines identity and psychological pressure through a young woman's experience. Plath's writing often shifts rapidly between vulnerability and control. Her images can be startling, precise and emotionally intense. She is studied for both her poetic technique and autobiographical dimensions. Her work has influenced generations of contemporary poets. Plath remains a central figure in discussions of modern confessional poetry.",
+quotes:[
+"I am, I am, I am.",
+"The silence depressed me. It wasn't the silence of silence. It was my own silence.",
+"Perhaps when we find ourselves wanting everything, it is because we are dangerously close to wanting nothing."
+]
+},
+
+{
+name:"Maya Angelou",
+origin:"United States",
+category:"English & American",
+years:"1928–2014",
+works:"I Know Why the Caged Bird Sings, Still I Rise, Phenomenal Woman",
+themes:"Identity, resilience, dignity, freedom",
+bio:"Maya Angelou was an American poet, memoirist and civil-rights activist whose writing celebrates dignity, resilience and human strength. Her autobiographical works brought powerful personal experiences into American literature. She wrote about racism, womanhood, identity and overcoming hardship. Her poetry frequently uses rhythm and repetition to create memorable declarations of strength. Still I Rise became an especially influential poem of resistance and self-respect. Angelou was also involved in the American civil-rights movement. Her work crossed the boundaries between literature, activism and public culture. She became a widely admired speaker and writer. Her memoirs helped establish a major tradition of autobiographical writing. Angelou remains an important voice for courage, dignity and hope.",
+quotes:[
+"Still I rise.",
+"Nothing can dim the light which shines from within.",
+"You may encounter many defeats, but you must not be defeated."
+]
+},
+
+{
+name:"William Blake",
+origin:"England",
+category:"English & American",
+years:"1757–1827",
+works:"Songs of Innocence and of Experience, The Marriage of Heaven and Hell",
+themes:"Innocence, experience, imagination, spirituality",
+bio:"William Blake was an English poet, artist and visionary thinker. He created poetry and visual art together, producing illuminated books unlike anything else in English literature. His Songs of Innocence and of Experience contrasts different states of human consciousness. Blake challenged conventional religion, politics and social authority. He believed imagination was essential to human freedom. His poems often use deceptively simple language to express complex ideas. The child, the city and the tiger become powerful symbolic figures in his work. Blake's mystical vision made him difficult for his contemporaries to understand. Later Romantic and modern writers recognized his originality. His combination of poetry and visual art was revolutionary. Blake is now considered one of England's great visionary poets.",
+quotes:[
+"Tyger Tyger, burning bright.",
+"To see a World in a Grain of Sand.",
+"Energy is Eternal Delight."
+]
+},
+
+{
+name:"W. B. Yeats",
+origin:"Ireland",
+category:"English & American",
+years:"1865–1939",
+works:"The Second Coming, Sailing to Byzantium, Easter 1916",
+themes:"History, aging, mythology, politics",
+bio:"William Butler Yeats was an Irish poet and dramatist whose work developed from Romantic symbolism toward modernist intensity. He was deeply interested in Irish mythology, politics and cultural identity. His poetry repeatedly examines history and the passage of time. Yeats created elaborate symbolic systems to understand human and historical cycles. His later poetry became more direct, dramatic and politically charged. The Second Coming is one of the most influential poems of the twentieth century. Yeats also helped establish the Irish Literary Revival. He received the Nobel Prize in Literature in 1923. His poetry explores aging, love, political violence and artistic ambition. He remains one of the defining poets of modern Ireland.",
+quotes:[
+"Things fall apart; the centre cannot hold.",
+"That is no country for old men.",
+"Education is not the filling of a pail, but the lighting of a fire."
+]
+},
+
+{
+name:"Christina Rossetti",
+origin:"England",
+category:"English & American",
+years:"1830–1894",
+works:"Goblin Market, Remember, In the Bleak Midwinter",
+themes:"Love, faith, temptation, mortality",
+bio:"Christina Rossetti was a major Victorian poet known for musical language and religious as well as emotional depth. Her poetry frequently explores love, temptation, sacrifice and mortality. Goblin Market combines fairy-tale imagery with complex themes of desire and sisterhood. Rossetti's religious faith strongly influenced her writing. Her poems often achieve great emotional force through simple rhythms and images. She wrote both devotional poetry and secular love poetry. Her work has attracted renewed feminist and literary attention. Rossetti belonged to the Pre-Raphaelite artistic circle through her family. Her poetry often balances earthly desire with spiritual aspiration. She is now recognized as one of the most important Victorian women poets.",
+quotes:[
+"Better by far you should forget and smile.",
+"Does the road wind uphill all the way?",
+"When I am dead, my dearest."
+]
+},
+
+/* ANCIENT */
+
+{
+name:"Homer",
+origin:"Ancient Greece",
+category:"Ancient & Classical",
+years:"Ancient Greek tradition",
+works:"Iliad, Odyssey",
+themes:"Heroism, fate, war, homecoming",
+bio:"Homer is the traditional name associated with the ancient Greek epics The Iliad and The Odyssey. Although details about the historical person are uncertain, the poems became foundational works of Western literature. The Iliad explores war, honor, anger and mortality through the Trojan conflict. The Odyssey follows Odysseus through a long journey toward home. Homeric poetry combines heroic action with profound reflections on human weakness. Gods and humans interact constantly in the epics. Oral poetic traditions shaped their formulaic language and structure. The poems influenced Greek education and later European literature. Characters such as Achilles, Hector and Odysseus became archetypal literary figures. Homer remains central to the study of epic poetry.",
+quotes:[
+"Sing, goddess, the anger of Peleus' son Achilles.",
+"Tell me, Muse, of the man of many ways.",
+"Of all creatures that breathe and move upon the earth, nothing is bred that is weaker than man."
+]
+},
+
+{
+name:"Sappho",
+origin:"Ancient Greece",
+category:"Ancient & Classical",
+years:"c. 630–570 BCE",
+works:"Fragments, Hymn to Aphrodite",
+themes:"Love, desire, beauty, longing",
+bio:"Sappho was an ancient Greek lyric poet from the island of Lesbos. She became famous for intimate poetry centered on love, desire, beauty and personal emotion. Much of her work survives only in fragments, making her poetry especially intriguing. Sappho's language is direct but emotionally sophisticated. She addressed gods and human lovers in lyrical forms. Her reputation became enormous throughout classical antiquity. Later writers admired her musicality and emotional intensity. Her name gave rise to terms associated with women-loving-women relationships because of her poetry and cultural association with Lesbos. Sappho transformed private feeling into enduring art. She remains one of the most famous poets of the ancient world.",
+quotes:[
+"Someone will remember us, I say, even in another time.",
+"Once again love drives me on.",
+"He seems to me equal to the gods."
+]
+},
+
+{
+name:"Virgil",
+origin:"Rome",
+category:"Ancient & Classical",
+years:"70–19 BCE",
+works:"Aeneid, Eclogues, Georgics",
+themes:"Empire, duty, fate, sacrifice",
+bio:"Virgil was the great Roman poet who wrote the Aeneid, Rome's national epic. The poem follows Aeneas after the destruction of Troy as he travels toward the future foundation of Roman civilization. Virgil combined Greek epic traditions with Roman political and cultural ideas. Aeneas represents duty, particularly the Roman virtue of pietas. His poetry also includes pastoral and agricultural subjects. Virgil's style became a model for European epic poetry. Dante later made Virgil his guide through Hell and Purgatory in the Divine Comedy. The Aeneid explores the painful cost of historical destiny. Virgil died before fully revising the poem. His influence on European literature is enormous.",
+quotes:[
+"Fortune favors the bold.",
+"Perhaps even here the memory of our deeds will bring comfort.",
+"Love conquers all."
+]
+},
+
+{
+name:"Ovid",
+origin:"Rome",
+category:"Ancient & Classical",
+years:"43 BCE–17/18 CE",
+works:"Metamorphoses, Ars Amatoria, Tristia",
+themes:"Transformation, love, mythology, exile",
+bio:"Ovid was one of ancient Rome's most influential poets. His Metamorphoses retells hundreds of Greek and Roman myths connected by the theme of transformation. Ovid's writing is playful, sophisticated and frequently interested in desire and power. His stories influenced European painting, poetry and drama for centuries. He was exiled by Emperor Augustus for reasons that remain uncertain. His poetry from exile becomes more personal and melancholic. Ovid's treatment of mythology gave later European writers an enormous source of stories. His influence can be seen in Shakespeare, Chaucer and countless modern artists. Transformation in his poetry can be physical, emotional or symbolic. He remains one of the foundational classical poets.",
+quotes:[
+"Take away the mind and you take away the world.",
+"Time, which changes people, does not alter the image we have retained of them.",
+"Love will enter softly."
+]
+},
+
+{
+name:"Dante Alighieri",
+origin:"Italy",
+category:"Ancient & Classical",
+years:"1265–1321",
+works:"Divine Comedy, Vita Nuova",
+themes:"Love, salvation, politics, journey",
+bio:"Dante Alighieri was an Italian poet whose Divine Comedy became one of the greatest achievements of medieval European literature. Written in the Tuscan vernacular, it helped establish the literary importance of Italian. The poem describes a journey through Hell, Purgatory and Paradise. Dante encounters historical figures, mythological characters and spiritual guides. Beatrice represents divine love and spiritual illumination. The poem combines theology, philosophy, politics and personal experience. Dante also wrote about language and love in other works. His political exile profoundly influenced his writing. The Divine Comedy became a foundational text for later European literature. Dante's imaginative architecture of the afterlife remains extraordinarily influential.",
+quotes:[
+"The path to paradise begins in hell.",
+"The love that moves the sun and the other stars.",
+"Consider your origin: you were not made to live as brutes."
+]
+},
+
+/* PERSIAN & MIDDLE EASTERN */
+
+{
+name:"Rumi",
+origin:"Persia",
+category:"Persian & Middle Eastern",
+years:"1207–1273",
+works:"Masnavi, Divan-e Shams",
+themes:"Love, spirituality, unity, transformation",
+bio:"Jalaluddin Muhammad Rumi was a Persian poet, mystic and spiritual teacher whose poetry became influential far beyond the Persian-speaking world. His work explores divine love, spiritual transformation and the relationship between the individual and the infinite. The Masnavi contains stories, parables and philosophical reflections. Rumi's poetry often uses earthly love as a metaphor for spiritual longing. His relationship with Shams of Tabriz profoundly changed his life and poetry. Music, movement and ecstatic experience are important aspects of his spiritual tradition. His verses frequently encourage readers to look beyond outward appearances. Rumi's work has been translated into many languages. He remains one of the world's most widely read mystical poets. His central message emphasizes love, compassion and transformation.",
+quotes:[
+"What you seek is seeking you.",
+"The wound is the place where the Light enters you.",
+"Let yourself be silently drawn by the strange pull of what you really love."
+]
+},
+
+{
+name:"Hafez",
+origin:"Persia",
+category:"Persian & Middle Eastern",
+years:"c. 1315–1390",
+works:"Divan of Hafez",
+themes:"Love, wine, spirituality, freedom",
+bio:"Hafez of Shiraz was a celebrated Persian lyric poet whose ghazals combine earthly love, spiritual longing and criticism of hypocrisy. His poetry frequently uses wine and the beloved as symbols with multiple possible meanings. Hafez's verses can be romantic, mystical, humorous and politically sharp. He became famous for his mastery of the ghazal form. His poetry remains deeply embedded in Persian cultural life. Readers often use his Divan for divination and reflection. Hafez's language can move between sacred and secular registers. His criticism of religious hypocrisy gives his work a rebellious dimension. His influence extends across Persian literature and beyond. He remains one of the most beloved Persian poets.",
+quotes:[
+"I wish I could show you when you are lonely or in darkness the astonishing light of your own being.",
+"Even after all this time the sun never says to the earth, 'You owe me.'",
+"Raise your words, not your voice."
+]
+},
+
+{
+name:"Omar Khayyam",
+origin:"Persia",
+category:"Persian & Middle Eastern",
+years:"1048–1131",
+works:"Rubaiyat",
+themes:"Time, mortality, pleasure, uncertainty",
+bio:"Omar Khayyam was a Persian mathematician, astronomer, philosopher and poet. He is particularly famous internationally for the quatrains attributed to him and later popularized in English by Edward FitzGerald. His poetry reflects on mortality, time, uncertainty and the limitations of human knowledge. The imagery of wine, gardens and companionship frequently appears in the Rubaiyat. Khayyam's historical identity was much broader than his poetic reputation. He contributed to mathematics and astronomy and participated in calendar reform. His philosophical skepticism gives his poetry a distinctive character. The quatrain form creates compact spaces for reflection. His work has been translated widely. Khayyam remains an enduring figure of Persian intellectual culture.",
+quotes:[
+"The moving finger writes; and, having writ, moves on.",
+"Be happy for this moment. This moment is your life.",
+"Yesterday this day's madness did prepare."
+]
+},
+
+{
+name:"Ferdowsi",
+origin:"Persia",
+category:"Persian & Middle Eastern",
+years:"c. 940–1020",
+works:"Shahnameh",
+themes:"Heroism, kingship, identity, fate",
+bio:"Abu al-Qasim Ferdowsi was the great Persian epic poet responsible for the Shahnameh, or Book of Kings. The monumental poem preserves stories of Persian kings, heroes, wars and legendary creatures. Ferdowsi wrote during a period when Persian cultural identity was being reshaped after the Arab conquest. The Shahnameh became a central work of Persian cultural memory. Its heroes include Rostam, one of the most famous figures in Persian epic. Ferdowsi combines heroic action with reflections on mortality and justice. The poem is enormous in scope and historical influence. It helped preserve the Persian language and literary tradition. His epic influenced art, storytelling and national identity. Ferdowsi remains one of the most important poets of Persian civilization.",
+quotes:[
+"Greatness comes from character.",
+"Words are the soul of the world.",
+"The world is a story, and we are its passing lines."
+]
+},
+
+{
+name:"Khalil Gibran",
+origin:"Lebanon / United States",
+category:"Persian & Middle Eastern",
+years:"1883–1931",
+works:"The Prophet, Broken Wings",
+themes:"Love, freedom, spirituality, humanity",
+bio:"Khalil Gibran was a Lebanese-American writer, poet and artist. His best-known book The Prophet presents philosophical reflections through poetic prose. Gibran's writing explores love, freedom, work, sorrow and spiritual identity. His language is often aphoristic and accessible. He became particularly popular among readers interested in spirituality and personal philosophy. Gibran wrote in both Arabic and English. His artistic work and poetry influenced one another. He belonged to the literary movement known as the Mahjar, associated with Arab writers in the Americas. His writing emphasizes human dignity and inner freedom. The Prophet became one of the most widely translated books of the twentieth century.",
+quotes:[
+"Your children are not your children.",
+"Out of suffering have emerged the strongest souls.",
+"Work is love made visible."
+]
+},
+
+/* SOUTH ASIAN */
+
+{
+name:"Rabindranath Tagore",
+origin:"India",
+category:"South Asian",
+years:"1861–1941",
+works:"Gitanjali, The Home and the World, The Gardener",
+themes:"Nature, spirituality, freedom, humanity",
+bio:"Rabindranath Tagore was a Bengali poet, philosopher, composer and educator who became the first Asian recipient of the Nobel Prize in Literature. His poetry combines spirituality, nature, love and human connection. Gitanjali brought his poetic voice to an international audience. Tagore wrote extensively in Bengali and translated some of his own work into English. He also composed songs and founded an educational institution at Santiniketan. His literary output included poetry, fiction, drama and essays. Tagore's nationalism was nuanced; he valued human freedom beyond narrow political identity. His songs became important to Bengali culture. He influenced education and cultural thought throughout South Asia. Tagore remains a central figure in world literature.",
+quotes:[
+"Where the mind is without fear and the head is held high.",
+"The butterfly counts not in months but moments, and has time enough.",
+"Faith is the bird that feels the light when the dawn is still dark."
+]
+},
+
+{
+name:"Mirza Ghalib",
+origin:"India",
+category:"South Asian",
+years:"1797–1869",
+works:"Diwan-e-Ghalib, Urdu Letters",
+themes:"Love, fate, philosophy, longing",
+bio:"Mirza Asadullah Khan Ghalib was one of the greatest poets of Urdu and Persian literature. His ghazals combine emotional intensity with philosophical questioning. Ghalib frequently explores love, loss, fate, desire and the contradictions of human existence. His poetry is known for intellectual complexity and layered meanings. He also wrote remarkable letters in an informal Urdu style. His life unfolded during the final period of Mughal Delhi and the upheaval surrounding 1857. Ghalib's poetry survived changing political and cultural circumstances. His language can be witty, melancholic and deeply philosophical at the same time. He remains enormously popular in South Asia. His couplets are quoted in everyday cultural life. Ghalib's influence on Urdu poetry is unparalleled.",
+quotes:[
+"Thousands of desires such that each desire took my breath away.",
+"The heart is not stone or brick; why shouldn't it feel pain?",
+"Nothing is easy in this world."
+]
+},
+
+{
+name:"Allama Iqbal",
+origin:"South Asia",
+category:"South Asian",
+years:"1877–1938",
+works:"Bang-e-Dra, Asrar-e-Khudi, Bal-e-Jibril",
+themes:"Selfhood, spirituality, awakening, action",
+bio:"Muhammad Iqbal was a philosopher-poet whose poetry played an important role in modern South Asian intellectual history. He wrote primarily in Urdu and Persian. His concept of khudi, or selfhood, emphasizes moral development, confidence and purposeful action. Iqbal drew from Islamic philosophy as well as Western philosophical traditions. His poems encourage intellectual awakening and resistance to passivity. He wrote about individual and collective renewal. His poetry contains powerful symbols including the eagle and the journey. He studied philosophy in Europe and developed a distinctive synthesis of Eastern and Western thought. His work influenced political and intellectual discussions in South Asia. He is widely known as Allama Iqbal. His poetry remains influential among Urdu readers.",
+quotes:[
+"Raise yourself so high that before every decree, God Himself asks you what is your wish.",
+"Khudi is the secret of the universe.",
+"Stars do not fear the darkness."
+]
+},
+
+{
+name:"Kabir",
+origin:"India",
+category:"South Asian",
+years:"15th century",
+works:"Bijak, Kabir's couplets",
+themes:"Unity, devotion, simplicity, criticism",
+bio:"Kabir was an influential Indian mystic poet whose verses challenged religious division and emphasized direct spiritual experience. His poems circulated orally and were later preserved in different collections. Kabir wrote in accessible vernacular language rather than elite literary forms. He criticized hypocrisy and empty ritual among different religious communities. His poetry repeatedly searches for the divine within ordinary life. The language of his couplets is simple but often paradoxical. Kabir became important to both Hindu and Muslim devotional traditions. His work emphasizes love, humility and inner transformation. His verses remain widely sung and quoted in South Asia. Kabir's poetry continues to speak across religious boundaries. He is one of the most important voices of the Indian Bhakti tradition.",
+quotes:[
+"The river that flows in you is also flowing in me.",
+"Wherever you are, that is the entry point.",
+"Do not go to the garden of flowers."
+]
+},
+
+{
+name:"Faiz Ahmed Faiz",
+origin:"Pakistan",
+category:"South Asian",
+years:"1911–1984",
+works:"Naqsh-e-Faryadi, Dast-e-Saba, Zindan-Nama",
+themes:"Love, resistance, justice, hope",
+bio:"Faiz Ahmed Faiz was a Pakistani Urdu poet whose poetry combines romantic imagery with political and social consciousness. He used the language of love to express ideas of freedom, justice and resistance. Faiz's poems became important during periods of political repression. His style blends classical Urdu poetic forms with modern concerns. He was also a journalist and political activist. His imprisonment influenced some of his most famous writing. Faiz received the Lenin Peace Prize in 1962. His poetry is celebrated for combining beauty with social commitment. He remains one of the most influential Urdu poets of the twentieth century. His work continues to be performed and quoted throughout South Asia.",
+quotes:[
+"Speak, for your lips are free.",
+"Don't ask me for that love again.",
+"We shall see."
+]
+},
+
+/* EAST ASIAN */
+
+{
+name:"Li Bai",
+origin:"China",
+category:"East Asian",
+years:"701–762",
+works:"Selected Tang poems",
+themes:"Nature, freedom, wine, friendship",
+bio:"Li Bai was one of the greatest poets of China's Tang dynasty. His poetry is famous for its freedom, imagination and celebration of nature. He often wrote about the moon, mountains, friendship and wine. Traditional accounts portray him as a wandering and unconventional figure. His poems can move quickly between ordinary experience and fantastical imagination. Li Bai became associated with the romantic image of the poet as a free spirit. His language often achieves remarkable simplicity and emotional directness. He is frequently paired with his contemporary Du Fu, although their styles differ significantly. Li Bai's poems have been translated around the world. He remains one of the central figures of classical Chinese poetry.",
+quotes:[
+"Among the flowers I pour a cup of wine.",
+"Before my bed the bright moonlight.",
+"Raise a cup to the bright moon."
+]
+},
+
+{
+name:"Du Fu",
+origin:"China",
+category:"East Asian",
+years:"712–770",
+works:"Selected Tang poems",
+themes:"War, society, family, responsibility",
+bio:"Du Fu was a major Tang dynasty poet whose work combines personal emotion with social and political awareness. His poetry reflects the suffering caused by war and political instability. He wrote about family, poverty, exile and responsibility. Unlike the carefree image associated with Li Bai, Du Fu is often remembered for his moral seriousness. He mastered many classical Chinese poetic forms. His poetry became an important source for later Chinese writers. Du Fu's concern for ordinary people gives his work a strong ethical dimension. His own life was marked by displacement and hardship. He is sometimes called the Poet Sage. His poems remain central to Chinese literary education. Du Fu's influence extends across East Asian literary traditions.",
+quotes:[
+"The state may be broken, but mountains and rivers remain.",
+"Thoughts of home arise in the moonlight.",
+"The wine is in the cup, but the heart is elsewhere."
+]
+},
+
+{
+name:"Matsuo Bashō",
+origin:"Japan",
+category:"East Asian",
+years:"1644–1694",
+works:"The Narrow Road to the Deep North, Haiku",
+themes:"Nature, travel, impermanence, simplicity",
+bio:"Matsuo Bashō was the most famous poet of the Japanese haiku tradition. He transformed haiku from a light poetic form into a vehicle for profound reflection. Bashō traveled extensively through Japan, recording landscapes and moments of insight. His poetry often connects natural images with Buddhist ideas of impermanence. Simplicity is central to his style. His travel writing combines prose and poetry. Bashō's poems frequently capture a single moment while suggesting a larger philosophical world. He valued solitude and attentive observation. His influence extends far beyond Japan. Modern poets around the world have adapted his approach to concise nature poetry. Bashō remains synonymous with classical haiku.",
+quotes:[
+"An old pond — a frog jumps in.",
+"The journey itself is home.",
+"Every day is a journey, and the journey itself is home."
+]
+},
+
+{
+name:"Li Qingzhao",
+origin:"China",
+category:"East Asian",
+years:"1084–c. 1155",
+works:"Ci poetry",
+themes:"Love, memory, loss, nature",
+bio:"Li Qingzhao was one of China's greatest female poets and a master of the ci lyric form. Her early poetry often describes love, flowers, wine and refined domestic life. After political upheaval and personal loss, her later poems become more melancholic. She was highly educated and also known for collecting books and art. Her poetry demonstrates extraordinary sensitivity to sound and atmosphere. She transforms small observations into powerful expressions of memory. Her work offers an important female perspective within classical Chinese literature. Her literary reputation remained strong across centuries. She is particularly admired for her mastery of the ci form. Li Qingzhao remains one of China's most celebrated classical women poets.",
+quotes:[
+"The fragrance of flowers is gone.",
+"How can one not be sorrowful?",
+"I cannot sleep because the memories are awake."
+]
+},
+
+/* EUROPEAN */
+
+{
+name:"Johann Wolfgang von Goethe",
+origin:"Germany",
+category:"European",
+years:"1749–1832",
+works:"Faust, The Sorrows of Young Werther",
+themes:"Knowledge, love, ambition, humanity",
+bio:"Johann Wolfgang von Goethe was a German writer, poet, scientist and statesman. He is one of the central figures of European literature. His writing spans poetry, drama, fiction, criticism and scientific studies. Faust explores the human desire for knowledge, experience and transcendence. The Sorrows of Young Werther became a landmark of European Romanticism. Goethe was associated with the German movement Sturm und Drang and later with Weimar Classicism. He maintained a lifelong interest in art, science and philosophy. His literary work crosses national and disciplinary boundaries. He influenced European ideas about genius and creativity. Goethe's concept of world literature encouraged dialogue among cultures. He remains Germany's most internationally influential classical writer.",
+quotes:[
+"Whatever you can do or dream you can, begin it.",
+"Knowing is not enough; we must apply.",
+"One lives in this world but once."
+]
+},
+
+{
+name:"Charles Baudelaire",
+origin:"France",
+category:"European",
+years:"1821–1867",
+works:"Les Fleurs du mal",
+themes:"Modernity, beauty, decay, desire",
+bio:"Charles Baudelaire was a French poet and critic whose Les Fleurs du mal became a foundational work of modern poetry. He explored beauty alongside decay, boredom, desire and urban experience. Baudelaire transformed the modern city into a poetic subject. His concept of the flâneur influenced later cultural criticism. He sought beauty in unexpected and disturbing places. His poetry helped prepare the way for Symbolism. Baudelaire was fascinated by artificiality, fashion and the psychological effects of modern life. His writing frequently combines sensuality with spiritual anxiety. Les Fleurs du mal was controversial and legally censored when first published. His influence extends across European and world poetry.",
+quotes:[
+"You have to be always drunk.",
+"The devil's finest trick is to persuade you that he does not exist.",
+"Anywhere out of the world."
+]
+},
+
+{
+name:"Arthur Rimbaud",
+origin:"France",
+category:"European",
+years:"1854–1891",
+works:"A Season in Hell, Illuminations",
+themes:"Rebellion, vision, freedom, language",
+bio:"Arthur Rimbaud was a French poet who produced an extraordinary body of experimental writing while still a teenager. He sought to transform poetry through radical changes in language and perception. His work moves beyond conventional logic into dreamlike images and symbolic associations. A Season in Hell records a crisis of artistic and personal identity. Illuminations contains prose poems of remarkable visual intensity. Rimbaud influenced Symbolism and later modernist and surrealist writers. He abandoned literature at a very young age and later traveled and worked in Africa and the Middle East. His brief literary career became legendary. His concept of the poet as a visionary influenced generations. Rimbaud remains a symbol of youthful rebellion in literature.",
+quotes:[
+"I is another.",
+"One must be absolutely modern.",
+"Love is to be reinvented."
+]
+},
+
+{
+name:"Pablo Neruda",
+origin:"Chile",
+category:"European",
+years:"1904–1973",
+works:"Twenty Love Poems, Canto General",
+themes:"Love, nature, politics, humanity",
+bio:"Pablo Neruda was a Chilean poet and diplomat whose writing ranges from intimate love poetry to epic political poetry. He became one of the most internationally recognized poets of the twentieth century. His Twenty Love Poems made him famous for sensual and melancholic imagery. Later works expanded toward history, politics and the lives of ordinary people. Canto General presents Latin American history through poetry. Neruda received the Nobel Prize in Literature in 1971. His poetry often uses rich natural imagery. He wrote in many forms and styles throughout his career. Political commitment became increasingly important to his later work. His influence on Spanish-language poetry is immense. He remains widely read across Latin America and beyond.",
+quotes:[
+"I want to do with you what spring does with the cherry trees.",
+"I love you without knowing how, or when, or from where.",
+"You can cut all the flowers but you cannot keep spring from coming."
+]
+},
+
+{
+name:"Federico García Lorca",
+origin:"Spain",
+category:"European",
+years:"1898–1936",
+works:"Romancero Gitano, Blood Wedding, The House of Bernarda Alba",
+themes:"Death, desire, identity, repression",
+bio:"Federico García Lorca was a Spanish poet and dramatist associated with the Generation of '27. His poetry combines folk traditions with avant-garde experimentation. He frequently explores desire, death, repression and cultural identity. Lorca's imagery is rich in moonlight, blood, horses and landscapes. His dramatic works portray individuals trapped by social conventions. He was fascinated by Andalusian culture and flamenco traditions. Lorca also experimented with surrealist imagery. His murder during the Spanish Civil War turned him into a cultural symbol. His writing remains central to Spanish literature. Lorca's influence reaches poetry, theatre, music and visual art.",
+quotes:[
+"Green, how I want you green.",
+"The green wind. Green branches.",
+"At five in the afternoon."
+]
+},
+
+{
+name:"Anna Akhmatova",
+origin:"Russia",
+category:"European",
+years:"1889–1966",
+works:"Requiem, Poem Without a Hero",
+themes:"Memory, oppression, grief, endurance",
+bio:"Anna Akhmatova was one of Russia's greatest twentieth-century poets. Her work combines personal emotion with the historical suffering of her country. During Stalinist repression, she experienced censorship and personal loss. Requiem became a powerful poetic testimony to the suffering of ordinary people under political terror. Akhmatova often used compressed language and classical forms. Her poetry explores memory, love and endurance. She remained in Russia despite enormous personal difficulties. Her son was imprisoned, and these experiences shaped her writing. Her poetry was often circulated privately when publication was impossible. Akhmatova became a symbol of artistic and moral endurance. She remains central to Russian literature.",
+quotes:[
+"I am not with those who abandoned their land.",
+"The soul knows no death.",
+"There are no strangers between us."
+]
+},
+
+{
+name:"Alexander Pushkin",
+origin:"Russia",
+category:"European",
+years:"1799–1837",
+works:"Eugene Onegin, The Bronze Horseman",
+themes:"Love, freedom, identity, society",
+bio:"Alexander Pushkin is widely regarded as the founder of modern Russian literature. His poetry, fiction and drama helped establish modern literary Russian. Eugene Onegin combines verse, narrative and social observation. Pushkin's writing ranges from romantic poetry to historical fiction and satire. He drew from European literary traditions while creating a distinct Russian voice. His characters often struggle between individual desire and social expectations. Pushkin's language is elegant, flexible and remarkably influential. His short life ended in a fatal duel. Later Russian writers repeatedly acknowledged his importance. He influenced Tolstoy, Dostoevsky, Turgenev and many others. Pushkin remains a foundational figure in Russian cultural identity.",
+quotes:[
+"I loved you; and perhaps I love you still.",
+"The illusion which exalts us is dearer to us than ten thousand truths.",
+"All that is noble is simple."
+]
+},
+
+/* AFRICA & LATIN AMERICA */
+
+{
+name:"Wole Soyinka",
+origin:"Nigeria",
+category:"African & Latin American",
+years:"1934–",
+works:"Death and the King's Horseman, The Man Died",
+themes:"Power, culture, freedom, colonialism",
+bio:"Wole Soyinka is a Nigerian playwright, poet, novelist and political activist. He became the first African writer to receive the Nobel Prize in Literature in 1986. His writing often examines political power, cultural conflict and the legacy of colonialism. Soyinka combines Yoruba cultural traditions with European dramatic forms. His plays can be satirical, tragic and intellectually challenging. He has repeatedly criticized authoritarian governments. His political commitment has sometimes resulted in imprisonment and exile. Soyinka's literary work crosses drama, poetry, memoir and essays. His writing emphasizes freedom of thought and artistic responsibility. He remains one of Africa's most important intellectual voices. His influence extends far beyond Nigeria.",
+quotes:[
+"The greatest threat to freedom is the absence of criticism.",
+"Books and all forms of writing have always been objects of terror to those who seek to suppress truth.",
+"Justice is not a commodity."
+]
+},
+
+{
+name:"Léopold Sédar Senghor",
+origin:"Senegal",
+category:"African & Latin American",
+years:"1906–2001",
+works:"Chants d'ombre, Hosties noires",
+themes:"Identity, Africa, culture, colonialism",
+bio:"Léopold Sédar Senghor was a Senegalese poet, philosopher and statesman. He was one of the principal figures associated with the Négritude movement. His poetry celebrated African identity, culture and history in response to colonial racism. Senghor sought dialogue rather than simple rejection between African and European cultures. His poetry is rich in rhythm, music and natural imagery. He later became the first president of Senegal. His political career did not separate him from literary work. Senghor's ideas influenced debates about African identity and cultural independence. His poetry helped bring African cultural perspectives into international literature. He received the Peace Prize of the German Book Trade. Senghor remains a major figure in African intellectual history.",
+quotes:[
+"Emotion is Negro, as reason is Hellenic.",
+"Culture is at the beginning and at the end of development.",
+"To name a thing is to possess it."
+]
+},
+
+{
+name:"Octavio Paz",
+origin:"Mexico",
+category:"African & Latin American",
+years:"1914–1998",
+works:"The Labyrinth of Solitude, Sunstone",
+themes:"Identity, solitude, language, modernity",
+bio:"Octavio Paz was a Mexican poet and essayist whose work explores identity, solitude, history and language. He received the Nobel Prize in Literature in 1990. His poetry was influenced by Surrealism, Eastern philosophy and modernist experimentation. Paz also wrote extensively about Mexican cultural identity. The Labyrinth of Solitude examines the historical and psychological dimensions of Mexican identity. His poetry frequently turns language into a philosophical subject. Paz worked as a diplomat and traveled widely. His international experiences expanded his literary perspective. He translated and engaged with writers from many cultures. His work contributed significantly to global modernism. Paz remains one of Mexico's most influential literary figures.",
+quotes:[
+"Love is a form of death.",
+"Solitude is the profoundest fact of the human condition.",
+"To read a poem is to hear it with the eyes."
+]
+},
+
+{
+name:"Gabriela Mistral",
+origin:"Chile",
+category:"African & Latin American",
+years:"1889–1957",
+works:"Desolación, Tala, Lagar",
+themes:"Love, motherhood, grief, nature",
+bio:"Gabriela Mistral was a Chilean poet, educator and diplomat who became the first Latin American author to receive the Nobel Prize in Literature. Her poetry explores love, motherhood, grief, nature and social justice. She worked as an educator and cared deeply about children's welfare and education. Her poems often use simple but emotionally powerful language. Mistral's personal experiences of loss influenced her writing. She also wrote about Latin American identity and social responsibility. Her work combines tenderness with profound sorrow. She served as a diplomat in several countries. Mistral expanded international recognition of Latin American poetry. She remains one of Chile's most important literary figures.",
+quotes:[
+"Where there is a tree to plant, plant it.",
+"Give me your hand from the deep shade of the night.",
+"Many things we need can wait."
+]
+},
+
+/* URDU & PUNJABI */
+
+{
+name:"Mir Taqi Mir",
+origin:"India",
+category:"Urdu & Punjabi",
+years:"1723–1810",
+works:"Kulliyat-e-Mir",
+themes:"Love, grief, Delhi, longing",
+bio:"Mir Taqi Mir was one of the foundational masters of classical Urdu poetry. He is especially famous for his ghazals of love, grief and emotional vulnerability. His poetry reflects the instability and destruction experienced by Delhi during his lifetime. Mir's language is often simple compared with the elaborate style of some later poets. His emotional directness made him enormously influential. He wrote about heartbreak, exile and the fragility of human existence. His poetry became a major model for later Urdu ghazal writers. Ghalib admired Mir's poetic stature even while developing a different style. Mir is frequently remembered as Khuda-e-Sukhan, the god of poetry. His work remains central to the classical Urdu canon.",
+quotes:[
+"Mir is poor, yet the heart is rich with grief.",
+"The city of Delhi has become a wilderness.",
+"Love made me a stranger to myself."
+]
+},
+
+{
+name:"Ahmad Faraz",
+origin:"Pakistan",
+category:"Urdu & Punjabi",
+years:"1931–2008",
+works:"Tanha Tanha, Shab-e-Khoon, Nayaft",
+themes:"Love, resistance, exile, society",
+bio:"Ahmad Faraz was one of Pakistan's most popular modern Urdu poets. His poetry combines romantic emotion with political resistance and social criticism. Faraz wrote in accessible language while maintaining the musical tradition of Urdu poetry. His poems frequently address separation, political repression and longing. He became known for criticizing authoritarian power. His political views led to periods of exile and censorship. Faraz's romantic poetry gave him a huge popular audience. He also wrote about the relationship between individual love and collective struggle. His poetry continues to be quoted widely in South Asia. He remains one of the most recognizable modern Urdu poets.",
+quotes:[
+"Nowhere is the heart at home.",
+"Keep the lamps of hope burning.",
+"Love is also a form of resistance."
+]
+},
+
+{
+name:"Parveen Shakir",
+origin:"Pakistan",
+category:"Urdu & Punjabi",
+years:"1952–1994",
+works:"Khushbu, Sad-barg, Khud Kalaami",
+themes:"Love, womanhood, identity, emotion",
+bio:"Parveen Shakir was a Pakistani poet whose work introduced a distinctive feminine voice into modern Urdu poetry. Her poetry explores love, relationships, identity and the experiences of women. She used both traditional ghazal forms and modern free verse. Her language is often intimate and conversational. Khushbu established her as an important poetic voice at a relatively young age. Shakir also worked as a civil servant. Her poetry challenged traditional assumptions about how women could speak about love and desire. She created memorable metaphors from everyday experiences. Her death in a car accident ended her life at only forty-two. Her poetry continues to be especially popular among young Urdu readers.",
+quotes:[
+"The fragrance of love remains even after the flowers are gone.",
+"Sometimes silence says what words cannot.",
+"A woman also has a world inside her."
+]
+},
+
+{
+name:"Baba Bulleh Shah",
+origin:"Punjab",
+category:"Urdu & Punjabi",
+years:"1680–1757",
+works:"Kafis",
+themes:"Love, spirituality, equality, truth",
+bio:"Bulleh Shah was a Punjabi Sufi poet whose poetry challenges social division and emphasizes direct spiritual experience. His kafis use simple Punjabi language to express profound mystical ideas. He criticized religious hypocrisy, caste divisions and rigid social conventions. His poetry often presents the human heart as the place where truth should be discovered. Bulleh Shah's relationship with his spiritual teacher Shah Inayat is central to his poetic tradition. His verses became part of Punjabi musical culture. Singers continue to perform his poetry across South Asia. His language makes difficult spiritual ideas accessible to ordinary people. His poetry emphasizes love over dogma. Bulleh Shah remains one of Punjab's most influential mystical poets.",
+quotes:[
+"Bulleh, who knows who I am?",
+"Neither Hindu nor Muslim am I.",
+"The one who searches outside has not yet looked within."
+]
+},
+
+{
+name:"Waris Shah",
+origin:"Punjab",
+category:"Urdu & Punjabi",
+years:"1722–1798",
+works:"Heer Ranjha",
+themes:"Love, society, tragedy, Punjab",
+bio:"Waris Shah was a Punjabi Sufi poet best known for his monumental version of the Heer Ranjha romance. His Heer is far more than a love story; it is a detailed portrait of Punjabi society, customs and social structures. Waris Shah uses the tragic romance to explore class, family, gender and social authority. His Punjabi is celebrated for its richness and expressive power. He drew from Sufi symbolism as well as folk storytelling. The poem became one of the defining works of Punjabi literature. Waris Shah's descriptions of Punjab preserve cultural memories of eighteenth-century life. His poetry continues to be performed and studied. Heer Ranjha became a cultural symbol of tragic love. Waris Shah remains central to Punjabi literary identity.",
+quotes:[
+"Ranjha is not only a lover; he is the search of the soul.",
+"Love breaks the walls built by society.",
+"The story of Heer is the story of the heart."
+]
+},
+
+/* MORE POETS */
+
+{
+name:"Langston Hughes",
+origin:"United States",
+category:"English & American",
+years:"1901–1967",
+works:"The Weary Blues, Harlem, I, Too",
+themes:"Race, dreams, identity, equality",
+bio:"Langston Hughes was a major African American poet and writer associated with the Harlem Renaissance. His poetry drew heavily on jazz and blues rhythms. He wrote about Black identity, inequality, dreams and everyday life. Hughes sought to create poetry accessible to ordinary people. His work frequently combines musicality with political awareness. The Harlem Renaissance provided an important cultural context for his writing. He also wrote fiction, drama, essays and children's literature. His poem Harlem asks what happens to a dream deferred. Hughes influenced generations of Black writers. He remains one of the most widely studied American poets.",
+quotes:[
+"What happens to a dream deferred?",
+"I, too, sing America.",
+"Hold fast to dreams."
+]
+},
+
+{
+name:"Mahmoud Darwish",
+origin:"Palestine",
+category:"African & Latin American",
+years:"1941–2008",
+works:"Memory for Forgetfulness, Why Did You Leave the Horse Alone?",
+themes:"Exile, homeland, identity, memory",
+bio:"Mahmoud Darwish was one of the most important Arabic poets of the modern era. His poetry explores homeland, exile, identity, memory and love. Personal experience and political history frequently intersect in his writing. Darwish transformed national experience into universal poetry. His language combines lyrical beauty with philosophical reflection. He wrote about belonging while also questioning the meaning of identity. His work became deeply associated with Palestinian cultural memory. Darwish resisted being reduced to political symbolism and emphasized the independence of poetry. His poems have been translated into many languages. He remains a major figure in contemporary Arabic literature. His influence extends across the Arab literary world.",
+quotes:[
+"Poetry is perhaps what makes us human.",
+"We have on this earth what makes life worth living.",
+"I belong there."
+]
+
+}
+
+];
+
+
+/* ============================================================
+   APP LOGIC
+   ============================================================ */
+
+const categories = [
+"All",
+"English & American",
+"Ancient & Classical",
+"Persian & Middle Eastern",
+"South Asian",
+"East Asian",
+"European",
+"African & Latin American",
+"Urdu & Punjabi"
+];
+
+let currentCategory="All";
+let favorites=JSON.parse(localStorage.getItem("litverseFavorites")||"[]");
+
+/* Category buttons */
+
+const categoryBox=document.getElementById("categories");
+
+categories.forEach(cat=>{
+  const btn=document.createElement("button");
+  btn.className="category"+(cat==="All"?" active":"");
+  btn.textContent=cat;
+
+  btn.onclick=()=>{
+    currentCategory=cat;
+
+    document.querySelectorAll(".category")
+      .forEach(x=>x.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    renderAuthors();
+  };
+
+  categoryBox.appendChild(btn);
+});
+
+
+/* Render authors */
+
+function renderAuthors(list=authors){
+
+  const box=document.getElementById("authors");
+  box.innerHTML="";
+
+  let filtered=list.filter(a=>
+    currentCategory==="All" || a.category===currentCategory
+  );
+
+  document.getElementById("noResults").style.display=
+    filtered.length ? "none":"block";
+
+  filtered.forEach((a,i)=>{
+
+    const saved=favorites.includes(a.name);
+
+    const card=document.createElement("article");
+
+    card.className="card";
+    card.style.animationDelay=(i*.035)+"s";
+
+    card.onclick=()=>openAuthor(a);
+
+    card.innerHTML=`
+      <button class="favorite ${saved?"saved":""}"
+        onclick="event.stopPropagation();toggleFavorite('${escapeQuotes(a.name)}')">
+        ${saved?"♥":"♡"}
+      </button>
+
+      <div class="initial">
+        ${a.name.charAt(0)}
+      </div>
+
+      <div class="origin">${a.origin}</div>
+
+      <h3>${a.name}</h3>
+
+      <p>${a.themes}</p>
+    `;
+
+    box.appendChild(card);
+  });
+}
+
+
+/* Search */
+
+function searchAuthors(){
+
+  const q=document.getElementById("search")
+    .value.toLowerCase()
+    .trim();
+
+  const results=authors.filter(a=>
+    a.name.toLowerCase().includes(q) ||
+    a.origin.toLowerCase().includes(q) ||
+    a.category.toLowerCase().includes(q) ||
+    a.themes.toLowerCase().includes(q)
+  );
+
+  renderAuthors(results);
+}
+
+
+/* Author modal */
+
+function openAuthor(a){
+
+  const modal=document.getElementById("modal");
+
+  const quoteHTML=a.quotes.map(q=>
+    `<div class="miniQuote">“${q}”</div>`
+  ).join("");
+
+  document.getElementById("modalBody").innerHTML=`
+
+    <div class="initial">${a.name.charAt(0)}</div>
+
+    <div class="origin">${a.origin} • ${a.category}</div>
+
+    <h2>${a.name}</h2>
+
+    <div class="infoGrid">
+
+      <div class="info">
+        <strong>Era</strong>
+        ${a.years}
+      </div>
+
+      <div class="info">
+        <strong>Major Works</strong>
+        ${a.works}
+      </div>
+
+      <div class="info">
+        <strong>Themes</strong>
+        ${a.themes}
+      </div>
+
+    </div>
+
+    <div class="bio">
+      ${a.bio}
+    </div>
+
+    <div class="quotes">
+      <h3>Selected Words</h3>
+      ${quoteHTML}
+    </div>
+  `;
+
+  modal.classList.add("show");
+  document.body.style.overflow="hidden";
+}
+
+
+/* Modal */
+
+function closeModal(){
+  document.getElementById("modal").classList.remove("show");
+  document.body.style.overflow="";
+}
+
+function closeOutside(e){
+  if(e.target.id==="modal") closeModal();
+}
+
+
+/* Favorites */
+
+function toggleFavorite(name){
+
+  if(favorites.includes(name)){
+    favorites=favorites.filter(x=>x!==name);
+  }else{
+    favorites.push(name);
+  }
+
+  localStorage.setItem(
+    "litverseFavorites",
+    JSON.stringify(favorites)
+  );
+
+  renderAuthors();
+}
+
+function showFavorites(){
+
+  currentCategory="__favorites__";
+
+  document.querySelectorAll(".category")
+    .forEach(x=>x.classList.remove("active"));
+
+  const list=authors.filter(a=>favorites.includes(a.name));
+
+  renderAuthors(list);
+}
+
+
+/* Theme */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "litverseTheme",
+    document.body.classList.contains("dark")
+      ?"dark":"light"
+  );
+}
+
+if(localStorage.getItem("litverseTheme")==="dark"){
+  document.body.classList.add("dark");
+}
+
+
+/* Daily quote */
+
+const dailyQuotes=[
+
+["The mind is its own place.","John Milton"],
+
+["Poetry is the spontaneous overflow of powerful feelings.","William Wordsworth"],
+
+["A thing of beauty is a joy for ever.","John Keats"],
+
+["If Winter comes, can Spring be far behind?","Percy Bysshe Shelley"],
+
+["Hope is the thing with feathers.","Emily Dickinson"],
+
+["I celebrate myself, and sing myself.","Walt Whitman"],
+
+["The woods are lovely, dark and deep.","Robert Frost"],
+
+["Things fall apart; the centre cannot hold.","W. B. Yeats"],
+
+["What happens to a dream deferred?","Langston Hughes"],
+
+["Where the mind is without fear and the head is held high.","Rabindranath Tagore"],
+
+["The wound is the place where the Light enters you.","Rumi"],
+
+["Raise your words, not your voice.","Hafez"],
+
+["I loved you; and perhaps I love you still.","Alexander Pushkin"],
+
+["Work is love made visible.","Khalil Gibran"],
+
+["The love that moves the sun and the other stars.","Dante Alighieri"]
+
+];
+
+const today=new Date();
+
+const index=
+  (today.getFullYear()+
+   today.getMonth()+
+   today.getDate())
+  %dailyQuotes.length;
+
+document.getElementById("dailyQuote").textContent=
+  "“"+dailyQuotes[index][0]+"”";
+
+document.getElementById("quoteAuthor").textContent=
+  "— "+dailyQuotes[index][1];
+
+
+/* Utility */
+
+function escapeQuotes(str){
+  return str.replace(/'/g,"\\'");
+}
+
+
+/* Keyboard shortcuts */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.key==="Escape"){
+    closeModal();
+  }
+
+  if(e.key==="/" && document.activeElement.tagName!=="INPUT"){
+    e.preventDefault();
+    document.getElementById("search").focus();
+  }
+
+});
+
+
+/* Initial render */
+
+renderAuthors();
+
+</script>
+
+</body>
+  </html>
