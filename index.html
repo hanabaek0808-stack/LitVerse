@@ -3,32 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101426">
-<title>LitVerse — World of Literature</title>
+<meta name="theme-color" content="#0d1020">
+<meta name="description" content="LitVerse — A World Literature Learning Platform">
+<title>LitVerse — World Literature Academy</title>
 
 <style>
+/* =========================================================
+   LITVERSE
+   SINGLE-FILE WORLD LITERATURE LEARNING PLATFORM
+   ========================================================= */
+
 :root{
-  --bg:#f7f3ec;
-  --card:#ffffff;
-  --text:#202033;
-  --muted:#707084;
-  --primary:#7657d9;
-  --secondary:#d9a441;
-  --accent:#c85b7c;
-  --border:#e9e3d8;
-  --shadow:0 15px 40px rgba(44,35,75,.10);
+  --bg:#080b16;
+  --bg2:#101526;
+  --card:rgba(20,25,43,.78);
+  --card2:rgba(255,255,255,.055);
+  --text:#f5f7ff;
+  --muted:#a8afc5;
+  --primary:#8b5cf6;
+  --primary2:#6366f1;
+  --cyan:#22d3ee;
+  --pink:#ec4899;
+  --gold:#f59e0b;
+  --green:#22c55e;
+  --red:#ef4444;
+  --border:rgba(255,255,255,.10);
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:22px;
+  --sidebar:260px;
 }
 
-body.dark{
-  --bg:#0e1020;
-  --card:#171a2e;
-  --text:#f5f1ff;
-  --muted:#a9a6bb;
-  --primary:#a58cff;
-  --secondary:#e4b65c;
-  --accent:#ee799e;
-  --border:#292c45;
-  --shadow:0 15px 45px rgba(0,0,0,.35);
+body.light{
+  --bg:#f5f7fb;
+  --bg2:#ffffff;
+  --card:rgba(255,255,255,.86);
+  --card2:rgba(20,25,43,.045);
+  --text:#151827;
+  --muted:#657087;
+  --border:rgba(20,25,43,.10);
+  --shadow:0 18px 50px rgba(50,60,90,.13);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -36,1609 +49,4538 @@ body.dark{
 html{scroll-behavior:smooth}
 
 body{
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
+  "Segoe UI",sans-serif;
   background:
-    radial-gradient(circle at 10% 10%,rgba(118,87,217,.10),transparent 25%),
-    radial-gradient(circle at 90% 80%,rgba(200,91,124,.09),transparent 25%),
+    radial-gradient(circle at 10% 10%,rgba(139,92,246,.14),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(34,211,238,.10),transparent 25%),
     var(--bg);
   color:var(--text);
   min-height:100vh;
-  transition:.4s;
+  overflow-x:hidden;
+  transition:.35s ease;
 }
 
-button,input{font:inherit}
+button,input,textarea,select{font:inherit}
 
 button{cursor:pointer}
 
-header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  backdrop-filter:blur(18px);
-  background:color-mix(in srgb,var(--bg) 82%,transparent);
-  border-bottom:1px solid var(--border);
+a{text-decoration:none;color:inherit}
+
+/* ---------------- LOADING ---------------- */
+
+#loader{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:#070914;
+  transition:opacity .7s,visibility .7s;
 }
 
-.nav{
-  max-width:1200px;
-  margin:auto;
-  padding:15px 20px;
+#loader.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+.loader-logo{
+  width:90px;
+  height:90px;
+  border-radius:28px;
+  display:grid;
+  place-items:center;
+  font-size:42px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  box-shadow:0 0 70px rgba(139,92,246,.45);
+  animation:logoPulse 1.5s infinite;
+}
+
+.loader-title{
+  margin-top:22px;
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.loader-bar{
+  width:220px;
+  height:5px;
+  background:#20253b;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:22px;
+}
+
+.loader-bar span{
+  display:block;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,var(--primary),var(--cyan));
+  animation:loading 1.7s ease;
+}
+
+@keyframes loading{
+  from{width:0}
+  to{width:100%}
+}
+
+@keyframes logoPulse{
+  50%{transform:scale(1.08);box-shadow:0 0 100px rgba(139,92,246,.65)}
+}
+
+/* ---------------- PARTICLES ---------------- */
+
+.particles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  overflow:hidden;
+}
+
+.particle{
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:rgba(255,255,255,.3);
+  animation:floatParticle linear infinite;
+}
+
+@keyframes floatParticle{
+  from{transform:translateY(110vh) translateX(0)}
+  to{transform:translateY(-20vh) translateX(80px)}
+}
+
+/* ---------------- SIDEBAR ---------------- */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+  padding:22px 15px;
+  border-right:1px solid var(--border);
+  background:rgba(8,11,22,.82);
+  backdrop-filter:blur(22px);
+  z-index:100;
+  overflow-y:auto;
+}
+
+body.light .sidebar{
+  background:rgba(255,255,255,.84);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
+}
+
+.brand-icon{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  font-size:23px;
+  background:linear-gradient(135deg,var(--primary),var(--cyan));
+  box-shadow:0 8px 25px rgba(99,102,241,.3);
+}
+
+.brand-text h1{
+  font-size:20px;
+  letter-spacing:-.5px;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav-label{
+  color:#747c96;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  padding:15px 12px 8px;
+}
+
+.nav-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:12px;
+  border-radius:13px;
+  margin-bottom:3px;
+  text-align:left;
+  transition:.25s;
+}
+
+.nav-item:hover{
+  background:var(--card2);
+  color:var(--text);
+  transform:translateX(3px);
+}
+
+.nav-item.active{
+  color:white;
+  background:linear-gradient(90deg,rgba(139,92,246,.28),rgba(99,102,241,.12));
+  box-shadow:inset 3px 0 var(--primary);
+}
+
+.nav-icon{
+  width:22px;
+  text-align:center;
+  font-size:17px;
+}
+
+.sidebar-bottom{
+  margin-top:20px;
+  border-top:1px solid var(--border);
+  padding-top:14px;
+}
+
+.theme-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:13px;
+}
+
+/* ---------------- MAIN ---------------- */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+  padding:24px 30px 100px;
+}
+
+.topbar{
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.mobile-menu{
+  display:none;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  width:44px;
+  height:44px;
+  border-radius:13px;
+}
+
+.search{
+  flex:1;
+  max-width:570px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:46px;
+  padding:0 45px 0 45px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+  backdrop-filter:blur(15px);
+}
+
+.search input:focus{
+  border-color:rgba(139,92,246,.65);
+  box-shadow:0 0 0 4px rgba(139,92,246,.08);
+}
+
+.search-icon{
+  position:absolute;
+  left:16px;
+  top:13px;
+  color:var(--muted);
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.icon-btn{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  transition:.25s;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--primary);
+}
+
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--pink),var(--primary));
+  font-weight:800;
+}
+
+/* ---------------- PAGE ---------------- */
+
+.page{
+  display:none;
+  animation:pageIn .45s ease;
+}
+
+.page.active{display:block}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+.hero{
+  min-height:270px;
+  position:relative;
+  overflow:hidden;
+  padding:35px;
+  border:1px solid var(--border);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(34,211,238,.2),transparent 30%),
+    radial-gradient(circle at 20% 100%,rgba(236,72,153,.15),transparent 35%),
+    linear-gradient(135deg,rgba(139,92,246,.28),rgba(20,25,43,.75));
+  box-shadow:var(--shadow);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:350px;
+  height:350px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  right:-100px;
+  top:-140px;
+  box-shadow:0 0 0 50px rgba(255,255,255,.02),
+             0 0 0 100px rgba(255,255,255,.015);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:720px;
+}
+
+.eyebrow{
+  color:#c4b5fd;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.hero h2{
+  font-size:clamp(30px,4vw,54px);
+  line-height:1.02;
+  letter-spacing:-2px;
+  margin-bottom:15px;
+}
+
+.gradient-text{
+  background:linear-gradient(90deg,#c4b5fd,#67e8f9,#f9a8d4);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  color:#c0c7da;
+  line-height:1.7;
+  max-width:650px;
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+}
+
+.btn{
+  border:0;
+  padding:11px 17px;
+  border-radius:12px;
+  font-weight:750;
+  transition:.25s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn-primary{
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 8px 25px rgba(99,102,241,.25);
+}
+
+.btn-secondary{
+  color:var(--text);
+  background:var(--card2);
+  border:1px solid var(--border);
+}
+
+/* ---------------- GRID ---------------- */
+
+.section{
+  margin-top:28px;
+}
+
+.section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+.section-head h3{
+  font-size:20px;
+}
+
+.section-head p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+}
+
+.link-btn{
+  color:#a78bfa;
+  background:none;
+  border:0;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  gap:15px;
+}
+
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,.10);
+  backdrop-filter:blur(18px);
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(139,92,246,.3);
+  box-shadow:var(--shadow);
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+}
+
+.stat-icon{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:var(--card2);
+  font-size:20px;
+  margin-bottom:15px;
+}
+
+.stat strong{
+  display:block;
+  font-size:27px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.progress{
+  height:7px;
+  border-radius:20px;
+  background:var(--card2);
+  overflow:hidden;
+  margin-top:13px;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  width:0;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--primary),var(--cyan));
+  transition:1s ease;
+}
+
+/* ---------------- QUOTE ---------------- */
+
+.quote-card{
+  background:
+    linear-gradient(135deg,rgba(139,92,246,.15),rgba(34,211,238,.07)),
+    var(--card);
+}
+
+.quote-mark{
+  font-size:50px;
+  line-height:.6;
+  color:#8b5cf6;
+}
+
+.quote{
+  font-family:Georgia,serif;
+  font-size:19px;
+  line-height:1.65;
+  margin:15px 0;
+}
+
+.quote-author{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ---------------- AUTHOR CARD ---------------- */
+
+.author-card{
+  cursor:pointer;
+}
+
+.author-avatar{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.author-card h4{
+  font-size:17px;
+  margin-bottom:5px;
+}
+
+.author-card .meta{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:13px;
+}
+
+.tag{
+  padding:5px 9px;
+  border-radius:20px;
+  background:var(--card2);
+  color:#b9c0d5;
+  font-size:10px;
+  border:1px solid var(--border);
+}
+
+/* ---------------- FILTERS ---------------- */
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.filter{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--muted);
+  border-radius:11px;
+  padding:9px 13px;
+}
+
+.filter.active{
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  border-color:transparent;
+}
+
+/* ---------------- LIBRARY ---------------- */
+
+.library-card{
+  min-height:175px;
+  cursor:pointer;
+  position:relative;
+}
+
+.library-icon{
+  font-size:29px;
+  margin-bottom:12px;
+}
+
+.library-card h4{
+  margin-bottom:6px;
+}
+
+.library-card p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.55;
+}
+
+.count{
+  position:absolute;
+  top:16px;
+  right:16px;
+  color:#b7a7ff;
+  font-size:11px;
+}
+
+/* ---------------- MODAL ---------------- */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+  width:min(850px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:25px;
+  box-shadow:0 30px 100px rgba(0,0,0,.5);
+  animation:modalIn .35s ease;
+}
+
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94) translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
+.modal-head{
+  padding:20px 24px;
+  border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:15px;
 }
 
-.logo{
-  font-family:Georgia,serif;
-  font-size:1.65rem;
-  font-weight:bold;
-  letter-spacing:.5px;
-}
-
-.logo span{color:var(--primary)}
-
-.navBtns{
-  display:flex;
-  gap:8px;
-}
-
-.iconBtn{
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  transition:.3s;
-}
-
-.iconBtn:hover{
-  transform:rotate(12deg) scale(1.08);
-  border-color:var(--primary);
-}
-
-.hero{
-  max-width:1200px;
-  margin:auto;
-  padding:70px 20px 45px;
-  text-align:center;
-  animation:fadeUp .8s ease;
-}
-
-.hero .eyebrow{
-  color:var(--primary);
-  font-family:Arial,sans-serif;
-  font-weight:bold;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  font-size:.78rem;
-}
-
-.hero h1{
-  font-size:clamp(3rem,9vw,6.5rem);
-  line-height:.9;
-  margin:20px 0;
-  background:linear-gradient(120deg,var(--primary),var(--accent),var(--secondary));
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.hero p{
-  max-width:720px;
-  margin:auto;
-  color:var(--muted);
-  line-height:1.8;
-  font-size:1.08rem;
-}
-
-.search{
-  max-width:650px;
-  margin:30px auto 0;
-  position:relative;
-}
-
-.search input{
-  width:100%;
-  padding:17px 55px 17px 20px;
-  border-radius:50px;
-  border:1px solid var(--border);
-  outline:none;
-  background:var(--card);
-  color:var(--text);
-  box-shadow:var(--shadow);
-}
-
-.search span{
-  position:absolute;
-  right:20px;
-  top:14px;
-  font-size:1.3rem;
-}
-
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px;
-}
-
-.sectionTitle{
-  margin:35px 0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-}
-
-.sectionTitle h2{font-size:1.8rem}
-
-.sectionTitle p{
-  color:var(--muted);
-  font-family:Arial,sans-serif;
-  font-size:.9rem;
-}
-
-.categories{
-  display:flex;
-  overflow-x:auto;
-  gap:10px;
-  padding-bottom:12px;
-  scrollbar-width:none;
-}
-
-.categories::-webkit-scrollbar{display:none}
-
-.category{
-  flex:0 0 auto;
-  padding:10px 17px;
-  border-radius:30px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  transition:.3s;
-}
-
-.category:hover,
-.category.active{
-  background:var(--primary);
-  color:white;
-  border-color:var(--primary);
-  transform:translateY(-2px);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-}
-
-.card{
-  position:relative;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:24px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  cursor:pointer;
-  transition:transform .35s,box-shadow .35s;
-  animation:fadeUp .6s ease both;
-}
-
-.card::before{
-  content:"";
-  position:absolute;
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  background:var(--primary);
-  opacity:.08;
-  right:-35px;
-  top:-35px;
-}
-
-.card:hover{
-  transform:translateY(-8px);
-  box-shadow:0 22px 55px rgba(70,50,110,.18);
-}
-
-.initial{
-  width:52px;
-  height:52px;
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:white;
-  font-size:1.5rem;
-  margin-bottom:18px;
-}
-
-.card h3{font-size:1.3rem;margin-bottom:7px}
-
-.card .origin{
-  color:var(--secondary);
-  font-family:Arial,sans-serif;
-  font-size:.78rem;
-  font-weight:bold;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.card p{
-  color:var(--muted);
-  line-height:1.6;
-  margin-top:13px;
-  font-size:.92rem;
-}
-
-.favorite{
-  position:absolute;
-  right:18px;
-  top:18px;
-  border:0;
-  background:none;
-  color:var(--muted);
-  font-size:1.25rem;
-}
-
-.favorite.saved{color:var(--accent)}
-
-.quoteBox{
-  margin:50px 0;
-  padding:45px 30px;
-  border-radius:30px;
-  background:
-    linear-gradient(135deg,
-      color-mix(in srgb,var(--primary) 18%,var(--card)),
-      color-mix(in srgb,var(--accent) 10%,var(--card)));
-  border:1px solid var(--border);
-  text-align:center;
-  box-shadow:var(--shadow);
-}
-
-.quoteMark{
-  font-size:4rem;
-  color:var(--secondary);
-  line-height:.6;
-}
-
-#dailyQuote{
-  max-width:800px;
-  margin:20px auto;
-  font-size:clamp(1.2rem,3vw,1.7rem);
-  line-height:1.7;
-  font-style:italic;
-}
-
-#quoteAuthor{
-  color:var(--primary);
-  font-weight:bold;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  display:none;
-  place-items:center;
-  padding:20px;
-  background:rgba(5,5,15,.72);
-  backdrop-filter:blur(8px);
-}
-
-.modal.show{
-  display:grid;
-  animation:fade .25s;
-}
-
-.modalContent{
-  width:min(850px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:28px;
-  padding:32px;
-  position:relative;
-  animation:scaleIn .3s;
-}
+.modal-body{padding:24px}
 
 .close{
-  position:absolute;
-  right:20px;
-  top:18px;
-  width:40px;
-  height:40px;
-  border-radius:50%;
   border:1px solid var(--border);
-  background:var(--bg);
+  background:var(--card2);
   color:var(--text);
+  width:38px;
+  height:38px;
+  border-radius:10px;
 }
 
-.modalContent h2{
-  font-size:2.3rem;
-  margin-bottom:7px;
+/* ---------------- AUTHOR PROFILE ---------------- */
+
+.profile-hero{
+  padding:26px;
+  display:flex;
+  gap:20px;
+  align-items:center;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(34,211,238,.06));
 }
 
-.bio{
-  color:var(--muted);
-  line-height:1.85;
-  margin:22px 0;
-}
-
-.infoGrid{
+.profile-avatar{
+  flex:0 0 90px;
+  width:90px;
+  height:90px;
+  border-radius:25px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-  gap:12px;
-  margin:20px 0;
+  place-items:center;
+  font-size:36px;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--primary),var(--pink));
 }
 
-.info{
-  padding:15px;
-  border:1px solid var(--border);
-  border-radius:15px;
-  background:var(--bg);
-}
-
-.info strong{
-  display:block;
-  color:var(--primary);
+.profile-info h2{
+  font-size:30px;
   margin-bottom:5px;
 }
 
-.quotes h3{
-  margin:25px 0 13px;
-}
-
-.miniQuote{
-  border-left:3px solid var(--secondary);
-  padding:12px 17px;
-  margin:12px 0;
-  background:var(--bg);
-  border-radius:0 12px 12px 0;
-  line-height:1.6;
-  font-style:italic;
-}
-
-footer{
-  margin-top:70px;
-  padding:40px 20px;
-  text-align:center;
-  border-top:1px solid var(--border);
+.profile-info p{
   color:var(--muted);
 }
 
-footer strong{color:var(--primary)}
+.detail-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:20px;
+}
 
-.noResults{
-  text-align:center;
-  padding:60px 20px;
+.detail{
+  padding:14px;
+  background:var(--card2);
+  border-radius:14px;
+}
+
+.detail small{
   color:var(--muted);
+  display:block;
+  margin-bottom:4px;
+}
+
+.detail strong{font-size:13px}
+
+.prose{
+  color:#c1c7d8;
+  line-height:1.8;
+  font-size:14px;
+}
+
+body.light .prose{color:#4f5870}
+
+/* ---------------- WORKS ---------------- */
+
+.work{
+  padding:17px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:var(--card2);
+}
+
+.work h4{margin-bottom:5px}
+
+.work p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.year{
+  color:#a78bfa;
+  font-size:11px;
+  margin-bottom:4px;
+}
+
+/* ---------------- QUIZ ---------------- */
+
+.quiz-option{
+  width:100%;
+  padding:14px;
+  margin-top:9px;
+  text-align:left;
+  color:var(--text);
+  border:1px solid var(--border);
+  background:var(--card2);
+  border-radius:13px;
+  transition:.2s;
+}
+
+.quiz-option:hover{
+  border-color:var(--primary);
+}
+
+.quiz-option.correct{
+  background:rgba(34,197,94,.15);
+  border-color:var(--green);
+}
+
+.quiz-option.wrong{
+  background:rgba(239,68,68,.15);
+  border-color:var(--red);
+}
+
+.quiz-progress{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+/* ---------------- FLASHCARD ---------------- */
+
+.flashcard{
+  min-height:300px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  cursor:pointer;
+  perspective:1000px;
+}
+
+.flash-inner{
+  width:100%;
+  min-height:300px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:35px;
+  border-radius:25px;
+  background:
+    radial-gradient(circle at top right,rgba(34,211,238,.15),transparent 30%),
+    linear-gradient(135deg,rgba(139,92,246,.18),rgba(20,25,43,.7));
+  border:1px solid var(--border);
+  transition:.5s;
+}
+
+.flashcard.flipped .flash-inner{
+  transform:rotateY(180deg);
+}
+
+.flash-content h2{
+  font-family:Georgia,serif;
+  font-size:30px;
+  margin-bottom:15px;
+}
+
+.flash-content p{
+  color:var(--muted);
+}
+
+/* ---------------- FORMS ---------------- */
+
+.form-control{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:12px;
+  outline:none;
+  margin-bottom:10px;
+}
+
+.form-control:focus{
+  border-color:var(--primary);
+}
+
+textarea.form-control{
+  min-height:130px;
+  resize:vertical;
+}
+
+/* ---------------- TIMELINE ---------------- */
+
+.timeline{
+  position:relative;
+  margin:20px 0;
+  padding-left:28px;
+}
+
+.timeline:before{
+  content:"";
+  position:absolute;
+  left:7px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(var(--primary),var(--cyan));
+}
+
+.timeline-item{
+  position:relative;
+  margin-bottom:20px;
+}
+
+.timeline-item:before{
+  content:"";
+  position:absolute;
+  left:-26px;
+  top:4px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 15px var(--cyan);
+}
+
+.timeline-item strong{
+  display:block;
+  color:#c4b5fd;
+  margin-bottom:4px;
+}
+
+.timeline-item p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ---------------- TOAST ---------------- */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:900;
+  background:#171b2b;
+  color:#fff;
+  padding:13px 17px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  box-shadow:var(--shadow);
+  transform:translateY(100px);
+  opacity:0;
+  transition:.35s;
+}
+
+.toast.show{
+  transform:none;
+  opacity:1;
+}
+
+/* ---------------- MOBILE NAV ---------------- */
+
+.mobile-nav{
   display:none;
 }
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(25px)}
-  to{opacity:1;transform:translateY(0)}
+/* ---------------- EMPTY ---------------- */
+
+.empty{
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
 }
 
-@keyframes fade{
-  from{opacity:0}
-  to{opacity:1}
+.empty-icon{
+  font-size:45px;
+  margin-bottom:12px;
 }
 
-@keyframes scaleIn{
-  from{opacity:0;transform:scale(.92)}
-  to{opacity:1;transform:scale(1)}
+/* ---------------- RESPONSIVE ---------------- */
+
+@media(max-width:1100px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
 }
 
-@media(max-width:600px){
-  .hero{padding-top:50px}
-  .hero h1{font-size:4rem}
-  .modalContent{padding:25px 20px}
+@media(max-width:800px){
+  :root{--sidebar:0px}
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.3s;
+    width:270px;
+    box-shadow:20px 0 50px rgba(0,0,0,.35);
+  }
+
+  .sidebar.open{transform:none}
+
+  .main{
+    margin-left:0;
+    padding:15px 15px 85px;
+  }
+
+  .mobile-menu{display:block}
+
+  .topbar{
+    gap:8px;
+    margin-bottom:15px;
+  }
+
+  .search{
+    max-width:none;
+  }
+
+  .avatar{display:none}
+
+  .hero{
+    padding:25px;
+    border-radius:23px;
+  }
+
+  .grid-4,
+  .grid-3,
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+
+  .mobile-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:150;
+    display:flex;
+    justify-content:space-around;
+    padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(8,11,22,.9);
+    backdrop-filter:blur(20px);
+    border-top:1px solid var(--border);
+  }
+
+  body.light .mobile-nav{
+    background:rgba(255,255,255,.93);
+  }
+
+  .mobile-nav button{
+    border:0;
+    background:none;
+    color:var(--muted);
+    padding:7px 10px;
+    font-size:10px;
+  }
+
+  .mobile-nav button.active{
+    color:#a78bfa;
+  }
+
+  .mobile-nav span{
+    display:block;
+    font-size:17px;
+    margin-bottom:2px;
+  }
+
+  .detail-list{
+    grid-template-columns:1fr;
+  }
+
+  .profile-hero{
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:500px){
+  .top-actions .icon-btn:first-child{display:none}
+  .hero h2{font-size:33px}
+  .section-head{align-items:flex-start}
+  .profile-hero{flex-direction:column}
+}
+
+/* ---------------- REDUCED MOTION ---------------- */
+
+.reduce-motion *,
+.reduce-motion *:before,
+.reduce-motion *:after{
+  animation-duration:.001ms!important;
+  animation-iteration-count:1!important;
+  transition-duration:.001ms!important;
+  scroll-behavior:auto!important;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="nav">
-    <div class="logo">Lit<span>Verse</span> ✦</div>
+<!-- =========================================================
+     LOADER
+     ========================================================= -->
 
-    <div class="navBtns">
-      <button class="iconBtn" onclick="showFavorites()" title="Favorites">♡</button>
-      <button class="iconBtn" onclick="toggleTheme()" title="Theme">☾</button>
+<div id="loader">
+  <div class="loader-logo">📖</div>
+  <div class="loader-title">LitVerse</div>
+  <div class="loader-bar"><span></span></div>
+</div>
+
+<div class="particles" id="particles"></div>
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-icon">📖</div>
+    <div class="brand-text">
+      <h1>LitVerse</h1>
+      <span>World Literature Academy</span>
     </div>
   </div>
-</header>
 
-<section class="hero">
-  <div class="eyebrow">The world of literature</div>
+  <div class="nav-label">Main</div>
 
-  <h1>LitVerse</h1>
+  <button class="nav-item active" data-page="home">
+    <span class="nav-icon">⌂</span> Dashboard
+  </button>
 
-  <p>
-    Enter a universe of poets, thinkers, stories and timeless words.
-    Explore literary voices from England, America, Persia, South Asia,
-    East Asia, Europe, Africa and Latin America.
-  </p>
+  <button class="nav-item" data-page="learn">
+    <span class="nav-icon">🎓</span> Learn
+  </button>
+
+  <button class="nav-item" data-page="authors">
+    <span class="nav-icon">✒️</span> Authors
+  </button>
+
+  <button class="nav-item" data-page="works">
+    <span class="nav-icon">📚</span> Works
+  </button>
+
+  <button class="nav-item" data-page="periods">
+    <span class="nav-icon">⌛</span> Periods
+  </button>
+
+  <button class="nav-item" data-page="terms">
+    <span class="nav-icon">🧠</span> Literary Terms
+  </button>
+
+  <div class="nav-label">Study</div>
+
+  <button class="nav-item" data-page="quiz">
+    <span class="nav-icon">📝</span> MCQ Quiz
+  </button>
+
+  <button class="nav-item" data-page="flashcards">
+    <span class="nav-icon">🃏</span> Flashcards
+  </button>
+
+  <button class="nav-item" data-page="timeline">
+    <span class="nav-icon">📅</span> Timeline
+  </button>
+
+  <button class="nav-item" data-page="compare">
+    <span class="nav-icon">⚖️</span> Compare Authors
+  </button>
+
+  <div class="nav-label">Personal</div>
+
+  <button class="nav-item" data-page="favorites">
+    <span class="nav-icon">⭐</span> Favorites
+  </button>
+
+  <button class="nav-item" data-page="notes">
+    <span class="nav-icon">🗒️</span> My Notes
+  </button>
+
+  <div class="sidebar-bottom">
+    <button class="theme-btn" id="themeBtn">
+      <span>🌙 Theme</span>
+      <span id="themeLabel">Dark</span>
+    </button>
+  </div>
+
+</aside>
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <button class="mobile-menu" id="mobileMenu">☰</button>
 
   <div class="search">
-    <input id="search" type="search"
-      placeholder="Search an author, country, movement..."
-      oninput="searchAuthors()">
-    <span>⌕</span>
+    <span class="search-icon">🔍</span>
+    <input id="globalSearch"
+           placeholder="Search authors, works, countries, periods, terms...">
   </div>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="motionBtn" title="Reduce motion">✨</button>
+    <button class="icon-btn" id="quickTheme">☾</button>
+    <div class="avatar">L</div>
+  </div>
+
+</header>
+
+<!-- =========================================================
+     HOME
+     ========================================================= -->
+
+<section class="page active" id="page-home">
+
+  <div class="hero">
+
+    <div class="hero-content">
+
+      <div class="eyebrow">WORLD LITERATURE • ONE UNIVERSE</div>
+
+      <h2>
+        Explore the
+        <span class="gradient-text">World of Literature.</span>
+      </h2>
+
+      <p>
+        Discover authors, movements, periods, masterpieces and literary
+        concepts from Britain, America, Russia, South Asia, China, Japan,
+        Korea, the Arab world, Europe and beyond.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showPage('learn')">
+          Start Learning →
+        </button>
+
+        <button class="btn btn-secondary" onclick="showPage('quiz')">
+          Take a Quiz
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="grid grid-4 section">
+
+    <div class="card stat">
+      <div class="stat-icon">📚</div>
+      <strong id="statAuthors">0</strong>
+      <span>Authors in Library</span>
+    </div>
+
+    <div class="card stat">
+      <div class="stat-icon">📖</div>
+      <strong id="statWorks">0</strong>
+      <span>Major Works</span>
+    </div>
+
+    <div class="card stat">
+      <div class="stat-icon">🧠</div>
+      <strong id="statTerms">0</strong>
+      <span>Literary Terms</span>
+    </div>
+
+    <div class="card stat">
+      <div class="stat-icon">🔥</div>
+      <strong id="statStreak">1</strong>
+      <span>Study Streak</span>
+    </div>
+
+  </div>
+
+  <div class="grid grid-2 section">
+
+    <div class="card quote-card">
+
+      <div class="quote-mark">“</div>
+
+      <div class="quote" id="dailyQuote"></div>
+
+      <div class="quote-author" id="quoteAuthor"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="section-head">
+        <div>
+          <h3>📊 Your Progress</h3>
+          <p>Keep exploring the literary universe.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between">
+        <span>Overall Learning</span>
+        <strong id="progressText">0%</strong>
+      </div>
+
+      <div class="progress">
+        <span id="progressBar"></span>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:20px">
+
+        <div>
+          <small style="color:var(--muted)">Quiz Score</small>
+          <strong style="display:block" id="quizScore">0%</strong>
+        </div>
+
+        <div>
+          <small style="color:var(--muted)">Cards Reviewed</small>
+          <strong style="display:block" id="cardsReviewed">0</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="section">
+
+    <div class="section-head">
+
+      <div>
+        <h3>✨ Recommended Learning</h3>
+        <p>Build your literary foundation.</p>
+      </div>
+
+      <button class="link-btn" onclick="showPage('learn')">
+        View all →
+      </button>
+
+    </div>
+
+    <div class="grid grid-3" id="recommendations"></div>
+
+  </div>
+
+  <div class="section">
+
+    <div class="section-head">
+      <div>
+        <h3>🌍 Explore Literature</h3>
+        <p>Choose a literary tradition.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-4" id="regionGrid"></div>
+
+  </div>
+
 </section>
 
-<main class="container">
+<!-- =========================================================
+     LEARN
+     ========================================================= -->
 
-  <div class="sectionTitle">
+<section class="page" id="page-learn">
+
+  <div class="hero" style="min-height:200px">
+
+    <div class="hero-content">
+
+      <div class="eyebrow">LEARNING LIBRARY</div>
+
+      <h2>Explore <span class="gradient-text">Literature.</span></h2>
+
+      <p>
+        Study literature by region, period, movement, genre and literary
+        history.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="section">
+
+    <div class="filters" id="regionFilters"></div>
+
+    <div class="grid grid-3" id="learnGrid"></div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     AUTHORS
+     ========================================================= -->
+
+<section class="page" id="page-authors">
+
+  <div class="section-head">
     <div>
-      <h2>Explore Literature</h2>
-      <p>Choose a literary world</p>
+      <h3 style="font-size:28px">✒️ Authors</h3>
+      <p>Explore writers and poets from around the world.</p>
     </div>
   </div>
 
-  <div class="categories" id="categories"></div>
-
-  <div class="grid" id="authors"></div>
-
-  <div class="noResults" id="noResults">
-    <h2>No author found</h2>
-    <p>Try another name, country or literary tradition.</p>
+  <div class="filters">
+    <button class="filter active" data-author-filter="All">All</button>
+    <button class="filter" data-author-filter="British">British</button>
+    <button class="filter" data-author-filter="American">American</button>
+    <button class="filter" data-author-filter="Russian">Russian</button>
+    <button class="filter" data-author-filter="South Asian">South Asian</button>
+    <button class="filter" data-author-filter="Chinese">Chinese</button>
+    <button class="filter" data-author-filter="Japanese">Japanese</button>
+    <button class="filter" data-author-filter="Korean">Korean</button>
+    <button class="filter" data-author-filter="Arabic">Arabic</button>
+    <button class="filter" data-author-filter="French">French</button>
+    <button class="filter" data-author-filter="Italian">Italian</button>
+    <button class="filter" data-author-filter="German">German</button>
+    <button class="filter" data-author-filter="Greek">Greek</button>
+    <button class="filter" data-author-filter="Roman">Roman</button>
   </div>
 
-  <section class="quoteBox">
-    <div class="quoteMark">“</div>
-    <div id="dailyQuote"></div>
-    <div id="quoteAuthor"></div>
-  </section>
+  <div class="grid grid-3" id="authorsGrid"></div>
+
+</section>
+
+<!-- =========================================================
+     WORKS
+     ========================================================= -->
+
+<section class="page" id="page-works">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">📚 Works Explorer</h3>
+      <p>Major novels, poems, plays, epics and philosophical works.</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-3" id="worksGrid"></div>
+
+</section>
+
+<!-- =========================================================
+     PERIODS
+     ========================================================= -->
+
+<section class="page" id="page-periods">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">⌛ Literary Periods</h3>
+      <p>Understand literature through history.</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-3" id="periodsGrid"></div>
+
+</section>
+
+<!-- =========================================================
+     TERMS
+     ========================================================= -->
+
+<section class="page" id="page-terms">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">🧠 Literary Terms</h3>
+      <p>Build your terminology for exams and literary analysis.</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-3" id="termsGrid"></div>
+
+</section>
+
+<!-- =========================================================
+     QUIZ
+     ========================================================= -->
+
+<section class="page" id="page-quiz">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">📝 Literature MCQ Quiz</h3>
+      <p>Test your knowledge.</p>
+    </div>
+
+    <button class="btn btn-primary" onclick="startQuiz()">
+      New Quiz
+    </button>
+
+  </div>
+
+  <div class="card" id="quizBox">
+
+    <div class="empty">
+      <div class="empty-icon">🧠</div>
+      <h3>Ready to test yourself?</h3>
+      <p style="margin:10px 0 18px">
+        Take a 10-question world literature quiz.
+      </p>
+      <button class="btn btn-primary" onclick="startQuiz()">
+        Start Quiz
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     FLASHCARDS
+     ========================================================= -->
+
+<section class="page" id="page-flashcards">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">🃏 Flashcards</h3>
+      <p>Click the card to reveal the answer.</p>
+    </div>
+
+    <button class="btn btn-primary" onclick="nextCard()">
+      Next Card →
+    </button>
+
+  </div>
+
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+
+    <div class="flash-inner">
+
+      <div class="flash-content">
+
+        <div class="eyebrow" id="flashLabel">LITERARY TERM</div>
+
+        <h2 id="flashFront">Loading...</h2>
+
+        <p id="flashBack">
+          Click the card to reveal the definition.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:15px;text-align:center">
+    <span id="flashCount">Card 1</span>
+  </div>
+
+</section>
+
+<!-- =========================================================
+     TIMELINE
+     ========================================================= -->
+
+<section class="page" id="page-timeline">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">📅 World Literary Timeline</h3>
+      <p>Major moments in literary history.</p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="timeline" id="timeline"></div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     COMPARE
+     ========================================================= -->
+
+<section class="page" id="page-compare">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">⚖️ Author Comparison</h3>
+      <p>Compare two literary figures.</p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="grid grid-2">
+
+      <select class="form-control" id="compareA"></select>
+
+      <select class="form-control" id="compareB"></select>
+
+    </div>
+
+    <button class="btn btn-primary" onclick="compareAuthors()">
+      Compare Authors
+    </button>
+
+  </div>
+
+  <div id="compareResult" class="section"></div>
+
+</section>
+
+<!-- =========================================================
+     FAVORITES
+     ========================================================= -->
+
+<section class="page" id="page-favorites">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">⭐ Favorites</h3>
+      <p>Your saved authors and works.</p>
+    </div>
+
+  </div>
+
+  <div id="favoritesGrid"></div>
+
+</section>
+
+<!-- =========================================================
+     NOTES
+     ========================================================= -->
+
+<section class="page" id="page-notes">
+
+  <div class="section-head">
+
+    <div>
+      <h3 style="font-size:28px">🗒️ My Notes</h3>
+      <p>Create your own literature revision notes.</p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <input class="form-control" id="noteTitle"
+           placeholder="Note title...">
+
+    <textarea class="form-control" id="noteText"
+              placeholder="Write your literature notes here..."></textarea>
+
+    <button class="btn btn-primary" onclick="saveNote()">
+      Save Note
+    </button>
+
+  </div>
+
+  <div class="grid grid-3 section" id="notesGrid"></div>
+
+</section>
 
 </main>
 
-<footer>
-  <strong>LitVerse</strong>
-  <br><br>
-  A small universe for lovers of literature.
-  <br><br>
-  Read • Discover • Think • Remember
-</footer>
+<!-- =========================================================
+     MOBILE NAV
+     ========================================================= -->
 
-<div class="modal" id="modal" onclick="closeOutside(event)">
-  <div class="modalContent">
-    <button class="close" onclick="closeModal()">×</button>
+<nav class="mobile-nav">
 
-    <div id="modalBody"></div>
+  <button data-page="home" class="active">
+    <span>⌂</span>Home
+  </button>
+
+  <button data-page="learn">
+    <span>🎓</span>Learn
+  </button>
+
+  <button data-page="authors">
+    <span>✒️</span>Authors
+  </button>
+
+  <button data-page="quiz">
+    <span>📝</span>Quiz
+  </button>
+
+  <button data-page="favorites">
+    <span>⭐</span>Saved
+  </button>
+
+</nav>
+
+<!-- =========================================================
+     MODAL
+     ========================================================= -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <strong id="modalTitle">LitVerse</strong>
+
+      <button class="close" onclick="closeModal()">×</button>
+
+    </div>
+
+    <div class="modal-body" id="modalBody"></div>
+
   </div>
+
 </div>
+
+<div class="toast" id="toast">Saved!</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
 
 <script>
 
-/* ============================================================
-   LITVERSE — COMPLETE AUTHOR DATABASE
-   ============================================================ */
+/* =========================================================
+   LITVERSE DATA
+   ========================================================= */
 
 const authors = [
 
+/* ---------------- BRITISH ---------------- */
+
 {
-name:"William Shakespeare",
-origin:"England",
-category:"English & American",
-years:"1564–1616",
-works:"Hamlet, Macbeth, King Lear, Othello, Romeo and Juliet",
-themes:"Love, ambition, jealousy, power, identity",
-bio:"William Shakespeare was an English playwright and poet widely regarded as one of the most influential writers in the English language. His plays explore human ambition, love, betrayal, political power, family, madness and mortality. He transformed drama through complex characters and remarkably flexible language. His tragedies examine people confronting choices that ultimately destroy them. His comedies explore love, disguise and social confusion. His histories dramatize English political life. Shakespeare's sonnets remain central to the English poetic tradition. His vocabulary, memorable characters and dramatic techniques have influenced generations of writers. His works continue to be performed throughout the world. LitVerse studies Shakespeare as both a literary artist and a major cultural influence.",
-quotes:[
-"To be, or not to be: that is the question.",
-"All the world's a stage.",
-"Some are born great, some achieve greatness, and some have greatness thrust upon them.",
-"The course of true love never did run smooth.",
-"All that glisters is not gold."
-]
+ id:"shakespeare",
+ name:"William Shakespeare",
+ region:"British",
+ period:"Elizabethan / Jacobean",
+ years:"1564–1616",
+ movement:"Renaissance",
+ genre:"Drama • Poetry",
+ bio:"English playwright, poet and actor widely regarded as one of the most influential writers in world literature.",
+ early:"Born in Stratford-upon-Avon. His education is traditionally associated with the local grammar school.",
+ education:"King's New School tradition",
+ career:"Actor, playwright and shareholder in the Lord Chamberlain's Men and King's Men.",
+ context:"Elizabethan and Jacobean England, a period of theatrical expansion and Renaissance humanism.",
+ style:"Rich imagery, wordplay, dramatic irony, blank verse and psychological complexity.",
+ themes:"Love, ambition, power, jealousy, identity, mortality and political legitimacy.",
+ works:["Hamlet","Macbeth","King Lear","Othello","Romeo and Juliet","The Tempest"],
+ characters:["Hamlet","Macbeth","Lady Macbeth","Othello","Iago","King Lear"],
+ influence:"Shakespeare transformed English drama and continues to influence theatre, cinema, literature and popular culture.",
+ notes:"Exam focus: Renaissance humanism, tragic flaw, soliloquy, dramatic irony, blank verse."
 },
 
 {
-name:"John Milton",
-origin:"England",
-category:"English & American",
-years:"1608–1674",
-works:"Paradise Lost, Paradise Regained, Areopagitica",
-themes:"Faith, free will, rebellion, morality",
-bio:"John Milton was an English poet and intellectual best known for Paradise Lost. He wrote during a period of enormous political and religious change in England. Milton's poetry combines classical learning with Christian theology and philosophical questions. Paradise Lost presents the biblical story of humanity's fall while exploring freedom, obedience and temptation. Milton's blank verse became a major model for later English poets. He was also a powerful prose writer who defended freedom of expression. His blindness did not end his literary ambition; he continued composing major poetry. Milton's work is intellectually demanding but deeply concerned with human choice. His Satan is one of the most discussed characters in English literature. Milton remains one of the central figures of seventeenth-century English poetry.",
-quotes:[
-"The mind is its own place, and in itself can make a Heaven of Hell.",
-"Better to reign in Hell, than serve in Heaven.",
-"Long is the way and hard, that out of darkness leads up to light."
-]
+ id:"milton",
+ name:"John Milton",
+ region:"British",
+ period:"17th Century",
+ years:"1608–1674",
+ movement:"Puritan / Renaissance",
+ genre:"Epic • Poetry",
+ bio:"English poet best known for Paradise Lost.",
+ early:"Born in London into a cultured family.",
+ education:"Cambridge University",
+ career:"Poet, scholar and civil servant.",
+ context:"English Civil War, Commonwealth and Restoration.",
+ style:"Grand epic diction, biblical allusion, blank verse and elevated rhetoric.",
+ themes:"Free will, obedience, rebellion, temptation, knowledge and divine justice.",
+ works:["Paradise Lost","Paradise Regained","Lycidas","Areopagitica"],
+ characters:["Satan","Adam","Eve","God","The Son"],
+ influence:"A central figure in English epic poetry.",
+ notes:"Exam focus: epic convention, Satan, free will, theodicy, blank verse."
 },
 
 {
-name:"William Wordsworth",
-origin:"England",
-category:"English & American",
-years:"1770–1850",
-works:"Lyrical Ballads, The Prelude, Tintern Abbey",
-themes:"Nature, childhood, memory, imagination",
-bio:"William Wordsworth was one of the founders of English Romantic poetry. He believed poetry should speak in language connected to ordinary human experience. Nature occupies a central place in his poetry and often becomes a source of spiritual and emotional education. Wordsworth explored childhood memories and their influence on adult identity. Together with Samuel Taylor Coleridge, he helped launch the Romantic movement through Lyrical Ballads. His long autobiographical poem The Prelude examines the development of his mind. Wordsworth saw imagination as a powerful force connecting people with the natural world. His poetry often transforms simple landscapes into profound emotional experiences. He emphasized feeling recollected through reflection. His influence on nature poetry remains enormous. Wordsworth made ordinary rural life a serious subject of poetry.",
-quotes:[
-"Poetry is the spontaneous overflow of powerful feelings.",
-"Nature never did betray the heart that loved her.",
-"The child is father of the man."
-]
+ id:"wordsworth",
+ name:"William Wordsworth",
+ region:"British",
+ period:"Romantic",
+ years:"1770–1850",
+ movement:"Romanticism",
+ genre:"Poetry",
+ bio:"Major English Romantic poet who emphasized nature, memory and ordinary human experience.",
+ early:"Born in Cockermouth in the Lake District.",
+ education:"Cambridge University",
+ career:"Poet Laureate of Britain.",
+ context:"Industrial Revolution and Romantic reaction against neoclassicism.",
+ style:"Simple language, nature imagery, reflection and emotional recollection.",
+ themes:"Nature, childhood, memory, imagination and the common person.",
+ works:["Lyrical Ballads","Tintern Abbey","The Prelude","I Wandered Lonely as a Cloud"],
+ influence:"Helped establish English Romantic poetry.",
+ notes:"Exam focus: poetry as emotion recollected in tranquility; nature as teacher."
 },
 
 {
-name:"John Keats",
-origin:"England",
-category:"English & American",
-years:"1795–1821",
-works:"Ode to a Nightingale, Ode on a Grecian Urn, To Autumn",
-themes:"Beauty, mortality, imagination, art",
-bio:"John Keats was a major English Romantic poet whose career was tragically short. His poetry is celebrated for its sensual imagery, musical language and fascination with beauty. Keats repeatedly explores the tension between beautiful things and human mortality. His odes bring together art, nature, imagination and philosophical reflection. He developed the idea of negative capability, describing the ability to remain comfortable with uncertainty. Despite criticism during his lifetime, Keats eventually became one of the most admired English poets. His poetry often turns physical beauty into a meditation on death and permanence. He was deeply influenced by Greek mythology and classical art. His descriptions of autumn, birds and flowers are particularly famous. His poetic development was extraordinarily rapid. Keats died from tuberculosis at only twenty-five.",
-quotes:[
-"A thing of beauty is a joy for ever.",
-"Beauty is truth, truth beauty.",
-"I have been half in love with easeful Death."
-]
+ id:"woolf",
+ name:"Virginia Woolf",
+ region:"British",
+ period:"Modernist",
+ years:"1882–1941",
+ movement:"Modernism",
+ genre:"Novel • Essay",
+ bio:"Modernist novelist and essayist famous for stream-of-consciousness narrative.",
+ early:"Born into an intellectual London family.",
+ education:"Privately educated; extensive literary education through family circle.",
+ career:"Novelist, essayist, publisher and member of the Bloomsbury Group.",
+ context:"Early twentieth-century modernism and changing gender roles.",
+ style:"Stream of consciousness, interiority, shifting perspectives and lyrical prose.",
+ themes:"Time, identity, gender, consciousness, memory and social convention.",
+ works:["Mrs Dalloway","To the Lighthouse","Orlando","A Room of One's Own"],
+ influence:"One of the defining voices of literary modernism.",
+ notes:"Exam focus: stream of consciousness, feminism, modernity, interiority."
+},
+
+/* ---------------- AMERICAN ---------------- */
+
+{
+ id:"poe",
+ name:"Edgar Allan Poe",
+ region:"American",
+ period:"19th Century",
+ years:"1809–1849",
+ movement:"American Romanticism",
+ genre:"Poetry • Short Story",
+ bio:"American poet, short-story writer and critic associated with Gothic literature and detective fiction.",
+ early:"Born in Boston.",
+ education:"University of Virginia briefly",
+ career:"Writer, editor and literary critic.",
+ context:"American Romanticism and Gothic literary culture.",
+ style:"Musical language, symbolism, psychological horror and Gothic atmosphere.",
+ themes:"Death, madness, grief, guilt and the supernatural.",
+ works:["The Raven","The Tell-Tale Heart","The Fall of the House of Usher","The Black Cat"],
+ characters:["The narrator of The Tell-Tale Heart","Lenore","Roderick Usher"],
+ influence:"Major influence on horror, detective fiction and symbolism."
 },
 
 {
-name:"Percy Bysshe Shelley",
-origin:"England",
-category:"English & American",
-years:"1792–1822",
-works:"Ode to the West Wind, To a Skylark, Prometheus Unbound",
-themes:"Freedom, revolution, nature, imagination",
-bio:"Percy Bysshe Shelley was one of the great English Romantic poets. His poetry combines revolutionary political ideals with intense imagination and musical expression. Shelley believed poetry could influence society and encourage human freedom. Nature is often presented as a powerful force of transformation. His Ode to the West Wind connects natural energy with hopes for intellectual and political renewal. His poetry frequently challenges tyranny and conventional authority. Shelley was influenced by classical literature, philosophy and contemporary political movements. His idealism is central to his poetic identity. He also wrote lyrical poems of extraordinary musical beauty. His life was controversial because of his political and religious views. He drowned in Italy at the age of twenty-nine.",
-quotes:[
-"If Winter comes, can Spring be far behind?",
-"The world's great age begins anew.",
-"Rise like Lions after slumber."
-]
+ id:"whitman",
+ name:"Walt Whitman",
+ region:"American",
+ period:"19th Century",
+ years:"1819–1892",
+ movement:"Transcendental / American Romantic",
+ genre:"Poetry",
+ bio:"American poet whose Leaves of Grass transformed nineteenth-century poetry.",
+ early:"Born on Long Island.",
+ education:"Limited formal schooling; worked in printing and journalism.",
+ career:"Printer, journalist, poet and government clerk.",
+ context:"American Civil War and democratic expansion.",
+ style:"Free verse, catalogues, expansive voice and celebration of individuality.",
+ themes:"Democracy, body, self, nature, sexuality and humanity.",
+ works:["Leaves of Grass","Song of Myself","O Captain! My Captain!"],
+ influence:"Pioneer of American free verse."
 },
 
 {
-name:"Lord Byron",
-origin:"England",
-category:"English & American",
-years:"1788–1824",
-works:"Don Juan, Childe Harold's Pilgrimage, She Walks in Beauty",
-themes:"Freedom, love, rebellion, individualism",
-bio:"George Gordon Byron, known as Lord Byron, was a major Romantic poet famous for his dramatic personality and powerful verse. His poetry often features rebellious, passionate and isolated characters. The Byronic hero became an influential literary type characterized by pride, mystery and emotional intensity. Byron's Don Juan combines satire, romance and social criticism. His poetry also reflects his fascination with travel and foreign cultures. He supported Greek independence and died while participating in the Greek struggle. Byron's writing can be both serious and humorous. He criticized social hypocrisy and political oppression. His life became almost as legendary as his poetry. His influence spread across European literature. Byron remains one of Romanticism's most recognizable figures.",
-quotes:[
-"She walks in beauty, like the night.",
-"Those who will not reason, are bigots; those who cannot, are fools.",
-"The best prophet of the future is the past."
-]
+ id:"hemingway",
+ name:"Ernest Hemingway",
+ region:"American",
+ period:"Modernist",
+ years:"1899–1961",
+ movement:"Modernism",
+ genre:"Novel • Short Story",
+ bio:"American novelist and short-story writer known for economical prose.",
+ early:"Born in Oak Park, Illinois.",
+ education:"Oak Park and River Forest High School.",
+ career:"Journalist, novelist and war correspondent.",
+ context:"World War I, Lost Generation and twentieth-century modernism.",
+ style:"Minimalism, short sentences, understatement and the iceberg theory.",
+ themes:"War, courage, masculinity, death, love and endurance.",
+ works:["The Old Man and the Sea","A Farewell to Arms","For Whom the Bell Tolls","The Sun Also Rises"],
+ influence:"Strong influence on twentieth-century prose style."
 },
 
 {
-name:"Emily Dickinson",
-origin:"United States",
-category:"English & American",
-years:"1830–1886",
-works:"Because I could not stop for Death, Hope is the thing with feathers",
-themes:"Death, immortality, nature, solitude",
-bio:"Emily Dickinson was an American poet whose unusual punctuation, compressed language and imaginative metaphors made her one of the most distinctive voices in American poetry. She spent much of her life in Amherst, Massachusetts. Her poems frequently examine death, immortality, faith, nature and private consciousness. Dickinson often used dashes and unexpected capitalization to create pauses and ambiguity. Her poems are usually short but intellectually dense. She transformed ordinary objects into mysterious symbols. Many of her poems were published only after her death. Her relationship with religion was complex and often questioning. She explored isolation while also possessing a remarkably expansive imagination. Modern poetry owes much to her compressed style. Dickinson is now considered one of America's greatest poets.",
-quotes:[
-"Hope is the thing with feathers.",
-"Because I could not stop for Death –",
-"Forever is composed of nows.",
-"That it will never come again is what makes life so sweet."
-]
+ id:"morrison",
+ name:"Toni Morrison",
+ region:"American",
+ period:"Postmodern / Contemporary",
+ years:"1931–2019",
+ movement:"African American Literature",
+ genre:"Novel",
+ bio:"American novelist and Nobel Prize-winning writer whose fiction explores memory, identity and history.",
+ early:"Born Chloe Anthony Wofford in Lorain, Ohio.",
+ education:"Howard University and Cornell University.",
+ career:"Editor, professor and novelist.",
+ context:"African American history, civil rights and contemporary literature.",
+ style:"Nonlinear narratives, symbolism, oral traditions and lyrical prose.",
+ themes:"Memory, race, trauma, motherhood, identity and community.",
+ works:["Beloved","Song of Solomon","The Bluest Eye","Sula"],
+ influence:"One of the most important American novelists of the twentieth century."
+},
+
+/* ---------------- RUSSIAN ---------------- */
+
+{
+ id:"tolstoy",
+ name:"Leo Tolstoy",
+ region:"Russian",
+ period:"19th Century",
+ years:"1828–1910",
+ movement:"Russian Realism",
+ genre:"Novel • Philosophy",
+ bio:"Russian novelist and philosopher famous for epic realistic fiction.",
+ early:"Born into an aristocratic family at Yasnaya Polyana.",
+ education:"Home education and Kazan University studies.",
+ career:"Novelist, moral philosopher and social thinker.",
+ context:"Imperial Russia and nineteenth-century realism.",
+ style:"Realism, detailed social observation and moral inquiry.",
+ themes:"War, peace, morality, family, society, faith and human purpose.",
+ works:["War and Peace","Anna Karenina","The Death of Ivan Ilyich"],
+ influence:"One of the giants of world realist fiction."
 },
 
 {
-name:"Walt Whitman",
-origin:"United States",
-category:"English & American",
-years:"1819–1892",
-works:"Leaves of Grass, Song of Myself",
-themes:"Democracy, individuality, body, humanity",
-bio:"Walt Whitman revolutionized American poetry through free verse and expansive celebrations of individual and collective life. His major work Leaves of Grass developed throughout his lifetime. Whitman rejected many traditional poetic conventions and created long, rhythmic lines. He celebrated the human body, democracy, nature and the dignity of ordinary people. His poetry frequently moves between the personal and the universal. He saw the individual self as connected with humanity as a whole. His Civil War experiences deeply affected his later writing. Whitman's style influenced poets around the world. His poetry often sounds like a declaration of freedom. He helped establish a distinctly American poetic voice. He remains one of the most influential nineteenth-century poets.",
-quotes:[
-"I celebrate myself, and sing myself.",
-"Do I contradict myself? Very well then I contradict myself.",
-"Keep your face always toward the sunshine."
-]
+ id:"dostoevsky",
+ name:"Fyodor Dostoevsky",
+ region:"Russian",
+ period:"19th Century",
+ years:"1821–1881",
+ movement:"Russian Realism",
+ genre:"Novel • Philosophy",
+ bio:"Russian novelist famous for psychological and philosophical fiction.",
+ early:"Born in Moscow.",
+ education:"Military Engineering Academy.",
+ career:"Novelist, journalist and essayist.",
+ context:"Tsarist Russia, political radicalism and religious debate.",
+ style:"Psychological depth, polyphony, existential questions and intense dialogue.",
+ themes:"Crime, guilt, faith, freedom, suffering and morality.",
+ works:["Crime and Punishment","The Brothers Karamazov","The Idiot","Notes from Underground"],
+ influence:"Highly influential on psychology, existentialism and modern fiction."
 },
 
 {
-name:"Edgar Allan Poe",
-origin:"United States",
-category:"English & American",
-years:"1809–1849",
-works:"The Raven, The Tell-Tale Heart, Annabel Lee",
-themes:"Death, mystery, madness, beauty",
-bio:"Edgar Allan Poe was an American poet, short-story writer and critic who became famous for his dark imagination. He is strongly associated with Gothic literature, mystery and psychological horror. Poe explored grief, obsession, madness and death with unusual intensity. The Raven is among his most famous poems. His short stories helped develop detective fiction and psychological horror. Poe was also an important literary critic who valued craftsmanship and unity of effect. His writing often creates claustrophobic and dreamlike atmospheres. He frequently portrays narrators whose minds become unreliable. Poe's influence extends into horror, detective fiction and popular culture. His work became especially influential in France and later European symbolism. He remains one of America's most recognizable literary figures.",
-quotes:[
-"All that we see or seem is but a dream within a dream.",
-"Deep into that darkness peering.",
-"Quoth the Raven, Nevermore."
-]
+ id:"chekhov",
+ name:"Anton Chekhov",
+ region:"Russian",
+ period:"Late 19th Century",
+ years:"1860–1904",
+ movement:"Russian Realism",
+ genre:"Drama • Short Story",
+ bio:"Russian playwright and short-story master.",
+ early:"Born in Taganrog.",
+ education:"Moscow State University medical studies.",
+ career:"Doctor, playwright and writer.",
+ context:"Late Imperial Russia.",
+ style:"Subtle characterization, understatement and open-ended drama.",
+ themes:"Ordinary life, disappointment, social change and human longing.",
+ works:["The Cherry Orchard","The Seagull","Uncle Vanya","Three Sisters"],
+ influence:"Revolutionized modern drama and short fiction."
+},
+
+/* ---------------- SOUTH ASIAN ---------------- */
+
+{
+ id:"tagore",
+ name:"Rabindranath Tagore",
+ region:"South Asian",
+ period:"Modern",
+ years:"1861–1941",
+ movement:"Bengali Renaissance",
+ genre:"Poetry • Fiction • Drama",
+ bio:"Bengali poet, novelist, playwright and philosopher who won the Nobel Prize in Literature.",
+ early:"Born into a prominent Bengali family in Calcutta.",
+ education:"Home education and studies in England.",
+ career:"Poet, educator, philosopher and institution builder.",
+ context:"Bengal Renaissance and colonial India.",
+ style:"Lyrical, spiritual, philosophical and humanistic.",
+ themes:"Nature, spirituality, freedom, love and humanity.",
+ works:["Gitanjali","The Home and the World","Gora","The Post Office"],
+ influence:"First non-European Nobel laureate in Literature."
 },
 
 {
-name:"Robert Frost",
-origin:"United States",
-category:"English & American",
-years:"1874–1963",
-works:"The Road Not Taken, Mending Wall, Stopping by Woods",
-themes:"Nature, choices, rural life, isolation",
-bio:"Robert Frost was an American poet famous for writing about rural New England landscapes while exploring difficult philosophical questions. His poetry often appears simple but contains deep ambiguity. He used traditional forms and conversational language to examine choices, relationships and human isolation. Nature in Frost is rarely merely beautiful; it can also be indifferent or dangerous. The Road Not Taken became one of the most famous poems about choices. Frost's poems often contain dramatic speakers whose words reveal more than they intend. His work balances accessibility with intellectual complexity. He received four Pulitzer Prizes for poetry. Frost became a major public literary figure in America. His poetry remains widely taught in schools and universities. His influence continues through his distinctive combination of simplicity and depth.",
-quotes:[
-"Two roads diverged in a wood, and I—",
-"The woods are lovely, dark and deep.",
-"Good fences make good neighbors."
-]
+ id:"iqbal",
+ name:"Muhammad Iqbal",
+ region:"South Asian",
+ period:"Modern",
+ years:"1877–1938",
+ movement:"Modern Urdu / Persian Poetry",
+ genre:"Poetry • Philosophy",
+ bio:"Major South Asian philosopher-poet who wrote extensively in Urdu and Persian.",
+ early:"Born in Sialkot.",
+ education:"Government College Lahore; Cambridge; University of Munich.",
+ career:"Poet, philosopher, lawyer and political thinker.",
+ context:"Colonial South Asia and Muslim intellectual awakening.",
+ style:"Philosophical symbolism, Persianate imagery and powerful rhetoric.",
+ themes:"Khudi, selfhood, spiritual awakening, freedom and community.",
+ works:["Bang-e-Dra","Asrar-e-Khudi","Bal-e-Jibril","Zarb-e-Kalim"],
+ influence:"Major influence on Urdu and Persian literary thought."
 },
 
 {
-name:"T. S. Eliot",
-origin:"United States / England",
-category:"English & American",
-years:"1888–1965",
-works:"The Waste Land, Four Quartets, The Love Song of J. Alfred Prufrock",
-themes:"Modernity, fragmentation, spirituality, alienation",
-bio:"T. S. Eliot was one of the most influential poets of literary Modernism. His poetry reflects the anxiety, fragmentation and cultural uncertainty of the modern world. The Waste Land became a landmark of twentieth-century literature. Eliot combined multiple languages, literary references and cultural traditions in his poems. His work can feel difficult because it creates deliberate fragmentation. He was also a major literary critic and dramatist. His later poetry increasingly explored spiritual questions. Four Quartets represents his mature meditation on time, memory and eternity. Eliot received the Nobel Prize in Literature in 1948. His influence transformed modern poetry and criticism. He remains essential for understanding twentieth-century literary Modernism.",
-quotes:[
-"April is the cruellest month.",
-"This is the way the world ends.",
-"Only those who will risk going too far can possibly find out how far one can go."
-]
+ id:"ghalib",
+ name:"Mirza Ghalib",
+ region:"South Asian",
+ period:"19th Century",
+ years:"1797–1869",
+ movement:"Classical Urdu Poetry",
+ genre:"Poetry",
+ bio:"One of the greatest Urdu and Persian poets.",
+ early:"Born in Agra.",
+ education:"Traditional literary and Persian education.",
+ career:"Poet and letter writer.",
+ context:"Late Mughal and colonial India.",
+ style:"Complex metaphors, wit, philosophical reflection and ambiguity.",
+ themes:"Love, existence, fate, spirituality and human desire.",
+ works:["Diwan-e-Ghalib","Urdu Letters"],
+ influence:"Central figure in Urdu literary culture."
 },
 
 {
-name:"Sylvia Plath",
-origin:"United States",
-category:"English & American",
-years:"1932–1963",
-works:"Ariel, The Bell Jar, Daddy",
-themes:"Identity, memory, death, alienation",
-bio:"Sylvia Plath was an American poet and novelist whose intense writing became associated with confessional poetry. Her poems frequently explore identity, memory, relationships, suffering and mortality. She used vivid imagery and powerful symbolic language. Ariel, published after her death, became one of the defining poetry collections of the twentieth century. Her novel The Bell Jar examines identity and psychological pressure through a young woman's experience. Plath's writing often shifts rapidly between vulnerability and control. Her images can be startling, precise and emotionally intense. She is studied for both her poetic technique and autobiographical dimensions. Her work has influenced generations of contemporary poets. Plath remains a central figure in discussions of modern confessional poetry.",
-quotes:[
-"I am, I am, I am.",
-"The silence depressed me. It wasn't the silence of silence. It was my own silence.",
-"Perhaps when we find ourselves wanting everything, it is because we are dangerously close to wanting nothing."
-]
+ id:"salmanrushdie",
+ name:"Salman Rushdie",
+ region:"South Asian",
+ period:"Postcolonial",
+ years:"1947–",
+ movement:"Postcolonial Literature",
+ genre:"Novel",
+ bio:"British-Indian novelist known for magical realism and postcolonial fiction.",
+ early:"Born in Bombay, British India.",
+ education:"Rugby School and King's College Cambridge.",
+ career:"Novelist and essayist.",
+ context:"Partition, migration and postcolonial identity.",
+ style:"Magical realism, satire, multilingual wordplay and historical layering.",
+ themes:"Identity, migration, nation, memory and cultural hybridity.",
+ works:["Midnight's Children","The Satanic Verses","Shame"],
+ influence:"Important voice in postcolonial literature."
+},
+
+/* ---------------- SOUTHEAST ASIAN ---------------- */
+
+{
+ id:"pramoedya",
+ name:"Pramoedya Ananta Toer",
+ region:"Southeast Asian",
+ period:"20th Century",
+ years:"1925–2006",
+ movement:"Indonesian Literature",
+ genre:"Novel • Essay",
+ bio:"Major Indonesian novelist whose works explore colonialism, nationalism and oppression.",
+ early:"Born in Blora, Java.",
+ education:"Formal education in Dutch colonial Indonesia.",
+ career:"Writer, journalist and activist.",
+ context:"Dutch colonialism, Japanese occupation and Indonesian independence.",
+ style:"Historical realism and political storytelling.",
+ themes:"Colonialism, freedom, identity and social injustice.",
+ works:["This Earth of Mankind","Child of All Nations"],
+ influence:"One of Indonesia's most internationally recognized writers."
 },
 
 {
-name:"Maya Angelou",
-origin:"United States",
-category:"English & American",
-years:"1928–2014",
-works:"I Know Why the Caged Bird Sings, Still I Rise, Phenomenal Woman",
-themes:"Identity, resilience, dignity, freedom",
-bio:"Maya Angelou was an American poet, memoirist and civil-rights activist whose writing celebrates dignity, resilience and human strength. Her autobiographical works brought powerful personal experiences into American literature. She wrote about racism, womanhood, identity and overcoming hardship. Her poetry frequently uses rhythm and repetition to create memorable declarations of strength. Still I Rise became an especially influential poem of resistance and self-respect. Angelou was also involved in the American civil-rights movement. Her work crossed the boundaries between literature, activism and public culture. She became a widely admired speaker and writer. Her memoirs helped establish a major tradition of autobiographical writing. Angelou remains an important voice for courage, dignity and hope.",
-quotes:[
-"Still I rise.",
-"Nothing can dim the light which shines from within.",
-"You may encounter many defeats, but you must not be defeated."
-]
+ id:"leminhkhue",
+ name:"Lê Minh Khuê",
+ region:"Southeast Asian",
+ period:"Contemporary",
+ years:"1949–",
+ movement:"Vietnamese Literature",
+ genre:"Short Story",
+ bio:"Vietnamese writer known for fiction about war and its human consequences.",
+ early:"Born in Thanh Hóa, Vietnam.",
+ education:"Literary and journalistic training.",
+ career:"Writer and journalist.",
+ context:"Vietnam War and postwar Vietnam.",
+ style:"Realist, concise and psychologically focused.",
+ themes:"War, youth, memory and human resilience.",
+ works:["The Distant Stars","The Stars"],
+ influence:"Important Vietnamese literary voice."
+},
+
+/* ---------------- FRENCH ---------------- */
+
+{
+ id:"hugo",
+ name:"Victor Hugo",
+ region:"French",
+ period:"19th Century",
+ years:"1802–1885",
+ movement:"French Romanticism",
+ genre:"Novel • Poetry • Drama",
+ bio:"French Romantic poet, novelist and political thinker.",
+ early:"Born in Besançon.",
+ education:"Self-educated and literary training.",
+ career:"Poet, novelist, playwright and politician.",
+ context:"Political upheaval in nineteenth-century France.",
+ style:"Grand Romantic imagery, social criticism and emotional intensity.",
+ themes:"Justice, freedom, poverty, love and revolution.",
+ works:["Les Misérables","The Hunchback of Notre-Dame","The Man Who Laughs"],
+ influence:"Central figure of French Romanticism."
 },
 
 {
-name:"William Blake",
-origin:"England",
-category:"English & American",
-years:"1757–1827",
-works:"Songs of Innocence and of Experience, The Marriage of Heaven and Hell",
-themes:"Innocence, experience, imagination, spirituality",
-bio:"William Blake was an English poet, artist and visionary thinker. He created poetry and visual art together, producing illuminated books unlike anything else in English literature. His Songs of Innocence and of Experience contrasts different states of human consciousness. Blake challenged conventional religion, politics and social authority. He believed imagination was essential to human freedom. His poems often use deceptively simple language to express complex ideas. The child, the city and the tiger become powerful symbolic figures in his work. Blake's mystical vision made him difficult for his contemporaries to understand. Later Romantic and modern writers recognized his originality. His combination of poetry and visual art was revolutionary. Blake is now considered one of England's great visionary poets.",
-quotes:[
-"Tyger Tyger, burning bright.",
-"To see a World in a Grain of Sand.",
-"Energy is Eternal Delight."
-]
+ id:"camus",
+ name:"Albert Camus",
+ region:"French",
+ period:"20th Century",
+ years:"1913–1960",
+ movement:"Absurdism / Existentialism",
+ genre:"Novel • Essay • Drama",
+ bio:"French-Algerian philosopher and writer associated with the philosophy of the absurd.",
+ early:"Born in Mondovi, French Algeria.",
+ education:"University of Algiers.",
+ career:"Writer, journalist and philosopher.",
+ context:"World War II and twentieth-century philosophical crisis.",
+ style:"Clear prose, philosophical fiction and moral questioning.",
+ themes:"Absurdity, freedom, death, rebellion and meaning.",
+ works:["The Stranger","The Plague","The Myth of Sisyphus","The Fall"],
+ influence:"Major twentieth-century thinker."
+},
+
+/* ---------------- ITALIAN ---------------- */
+
+{
+ id:"dante",
+ name:"Dante Alighieri",
+ region:"Italian",
+ period:"Medieval",
+ years:"1265–1321",
+ movement:"Medieval Literature",
+ genre:"Epic Poetry",
+ bio:"Italian poet best known for the Divine Comedy.",
+ early:"Born in Florence.",
+ education:"Studied classical and theological traditions.",
+ career:"Poet, political thinker and exile.",
+ context:"Medieval Florence and Christian Europe.",
+ style:"Allegory, terza rima, symbolism and theological vision.",
+ themes:"Sin, redemption, love, justice and spiritual journey.",
+ works:["The Divine Comedy","Vita Nuova","De Monarchia"],
+ influence:"Foundational figure in Italian literature."
 },
 
 {
-name:"W. B. Yeats",
-origin:"Ireland",
-category:"English & American",
-years:"1865–1939",
-works:"The Second Coming, Sailing to Byzantium, Easter 1916",
-themes:"History, aging, mythology, politics",
-bio:"William Butler Yeats was an Irish poet and dramatist whose work developed from Romantic symbolism toward modernist intensity. He was deeply interested in Irish mythology, politics and cultural identity. His poetry repeatedly examines history and the passage of time. Yeats created elaborate symbolic systems to understand human and historical cycles. His later poetry became more direct, dramatic and politically charged. The Second Coming is one of the most influential poems of the twentieth century. Yeats also helped establish the Irish Literary Revival. He received the Nobel Prize in Literature in 1923. His poetry explores aging, love, political violence and artistic ambition. He remains one of the defining poets of modern Ireland.",
-quotes:[
-"Things fall apart; the centre cannot hold.",
-"That is no country for old men.",
-"Education is not the filling of a pail, but the lighting of a fire."
-]
+ id:"petrarch",
+ name:"Francesco Petrarch",
+ region:"Italian",
+ period:"Renaissance",
+ years:"1304–1374",
+ movement:"Humanism",
+ genre:"Poetry",
+ bio:"Italian poet and scholar often called the father of Humanism.",
+ early:"Born in Arezzo.",
+ education:"Studied law at Montpellier and Bologna.",
+ career:"Poet and scholar.",
+ context:"Early Renaissance Italy.",
+ style:"Sonnet form, classical allusion and introspection.",
+ themes:"Love, memory, nature and humanism.",
+ works:["Canzoniere","Secretum"],
+ influence:"Huge influence on European Renaissance poetry."
+},
+
+/* ---------------- GERMAN ---------------- */
+
+{
+ id:"goethe",
+ name:"Johann Wolfgang von Goethe",
+ region:"German",
+ period:"18th–19th Century",
+ years:"1749–1832",
+ movement:"Sturm und Drang / Weimar Classicism",
+ genre:"Poetry • Drama • Novel",
+ bio:"German writer and polymath whose work spans poetry, drama, fiction and philosophy.",
+ early:"Born in Frankfurt.",
+ education:"University of Leipzig and Strasbourg.",
+ career:"Writer, statesman and scholar.",
+ context:"German Enlightenment and Romantic transition.",
+ style:"Classical balance combined with Romantic passion.",
+ themes:"Knowledge, love, individuality, nature and human development.",
+ works:["Faust","The Sorrows of Young Werther","Wilhelm Meister"],
+ influence:"One of Germany's greatest literary figures."
 },
 
 {
-name:"Christina Rossetti",
-origin:"England",
-category:"English & American",
-years:"1830–1894",
-works:"Goblin Market, Remember, In the Bleak Midwinter",
-themes:"Love, faith, temptation, mortality",
-bio:"Christina Rossetti was a major Victorian poet known for musical language and religious as well as emotional depth. Her poetry frequently explores love, temptation, sacrifice and mortality. Goblin Market combines fairy-tale imagery with complex themes of desire and sisterhood. Rossetti's religious faith strongly influenced her writing. Her poems often achieve great emotional force through simple rhythms and images. She wrote both devotional poetry and secular love poetry. Her work has attracted renewed feminist and literary attention. Rossetti belonged to the Pre-Raphaelite artistic circle through her family. Her poetry often balances earthly desire with spiritual aspiration. She is now recognized as one of the most important Victorian women poets.",
-quotes:[
-"Better by far you should forget and smile.",
-"Does the road wind uphill all the way?",
-"When I am dead, my dearest."
-]
+ id:"kafka",
+ name:"Franz Kafka",
+ region:"German",
+ period:"Modernist",
+ years:"1883–1924",
+ movement:"Modernism / Existential",
+ genre:"Novel • Short Story",
+ bio:"German-language writer known for surreal bureaucratic worlds and alienation.",
+ early:"Born in Prague into a German-speaking Jewish family.",
+ education:"Charles University in Prague.",
+ career:"Insurance worker and writer.",
+ context:"Central European modernity and Austro-Hungarian society.",
+ style:"Absurd situations, bureaucracy, alienation and dream logic.",
+ themes:"Isolation, guilt, identity, authority and absurdity.",
+ works:["The Metamorphosis","The Trial","The Castle"],
+ influence:"Created the adjective 'Kafkaesque'."
 },
 
-/* ANCIENT */
+/* ---------------- GREEK ---------------- */
 
 {
-name:"Homer",
-origin:"Ancient Greece",
-category:"Ancient & Classical",
-years:"Ancient Greek tradition",
-works:"Iliad, Odyssey",
-themes:"Heroism, fate, war, homecoming",
-bio:"Homer is the traditional name associated with the ancient Greek epics The Iliad and The Odyssey. Although details about the historical person are uncertain, the poems became foundational works of Western literature. The Iliad explores war, honor, anger and mortality through the Trojan conflict. The Odyssey follows Odysseus through a long journey toward home. Homeric poetry combines heroic action with profound reflections on human weakness. Gods and humans interact constantly in the epics. Oral poetic traditions shaped their formulaic language and structure. The poems influenced Greek education and later European literature. Characters such as Achilles, Hector and Odysseus became archetypal literary figures. Homer remains central to the study of epic poetry.",
-quotes:[
-"Sing, goddess, the anger of Peleus' son Achilles.",
-"Tell me, Muse, of the man of many ways.",
-"Of all creatures that breathe and move upon the earth, nothing is bred that is weaker than man."
-]
-},
-
-{
-name:"Sappho",
-origin:"Ancient Greece",
-category:"Ancient & Classical",
-years:"c. 630–570 BCE",
-works:"Fragments, Hymn to Aphrodite",
-themes:"Love, desire, beauty, longing",
-bio:"Sappho was an ancient Greek lyric poet from the island of Lesbos. She became famous for intimate poetry centered on love, desire, beauty and personal emotion. Much of her work survives only in fragments, making her poetry especially intriguing. Sappho's language is direct but emotionally sophisticated. She addressed gods and human lovers in lyrical forms. Her reputation became enormous throughout classical antiquity. Later writers admired her musicality and emotional intensity. Her name gave rise to terms associated with women-loving-women relationships because of her poetry and cultural association with Lesbos. Sappho transformed private feeling into enduring art. She remains one of the most famous poets of the ancient world.",
-quotes:[
-"Someone will remember us, I say, even in another time.",
-"Once again love drives me on.",
-"He seems to me equal to the gods."
-]
+ id:"homer",
+ name:"Homer",
+ region:"Greek",
+ period:"Archaic Greece",
+ years:"c. 8th century BCE",
+ movement:"Ancient Greek Epic",
+ genre:"Epic",
+ bio:"Traditional name associated with two foundational Greek epics.",
+ early:"Biographical details are uncertain.",
+ education:"Unknown.",
+ career:"Traditional epic poet.",
+ context:"Archaic Greek oral poetic tradition.",
+ style:"Formulaic language, epic similes and heroic narrative.",
+ themes:"Honor, fate, war, heroism, loyalty and divine intervention.",
+ works:["Iliad","Odyssey"],
+ influence:"Foundational influence on Western literature."
 },
 
 {
-name:"Virgil",
-origin:"Rome",
-category:"Ancient & Classical",
-years:"70–19 BCE",
-works:"Aeneid, Eclogues, Georgics",
-themes:"Empire, duty, fate, sacrifice",
-bio:"Virgil was the great Roman poet who wrote the Aeneid, Rome's national epic. The poem follows Aeneas after the destruction of Troy as he travels toward the future foundation of Roman civilization. Virgil combined Greek epic traditions with Roman political and cultural ideas. Aeneas represents duty, particularly the Roman virtue of pietas. His poetry also includes pastoral and agricultural subjects. Virgil's style became a model for European epic poetry. Dante later made Virgil his guide through Hell and Purgatory in the Divine Comedy. The Aeneid explores the painful cost of historical destiny. Virgil died before fully revising the poem. His influence on European literature is enormous.",
-quotes:[
-"Fortune favors the bold.",
-"Perhaps even here the memory of our deeds will bring comfort.",
-"Love conquers all."
-]
+ id:"sappho",
+ name:"Sappho",
+ region:"Greek",
+ period:"Archaic Greece",
+ years:"c. 630–570 BCE",
+ movement:"Greek Lyric",
+ genre:"Lyric Poetry",
+ bio:"Ancient Greek lyric poet from Lesbos.",
+ early:"Associated with aristocratic society on Lesbos.",
+ education:"Classical Greek cultural education.",
+ career:"Poet and performer.",
+ context:"Archaic Greek lyric tradition.",
+ style:"Intimate first-person lyricism and emotional intensity.",
+ themes:"Love, desire, beauty and separation.",
+ works:["Fragments","Ode to Aphrodite"],
+ influence:"One of antiquity's most celebrated lyric poets."
 },
 
 {
-name:"Ovid",
-origin:"Rome",
-category:"Ancient & Classical",
-years:"43 BCE–17/18 CE",
-works:"Metamorphoses, Ars Amatoria, Tristia",
-themes:"Transformation, love, mythology, exile",
-bio:"Ovid was one of ancient Rome's most influential poets. His Metamorphoses retells hundreds of Greek and Roman myths connected by the theme of transformation. Ovid's writing is playful, sophisticated and frequently interested in desire and power. His stories influenced European painting, poetry and drama for centuries. He was exiled by Emperor Augustus for reasons that remain uncertain. His poetry from exile becomes more personal and melancholic. Ovid's treatment of mythology gave later European writers an enormous source of stories. His influence can be seen in Shakespeare, Chaucer and countless modern artists. Transformation in his poetry can be physical, emotional or symbolic. He remains one of the foundational classical poets.",
-quotes:[
-"Take away the mind and you take away the world.",
-"Time, which changes people, does not alter the image we have retained of them.",
-"Love will enter softly."
-]
+ id:"sophocles",
+ name:"Sophocles",
+ region:"Greek",
+ period:"Classical Greece",
+ years:"c. 496–406 BCE",
+ movement:"Greek Tragedy",
+ genre:"Drama",
+ bio:"One of the three great ancient Greek tragedians.",
+ early:"Born near Athens.",
+ education:"Elite Athenian education.",
+ career:"Playwright and public official.",
+ context:"Classical Athens.",
+ style:"Complex characterization and tragic structure.",
+ themes:"Fate, knowledge, pride, law and moral responsibility.",
+ works:["Oedipus Rex","Antigone","Oedipus at Colonus"],
+ influence:"Central to the development of tragedy."
+},
+
+/* ---------------- ROMAN ---------------- */
+
+{
+ id:"virgil",
+ name:"Virgil",
+ region:"Roman",
+ period:"Augustan",
+ years:"70–19 BCE",
+ movement:"Roman Classical",
+ genre:"Epic Poetry",
+ bio:"Roman poet best known for the Aeneid.",
+ early:"Born near Mantua.",
+ education:"Studied rhetoric and philosophy.",
+ career:"Poet under Augustus.",
+ context:"Augustan Rome.",
+ style:"Epic diction, mythology and political symbolism.",
+ themes:"Duty, destiny, empire, sacrifice and identity.",
+ works:["Aeneid","Eclogues","Georgics"],
+ influence:"Major model for later European epic poetry."
 },
 
 {
-name:"Dante Alighieri",
-origin:"Italy",
-category:"Ancient & Classical",
-years:"1265–1321",
-works:"Divine Comedy, Vita Nuova",
-themes:"Love, salvation, politics, journey",
-bio:"Dante Alighieri was an Italian poet whose Divine Comedy became one of the greatest achievements of medieval European literature. Written in the Tuscan vernacular, it helped establish the literary importance of Italian. The poem describes a journey through Hell, Purgatory and Paradise. Dante encounters historical figures, mythological characters and spiritual guides. Beatrice represents divine love and spiritual illumination. The poem combines theology, philosophy, politics and personal experience. Dante also wrote about language and love in other works. His political exile profoundly influenced his writing. The Divine Comedy became a foundational text for later European literature. Dante's imaginative architecture of the afterlife remains extraordinarily influential.",
-quotes:[
-"The path to paradise begins in hell.",
-"The love that moves the sun and the other stars.",
-"Consider your origin: you were not made to live as brutes."
-]
+ id:"ovid",
+ name:"Ovid",
+ region:"Roman",
+ period:"Augustan",
+ years:"43 BCE–17/18 CE",
+ movement:"Roman Classical",
+ genre:"Poetry",
+ bio:"Roman poet famous for mythology and transformation narratives.",
+ early:"Born in Sulmo.",
+ education:"Studied rhetoric in Rome.",
+ career:"Poet and court literary figure.",
+ context:"Augustan Rome.",
+ style:"Elegant verse, wit, mythology and transformation.",
+ themes:"Love, desire, change and power.",
+ works:["Metamorphoses","Ars Amatoria","Tristia"],
+ influence:"Enormous influence on European art and literature."
 },
 
-/* PERSIAN & MIDDLE EASTERN */
+/* ---------------- CHINESE ---------------- */
 
 {
-name:"Rumi",
-origin:"Persia",
-category:"Persian & Middle Eastern",
-years:"1207–1273",
-works:"Masnavi, Divan-e Shams",
-themes:"Love, spirituality, unity, transformation",
-bio:"Jalaluddin Muhammad Rumi was a Persian poet, mystic and spiritual teacher whose poetry became influential far beyond the Persian-speaking world. His work explores divine love, spiritual transformation and the relationship between the individual and the infinite. The Masnavi contains stories, parables and philosophical reflections. Rumi's poetry often uses earthly love as a metaphor for spiritual longing. His relationship with Shams of Tabriz profoundly changed his life and poetry. Music, movement and ecstatic experience are important aspects of his spiritual tradition. His verses frequently encourage readers to look beyond outward appearances. Rumi's work has been translated into many languages. He remains one of the world's most widely read mystical poets. His central message emphasizes love, compassion and transformation.",
-quotes:[
-"What you seek is seeking you.",
-"The wound is the place where the Light enters you.",
-"Let yourself be silently drawn by the strange pull of what you really love."
-]
-},
-
-{
-name:"Hafez",
-origin:"Persia",
-category:"Persian & Middle Eastern",
-years:"c. 1315–1390",
-works:"Divan of Hafez",
-themes:"Love, wine, spirituality, freedom",
-bio:"Hafez of Shiraz was a celebrated Persian lyric poet whose ghazals combine earthly love, spiritual longing and criticism of hypocrisy. His poetry frequently uses wine and the beloved as symbols with multiple possible meanings. Hafez's verses can be romantic, mystical, humorous and politically sharp. He became famous for his mastery of the ghazal form. His poetry remains deeply embedded in Persian cultural life. Readers often use his Divan for divination and reflection. Hafez's language can move between sacred and secular registers. His criticism of religious hypocrisy gives his work a rebellious dimension. His influence extends across Persian literature and beyond. He remains one of the most beloved Persian poets.",
-quotes:[
-"I wish I could show you when you are lonely or in darkness the astonishing light of your own being.",
-"Even after all this time the sun never says to the earth, 'You owe me.'",
-"Raise your words, not your voice."
-]
+ id:"confucius",
+ name:"Confucius",
+ region:"Chinese",
+ period:"Spring and Autumn Period",
+ years:"551–479 BCE",
+ movement:"Confucianism",
+ genre:"Philosophy",
+ bio:"Chinese philosopher whose teachings profoundly shaped East Asian intellectual culture.",
+ early:"Born in the state of Lu.",
+ education:"Classical Chinese learning.",
+ career:"Teacher, philosopher and political thinker.",
+ context:"Political fragmentation during the Zhou period.",
+ style:"Dialogues, aphorisms and ethical instruction.",
+ themes:"Virtue, education, filial piety, social harmony and governance.",
+ works:["The Analects"],
+ influence:"Foundational influence on Chinese and East Asian civilization."
 },
 
 {
-name:"Omar Khayyam",
-origin:"Persia",
-category:"Persian & Middle Eastern",
-years:"1048–1131",
-works:"Rubaiyat",
-themes:"Time, mortality, pleasure, uncertainty",
-bio:"Omar Khayyam was a Persian mathematician, astronomer, philosopher and poet. He is particularly famous internationally for the quatrains attributed to him and later popularized in English by Edward FitzGerald. His poetry reflects on mortality, time, uncertainty and the limitations of human knowledge. The imagery of wine, gardens and companionship frequently appears in the Rubaiyat. Khayyam's historical identity was much broader than his poetic reputation. He contributed to mathematics and astronomy and participated in calendar reform. His philosophical skepticism gives his poetry a distinctive character. The quatrain form creates compact spaces for reflection. His work has been translated widely. Khayyam remains an enduring figure of Persian intellectual culture.",
-quotes:[
-"The moving finger writes; and, having writ, moves on.",
-"Be happy for this moment. This moment is your life.",
-"Yesterday this day's madness did prepare."
-]
+ id:"dufu",
+ name:"Du Fu",
+ region:"Chinese",
+ period:"Tang Dynasty",
+ years:"712–770",
+ movement:"Tang Poetry",
+ genre:"Poetry",
+ bio:"Chinese poet renowned for historical consciousness and moral seriousness.",
+ early:"Born in Gong County.",
+ education:"Classical Confucian education.",
+ career:"Poet and minor government official.",
+ context:"Tang Dynasty and An Lushan rebellion.",
+ style:"Precise regulated verse and social observation.",
+ themes:"War, poverty, family, duty and social suffering.",
+ works:["Spring View","Three Hundred Tang Poems selections"],
+ influence:"Often regarded as one of China's greatest poets."
 },
 
 {
-name:"Ferdowsi",
-origin:"Persia",
-category:"Persian & Middle Eastern",
-years:"c. 940–1020",
-works:"Shahnameh",
-themes:"Heroism, kingship, identity, fate",
-bio:"Abu al-Qasim Ferdowsi was the great Persian epic poet responsible for the Shahnameh, or Book of Kings. The monumental poem preserves stories of Persian kings, heroes, wars and legendary creatures. Ferdowsi wrote during a period when Persian cultural identity was being reshaped after the Arab conquest. The Shahnameh became a central work of Persian cultural memory. Its heroes include Rostam, one of the most famous figures in Persian epic. Ferdowsi combines heroic action with reflections on mortality and justice. The poem is enormous in scope and historical influence. It helped preserve the Persian language and literary tradition. His epic influenced art, storytelling and national identity. Ferdowsi remains one of the most important poets of Persian civilization.",
-quotes:[
-"Greatness comes from character.",
-"Words are the soul of the world.",
-"The world is a story, and we are its passing lines."
-]
+ id:"cao",
+ name:"Cao Xueqin",
+ region:"Chinese",
+ period:"Qing Dynasty",
+ years:"1715/1724–1763/1764",
+ movement:"Qing Fiction",
+ genre:"Novel",
+ bio:"Chinese novelist traditionally credited with Dream of the Red Chamber.",
+ early:"Born into a prominent family that later experienced decline.",
+ education:"Classical Chinese education.",
+ career:"Writer and artist.",
+ context:"Qing Dynasty society.",
+ style:"Psychological realism, symbolism and social detail.",
+ themes:"Love, family, social class and impermanence.",
+ works:["Dream of the Red Chamber"],
+ influence:"One of the greatest Chinese novels."
+},
+
+/* ---------------- JAPANESE ---------------- */
+
+{
+ id:"murasaki",
+ name:"Murasaki Shikibu",
+ region:"Japanese",
+ period:"Heian",
+ years:"c. 973–c. 1014",
+ movement:"Heian Literature",
+ genre:"Novel / Diary",
+ bio:"Japanese court writer traditionally credited with The Tale of Genji.",
+ early:"Born into the Fujiwara family.",
+ education:"Privately educated in Chinese classics and Japanese literature.",
+ career:"Court lady and writer.",
+ context:"Heian court culture.",
+ style:"Psychological realism, courtly detail and elegant prose.",
+ themes:"Love, impermanence, court life and human psychology.",
+ works:["The Tale of Genji","Murasaki Shikibu Diary"],
+ influence:"Often associated with one of the world's earliest novels."
 },
 
 {
-name:"Khalil Gibran",
-origin:"Lebanon / United States",
-category:"Persian & Middle Eastern",
-years:"1883–1931",
-works:"The Prophet, Broken Wings",
-themes:"Love, freedom, spirituality, humanity",
-bio:"Khalil Gibran was a Lebanese-American writer, poet and artist. His best-known book The Prophet presents philosophical reflections through poetic prose. Gibran's writing explores love, freedom, work, sorrow and spiritual identity. His language is often aphoristic and accessible. He became particularly popular among readers interested in spirituality and personal philosophy. Gibran wrote in both Arabic and English. His artistic work and poetry influenced one another. He belonged to the literary movement known as the Mahjar, associated with Arab writers in the Americas. His writing emphasizes human dignity and inner freedom. The Prophet became one of the most widely translated books of the twentieth century.",
-quotes:[
-"Your children are not your children.",
-"Out of suffering have emerged the strongest souls.",
-"Work is love made visible."
-]
-},
-
-/* SOUTH ASIAN */
-
-{
-name:"Rabindranath Tagore",
-origin:"India",
-category:"South Asian",
-years:"1861–1941",
-works:"Gitanjali, The Home and the World, The Gardener",
-themes:"Nature, spirituality, freedom, humanity",
-bio:"Rabindranath Tagore was a Bengali poet, philosopher, composer and educator who became the first Asian recipient of the Nobel Prize in Literature. His poetry combines spirituality, nature, love and human connection. Gitanjali brought his poetic voice to an international audience. Tagore wrote extensively in Bengali and translated some of his own work into English. He also composed songs and founded an educational institution at Santiniketan. His literary output included poetry, fiction, drama and essays. Tagore's nationalism was nuanced; he valued human freedom beyond narrow political identity. His songs became important to Bengali culture. He influenced education and cultural thought throughout South Asia. Tagore remains a central figure in world literature.",
-quotes:[
-"Where the mind is without fear and the head is held high.",
-"The butterfly counts not in months but moments, and has time enough.",
-"Faith is the bird that feels the light when the dawn is still dark."
-]
+ id:"basho",
+ name:"Matsuo Bashō",
+ region:"Japanese",
+ period:"Edo",
+ years:"1644–1694",
+ movement:"Haikai / Zen-influenced Poetry",
+ genre:"Poetry",
+ bio:"Japan's most famous haiku poet.",
+ early:"Born in Iga Province.",
+ education:"Classical poetry and Buddhist traditions.",
+ career:"Poet and traveller.",
+ context:"Edo-period Japan.",
+ style:"Minimalist imagery, seasonal references and contemplative depth.",
+ themes:"Nature, impermanence, travel and solitude.",
+ works:["The Narrow Road to the Deep North","Frog Haiku"],
+ influence:"Defined the classical haiku tradition."
 },
 
 {
-name:"Mirza Ghalib",
-origin:"India",
-category:"South Asian",
-years:"1797–1869",
-works:"Diwan-e-Ghalib, Urdu Letters",
-themes:"Love, fate, philosophy, longing",
-bio:"Mirza Asadullah Khan Ghalib was one of the greatest poets of Urdu and Persian literature. His ghazals combine emotional intensity with philosophical questioning. Ghalib frequently explores love, loss, fate, desire and the contradictions of human existence. His poetry is known for intellectual complexity and layered meanings. He also wrote remarkable letters in an informal Urdu style. His life unfolded during the final period of Mughal Delhi and the upheaval surrounding 1857. Ghalib's poetry survived changing political and cultural circumstances. His language can be witty, melancholic and deeply philosophical at the same time. He remains enormously popular in South Asia. His couplets are quoted in everyday cultural life. Ghalib's influence on Urdu poetry is unparalleled.",
-quotes:[
-"Thousands of desires such that each desire took my breath away.",
-"The heart is not stone or brick; why shouldn't it feel pain?",
-"Nothing is easy in this world."
-]
+ id:"kawabata",
+ name:"Yasunari Kawabata",
+ region:"Japanese",
+ period:"Modern",
+ years:"1899–1972",
+ movement:"Japanese Modernism",
+ genre:"Novel",
+ bio:"Japanese novelist and first Japanese recipient of the Nobel Prize in Literature.",
+ early:"Born in Osaka.",
+ education:"Tokyo Imperial University.",
+ career:"Novelist and literary critic.",
+ context:"Modernizing Japan.",
+ style:"Minimalist lyricism, beauty and suggestion.",
+ themes:"Beauty, loneliness, memory and impermanence.",
+ works:["Snow Country","The Old Capital","Thousand Cranes"],
+ influence:"Internationally important Japanese novelist."
+},
+
+/* ---------------- KOREAN ---------------- */
+
+{
+ id:"kimsooyoung",
+ name:"Kim Soo-young",
+ region:"Korean",
+ period:"Modern Korean",
+ years:"1921–1968",
+ movement:"Modern Korean Poetry",
+ genre:"Poetry",
+ bio:"Influential Korean modernist poet associated with social and linguistic experimentation.",
+ early:"Born in Seoul.",
+ education:"Studied in Korea and Japan.",
+ career:"Poet and translator.",
+ context:"Japanese colonial period, Korean War and postwar Korea.",
+ style:"Modernist experimentation and social criticism.",
+ themes:"Freedom, language, politics and modernity.",
+ works:["Grass","Selected Poems"],
+ influence:"Important figure in modern Korean poetry."
 },
 
 {
-name:"Allama Iqbal",
-origin:"South Asia",
-category:"South Asian",
-years:"1877–1938",
-works:"Bang-e-Dra, Asrar-e-Khudi, Bal-e-Jibril",
-themes:"Selfhood, spirituality, awakening, action",
-bio:"Muhammad Iqbal was a philosopher-poet whose poetry played an important role in modern South Asian intellectual history. He wrote primarily in Urdu and Persian. His concept of khudi, or selfhood, emphasizes moral development, confidence and purposeful action. Iqbal drew from Islamic philosophy as well as Western philosophical traditions. His poems encourage intellectual awakening and resistance to passivity. He wrote about individual and collective renewal. His poetry contains powerful symbols including the eagle and the journey. He studied philosophy in Europe and developed a distinctive synthesis of Eastern and Western thought. His work influenced political and intellectual discussions in South Asia. He is widely known as Allama Iqbal. His poetry remains influential among Urdu readers.",
-quotes:[
-"Raise yourself so high that before every decree, God Himself asks you what is your wish.",
-"Khudi is the secret of the universe.",
-"Stars do not fear the darkness."
-]
+ id:"han_kang",
+ name:"Han Kang",
+ region:"Korean",
+ period:"Contemporary",
+ years:"1970–",
+ movement:"Contemporary Korean Literature",
+ genre:"Novel • Poetry",
+ bio:"South Korean novelist known internationally for psychologically intense fiction.",
+ early:"Born in Gwangju.",
+ education:"Yonsei University.",
+ career:"Novelist and poet.",
+ context:"Contemporary South Korea and historical memory.",
+ style:"Poetic prose, fragmentation and psychological intensity.",
+ themes:"Violence, body, memory, trauma and resistance.",
+ works:["The Vegetarian","Human Acts","Greek Lessons"],
+ influence:"One of the most internationally recognized contemporary Korean writers."
+},
+
+/* ---------------- ARABIC ---------------- */
+
+{
+ id:"maarri",
+ name:"Al-Ma'arri",
+ region:"Arabic",
+ period:"Golden Age",
+ years:"973–1057",
+ movement:"Classical Arabic Literature",
+ genre:"Poetry • Philosophy",
+ bio:"Syrian philosopher-poet known for skepticism and intellectual independence.",
+ early:"Born in Ma'arrat al-Nu'man.",
+ education:"Studied Arabic language, literature and philosophy.",
+ career:"Poet and scholar.",
+ context:"Islamic Golden Age.",
+ style:"Dense philosophical poetry and linguistic sophistication.",
+ themes:"Reason, morality, mortality and society.",
+ works:["The Epistle of Forgiveness","Luzumiyyat"],
+ influence:"Highly respected in Arabic intellectual history."
 },
 
 {
-name:"Kabir",
-origin:"India",
-category:"South Asian",
-years:"15th century",
-works:"Bijak, Kabir's couplets",
-themes:"Unity, devotion, simplicity, criticism",
-bio:"Kabir was an influential Indian mystic poet whose verses challenged religious division and emphasized direct spiritual experience. His poems circulated orally and were later preserved in different collections. Kabir wrote in accessible vernacular language rather than elite literary forms. He criticized hypocrisy and empty ritual among different religious communities. His poetry repeatedly searches for the divine within ordinary life. The language of his couplets is simple but often paradoxical. Kabir became important to both Hindu and Muslim devotional traditions. His work emphasizes love, humility and inner transformation. His verses remain widely sung and quoted in South Asia. Kabir's poetry continues to speak across religious boundaries. He is one of the most important voices of the Indian Bhakti tradition.",
-quotes:[
-"The river that flows in you is also flowing in me.",
-"Wherever you are, that is the entry point.",
-"Do not go to the garden of flowers."
-]
+ id:"naguib",
+ name:"Naguib Mahfouz",
+ region:"Arabic",
+ period:"20th Century",
+ years:"1911–2006",
+ movement:"Arabic Realism",
+ genre:"Novel",
+ bio:"Egyptian novelist and Nobel laureate.",
+ early:"Born in Cairo.",
+ education:"Cairo University.",
+ career:"Civil servant and novelist.",
+ context:"Modern Egyptian society and political transformation.",
+ style:"Realism, symbolism and social observation.",
+ themes:"Family, class, religion, politics and modernity.",
+ works:["The Cairo Trilogy","Midaq Alley","Children of Gebelawi"],
+ influence:"One of the most important Arabic novelists."
 },
 
 {
-name:"Faiz Ahmed Faiz",
-origin:"Pakistan",
-category:"South Asian",
-years:"1911–1984",
-works:"Naqsh-e-Faryadi, Dast-e-Saba, Zindan-Nama",
-themes:"Love, resistance, justice, hope",
-bio:"Faiz Ahmed Faiz was a Pakistani Urdu poet whose poetry combines romantic imagery with political and social consciousness. He used the language of love to express ideas of freedom, justice and resistance. Faiz's poems became important during periods of political repression. His style blends classical Urdu poetic forms with modern concerns. He was also a journalist and political activist. His imprisonment influenced some of his most famous writing. Faiz received the Lenin Peace Prize in 1962. His poetry is celebrated for combining beauty with social commitment. He remains one of the most influential Urdu poets of the twentieth century. His work continues to be performed and quoted throughout South Asia.",
-quotes:[
-"Speak, for your lips are free.",
-"Don't ask me for that love again.",
-"We shall see."
-]
-},
-
-/* EAST ASIAN */
-
-{
-name:"Li Bai",
-origin:"China",
-category:"East Asian",
-years:"701–762",
-works:"Selected Tang poems",
-themes:"Nature, freedom, wine, friendship",
-bio:"Li Bai was one of the greatest poets of China's Tang dynasty. His poetry is famous for its freedom, imagination and celebration of nature. He often wrote about the moon, mountains, friendship and wine. Traditional accounts portray him as a wandering and unconventional figure. His poems can move quickly between ordinary experience and fantastical imagination. Li Bai became associated with the romantic image of the poet as a free spirit. His language often achieves remarkable simplicity and emotional directness. He is frequently paired with his contemporary Du Fu, although their styles differ significantly. Li Bai's poems have been translated around the world. He remains one of the central figures of classical Chinese poetry.",
-quotes:[
-"Among the flowers I pour a cup of wine.",
-"Before my bed the bright moonlight.",
-"Raise a cup to the bright moon."
-]
-},
-
-{
-name:"Du Fu",
-origin:"China",
-category:"East Asian",
-years:"712–770",
-works:"Selected Tang poems",
-themes:"War, society, family, responsibility",
-bio:"Du Fu was a major Tang dynasty poet whose work combines personal emotion with social and political awareness. His poetry reflects the suffering caused by war and political instability. He wrote about family, poverty, exile and responsibility. Unlike the carefree image associated with Li Bai, Du Fu is often remembered for his moral seriousness. He mastered many classical Chinese poetic forms. His poetry became an important source for later Chinese writers. Du Fu's concern for ordinary people gives his work a strong ethical dimension. His own life was marked by displacement and hardship. He is sometimes called the Poet Sage. His poems remain central to Chinese literary education. Du Fu's influence extends across East Asian literary traditions.",
-quotes:[
-"The state may be broken, but mountains and rivers remain.",
-"Thoughts of home arise in the moonlight.",
-"The wine is in the cup, but the heart is elsewhere."
-]
-},
-
-{
-name:"Matsuo Bashō",
-origin:"Japan",
-category:"East Asian",
-years:"1644–1694",
-works:"The Narrow Road to the Deep North, Haiku",
-themes:"Nature, travel, impermanence, simplicity",
-bio:"Matsuo Bashō was the most famous poet of the Japanese haiku tradition. He transformed haiku from a light poetic form into a vehicle for profound reflection. Bashō traveled extensively through Japan, recording landscapes and moments of insight. His poetry often connects natural images with Buddhist ideas of impermanence. Simplicity is central to his style. His travel writing combines prose and poetry. Bashō's poems frequently capture a single moment while suggesting a larger philosophical world. He valued solitude and attentive observation. His influence extends far beyond Japan. Modern poets around the world have adapted his approach to concise nature poetry. Bashō remains synonymous with classical haiku.",
-quotes:[
-"An old pond — a frog jumps in.",
-"The journey itself is home.",
-"Every day is a journey, and the journey itself is home."
-]
-},
-
-{
-name:"Li Qingzhao",
-origin:"China",
-category:"East Asian",
-years:"1084–c. 1155",
-works:"Ci poetry",
-themes:"Love, memory, loss, nature",
-bio:"Li Qingzhao was one of China's greatest female poets and a master of the ci lyric form. Her early poetry often describes love, flowers, wine and refined domestic life. After political upheaval and personal loss, her later poems become more melancholic. She was highly educated and also known for collecting books and art. Her poetry demonstrates extraordinary sensitivity to sound and atmosphere. She transforms small observations into powerful expressions of memory. Her work offers an important female perspective within classical Chinese literature. Her literary reputation remained strong across centuries. She is particularly admired for her mastery of the ci form. Li Qingzhao remains one of China's most celebrated classical women poets.",
-quotes:[
-"The fragrance of flowers is gone.",
-"How can one not be sorrowful?",
-"I cannot sleep because the memories are awake."
-]
-},
-
-/* EUROPEAN */
-
-{
-name:"Johann Wolfgang von Goethe",
-origin:"Germany",
-category:"European",
-years:"1749–1832",
-works:"Faust, The Sorrows of Young Werther",
-themes:"Knowledge, love, ambition, humanity",
-bio:"Johann Wolfgang von Goethe was a German writer, poet, scientist and statesman. He is one of the central figures of European literature. His writing spans poetry, drama, fiction, criticism and scientific studies. Faust explores the human desire for knowledge, experience and transcendence. The Sorrows of Young Werther became a landmark of European Romanticism. Goethe was associated with the German movement Sturm und Drang and later with Weimar Classicism. He maintained a lifelong interest in art, science and philosophy. His literary work crosses national and disciplinary boundaries. He influenced European ideas about genius and creativity. Goethe's concept of world literature encouraged dialogue among cultures. He remains Germany's most internationally influential classical writer.",
-quotes:[
-"Whatever you can do or dream you can, begin it.",
-"Knowing is not enough; we must apply.",
-"One lives in this world but once."
-]
-},
-
-{
-name:"Charles Baudelaire",
-origin:"France",
-category:"European",
-years:"1821–1867",
-works:"Les Fleurs du mal",
-themes:"Modernity, beauty, decay, desire",
-bio:"Charles Baudelaire was a French poet and critic whose Les Fleurs du mal became a foundational work of modern poetry. He explored beauty alongside decay, boredom, desire and urban experience. Baudelaire transformed the modern city into a poetic subject. His concept of the flâneur influenced later cultural criticism. He sought beauty in unexpected and disturbing places. His poetry helped prepare the way for Symbolism. Baudelaire was fascinated by artificiality, fashion and the psychological effects of modern life. His writing frequently combines sensuality with spiritual anxiety. Les Fleurs du mal was controversial and legally censored when first published. His influence extends across European and world poetry.",
-quotes:[
-"You have to be always drunk.",
-"The devil's finest trick is to persuade you that he does not exist.",
-"Anywhere out of the world."
-]
-},
-
-{
-name:"Arthur Rimbaud",
-origin:"France",
-category:"European",
-years:"1854–1891",
-works:"A Season in Hell, Illuminations",
-themes:"Rebellion, vision, freedom, language",
-bio:"Arthur Rimbaud was a French poet who produced an extraordinary body of experimental writing while still a teenager. He sought to transform poetry through radical changes in language and perception. His work moves beyond conventional logic into dreamlike images and symbolic associations. A Season in Hell records a crisis of artistic and personal identity. Illuminations contains prose poems of remarkable visual intensity. Rimbaud influenced Symbolism and later modernist and surrealist writers. He abandoned literature at a very young age and later traveled and worked in Africa and the Middle East. His brief literary career became legendary. His concept of the poet as a visionary influenced generations. Rimbaud remains a symbol of youthful rebellion in literature.",
-quotes:[
-"I is another.",
-"One must be absolutely modern.",
-"Love is to be reinvented."
-]
-},
-
-{
-name:"Pablo Neruda",
-origin:"Chile",
-category:"European",
-years:"1904–1973",
-works:"Twenty Love Poems, Canto General",
-themes:"Love, nature, politics, humanity",
-bio:"Pablo Neruda was a Chilean poet and diplomat whose writing ranges from intimate love poetry to epic political poetry. He became one of the most internationally recognized poets of the twentieth century. His Twenty Love Poems made him famous for sensual and melancholic imagery. Later works expanded toward history, politics and the lives of ordinary people. Canto General presents Latin American history through poetry. Neruda received the Nobel Prize in Literature in 1971. His poetry often uses rich natural imagery. He wrote in many forms and styles throughout his career. Political commitment became increasingly important to his later work. His influence on Spanish-language poetry is immense. He remains widely read across Latin America and beyond.",
-quotes:[
-"I want to do with you what spring does with the cherry trees.",
-"I love you without knowing how, or when, or from where.",
-"You can cut all the flowers but you cannot keep spring from coming."
-]
-},
-
-{
-name:"Federico García Lorca",
-origin:"Spain",
-category:"European",
-years:"1898–1936",
-works:"Romancero Gitano, Blood Wedding, The House of Bernarda Alba",
-themes:"Death, desire, identity, repression",
-bio:"Federico García Lorca was a Spanish poet and dramatist associated with the Generation of '27. His poetry combines folk traditions with avant-garde experimentation. He frequently explores desire, death, repression and cultural identity. Lorca's imagery is rich in moonlight, blood, horses and landscapes. His dramatic works portray individuals trapped by social conventions. He was fascinated by Andalusian culture and flamenco traditions. Lorca also experimented with surrealist imagery. His murder during the Spanish Civil War turned him into a cultural symbol. His writing remains central to Spanish literature. Lorca's influence reaches poetry, theatre, music and visual art.",
-quotes:[
-"Green, how I want you green.",
-"The green wind. Green branches.",
-"At five in the afternoon."
-]
-},
-
-{
-name:"Anna Akhmatova",
-origin:"Russia",
-category:"European",
-years:"1889–1966",
-works:"Requiem, Poem Without a Hero",
-themes:"Memory, oppression, grief, endurance",
-bio:"Anna Akhmatova was one of Russia's greatest twentieth-century poets. Her work combines personal emotion with the historical suffering of her country. During Stalinist repression, she experienced censorship and personal loss. Requiem became a powerful poetic testimony to the suffering of ordinary people under political terror. Akhmatova often used compressed language and classical forms. Her poetry explores memory, love and endurance. She remained in Russia despite enormous personal difficulties. Her son was imprisoned, and these experiences shaped her writing. Her poetry was often circulated privately when publication was impossible. Akhmatova became a symbol of artistic and moral endurance. She remains central to Russian literature.",
-quotes:[
-"I am not with those who abandoned their land.",
-"The soul knows no death.",
-"There are no strangers between us."
-]
-},
-
-{
-name:"Alexander Pushkin",
-origin:"Russia",
-category:"European",
-years:"1799–1837",
-works:"Eugene Onegin, The Bronze Horseman",
-themes:"Love, freedom, identity, society",
-bio:"Alexander Pushkin is widely regarded as the founder of modern Russian literature. His poetry, fiction and drama helped establish modern literary Russian. Eugene Onegin combines verse, narrative and social observation. Pushkin's writing ranges from romantic poetry to historical fiction and satire. He drew from European literary traditions while creating a distinct Russian voice. His characters often struggle between individual desire and social expectations. Pushkin's language is elegant, flexible and remarkably influential. His short life ended in a fatal duel. Later Russian writers repeatedly acknowledged his importance. He influenced Tolstoy, Dostoevsky, Turgenev and many others. Pushkin remains a foundational figure in Russian cultural identity.",
-quotes:[
-"I loved you; and perhaps I love you still.",
-"The illusion which exalts us is dearer to us than ten thousand truths.",
-"All that is noble is simple."
-]
-},
-
-/* AFRICA & LATIN AMERICA */
-
-{
-name:"Wole Soyinka",
-origin:"Nigeria",
-category:"African & Latin American",
-years:"1934–",
-works:"Death and the King's Horseman, The Man Died",
-themes:"Power, culture, freedom, colonialism",
-bio:"Wole Soyinka is a Nigerian playwright, poet, novelist and political activist. He became the first African writer to receive the Nobel Prize in Literature in 1986. His writing often examines political power, cultural conflict and the legacy of colonialism. Soyinka combines Yoruba cultural traditions with European dramatic forms. His plays can be satirical, tragic and intellectually challenging. He has repeatedly criticized authoritarian governments. His political commitment has sometimes resulted in imprisonment and exile. Soyinka's literary work crosses drama, poetry, memoir and essays. His writing emphasizes freedom of thought and artistic responsibility. He remains one of Africa's most important intellectual voices. His influence extends far beyond Nigeria.",
-quotes:[
-"The greatest threat to freedom is the absence of criticism.",
-"Books and all forms of writing have always been objects of terror to those who seek to suppress truth.",
-"Justice is not a commodity."
-]
-},
-
-{
-name:"Léopold Sédar Senghor",
-origin:"Senegal",
-category:"African & Latin American",
-years:"1906–2001",
-works:"Chants d'ombre, Hosties noires",
-themes:"Identity, Africa, culture, colonialism",
-bio:"Léopold Sédar Senghor was a Senegalese poet, philosopher and statesman. He was one of the principal figures associated with the Négritude movement. His poetry celebrated African identity, culture and history in response to colonial racism. Senghor sought dialogue rather than simple rejection between African and European cultures. His poetry is rich in rhythm, music and natural imagery. He later became the first president of Senegal. His political career did not separate him from literary work. Senghor's ideas influenced debates about African identity and cultural independence. His poetry helped bring African cultural perspectives into international literature. He received the Peace Prize of the German Book Trade. Senghor remains a major figure in African intellectual history.",
-quotes:[
-"Emotion is Negro, as reason is Hellenic.",
-"Culture is at the beginning and at the end of development.",
-"To name a thing is to possess it."
-]
-},
-
-{
-name:"Octavio Paz",
-origin:"Mexico",
-category:"African & Latin American",
-years:"1914–1998",
-works:"The Labyrinth of Solitude, Sunstone",
-themes:"Identity, solitude, language, modernity",
-bio:"Octavio Paz was a Mexican poet and essayist whose work explores identity, solitude, history and language. He received the Nobel Prize in Literature in 1990. His poetry was influenced by Surrealism, Eastern philosophy and modernist experimentation. Paz also wrote extensively about Mexican cultural identity. The Labyrinth of Solitude examines the historical and psychological dimensions of Mexican identity. His poetry frequently turns language into a philosophical subject. Paz worked as a diplomat and traveled widely. His international experiences expanded his literary perspective. He translated and engaged with writers from many cultures. His work contributed significantly to global modernism. Paz remains one of Mexico's most influential literary figures.",
-quotes:[
-"Love is a form of death.",
-"Solitude is the profoundest fact of the human condition.",
-"To read a poem is to hear it with the eyes."
-]
-},
-
-{
-name:"Gabriela Mistral",
-origin:"Chile",
-category:"African & Latin American",
-years:"1889–1957",
-works:"Desolación, Tala, Lagar",
-themes:"Love, motherhood, grief, nature",
-bio:"Gabriela Mistral was a Chilean poet, educator and diplomat who became the first Latin American author to receive the Nobel Prize in Literature. Her poetry explores love, motherhood, grief, nature and social justice. She worked as an educator and cared deeply about children's welfare and education. Her poems often use simple but emotionally powerful language. Mistral's personal experiences of loss influenced her writing. She also wrote about Latin American identity and social responsibility. Her work combines tenderness with profound sorrow. She served as a diplomat in several countries. Mistral expanded international recognition of Latin American poetry. She remains one of Chile's most important literary figures.",
-quotes:[
-"Where there is a tree to plant, plant it.",
-"Give me your hand from the deep shade of the night.",
-"Many things we need can wait."
-]
-},
-
-/* URDU & PUNJABI */
-
-{
-name:"Mir Taqi Mir",
-origin:"India",
-category:"Urdu & Punjabi",
-years:"1723–1810",
-works:"Kulliyat-e-Mir",
-themes:"Love, grief, Delhi, longing",
-bio:"Mir Taqi Mir was one of the foundational masters of classical Urdu poetry. He is especially famous for his ghazals of love, grief and emotional vulnerability. His poetry reflects the instability and destruction experienced by Delhi during his lifetime. Mir's language is often simple compared with the elaborate style of some later poets. His emotional directness made him enormously influential. He wrote about heartbreak, exile and the fragility of human existence. His poetry became a major model for later Urdu ghazal writers. Ghalib admired Mir's poetic stature even while developing a different style. Mir is frequently remembered as Khuda-e-Sukhan, the god of poetry. His work remains central to the classical Urdu canon.",
-quotes:[
-"Mir is poor, yet the heart is rich with grief.",
-"The city of Delhi has become a wilderness.",
-"Love made me a stranger to myself."
-]
-},
-
-{
-name:"Ahmad Faraz",
-origin:"Pakistan",
-category:"Urdu & Punjabi",
-years:"1931–2008",
-works:"Tanha Tanha, Shab-e-Khoon, Nayaft",
-themes:"Love, resistance, exile, society",
-bio:"Ahmad Faraz was one of Pakistan's most popular modern Urdu poets. His poetry combines romantic emotion with political resistance and social criticism. Faraz wrote in accessible language while maintaining the musical tradition of Urdu poetry. His poems frequently address separation, political repression and longing. He became known for criticizing authoritarian power. His political views led to periods of exile and censorship. Faraz's romantic poetry gave him a huge popular audience. He also wrote about the relationship between individual love and collective struggle. His poetry continues to be quoted widely in South Asia. He remains one of the most recognizable modern Urdu poets.",
-quotes:[
-"Nowhere is the heart at home.",
-"Keep the lamps of hope burning.",
-"Love is also a form of resistance."
-]
-},
-
-{
-name:"Parveen Shakir",
-origin:"Pakistan",
-category:"Urdu & Punjabi",
-years:"1952–1994",
-works:"Khushbu, Sad-barg, Khud Kalaami",
-themes:"Love, womanhood, identity, emotion",
-bio:"Parveen Shakir was a Pakistani poet whose work introduced a distinctive feminine voice into modern Urdu poetry. Her poetry explores love, relationships, identity and the experiences of women. She used both traditional ghazal forms and modern free verse. Her language is often intimate and conversational. Khushbu established her as an important poetic voice at a relatively young age. Shakir also worked as a civil servant. Her poetry challenged traditional assumptions about how women could speak about love and desire. She created memorable metaphors from everyday experiences. Her death in a car accident ended her life at only forty-two. Her poetry continues to be especially popular among young Urdu readers.",
-quotes:[
-"The fragrance of love remains even after the flowers are gone.",
-"Sometimes silence says what words cannot.",
-"A woman also has a world inside her."
-]
-},
-
-{
-name:"Baba Bulleh Shah",
-origin:"Punjab",
-category:"Urdu & Punjabi",
-years:"1680–1757",
-works:"Kafis",
-themes:"Love, spirituality, equality, truth",
-bio:"Bulleh Shah was a Punjabi Sufi poet whose poetry challenges social division and emphasizes direct spiritual experience. His kafis use simple Punjabi language to express profound mystical ideas. He criticized religious hypocrisy, caste divisions and rigid social conventions. His poetry often presents the human heart as the place where truth should be discovered. Bulleh Shah's relationship with his spiritual teacher Shah Inayat is central to his poetic tradition. His verses became part of Punjabi musical culture. Singers continue to perform his poetry across South Asia. His language makes difficult spiritual ideas accessible to ordinary people. His poetry emphasizes love over dogma. Bulleh Shah remains one of Punjab's most influential mystical poets.",
-quotes:[
-"Bulleh, who knows who I am?",
-"Neither Hindu nor Muslim am I.",
-"The one who searches outside has not yet looked within."
-]
-},
-
-{
-name:"Waris Shah",
-origin:"Punjab",
-category:"Urdu & Punjabi",
-years:"1722–1798",
-works:"Heer Ranjha",
-themes:"Love, society, tragedy, Punjab",
-bio:"Waris Shah was a Punjabi Sufi poet best known for his monumental version of the Heer Ranjha romance. His Heer is far more than a love story; it is a detailed portrait of Punjabi society, customs and social structures. Waris Shah uses the tragic romance to explore class, family, gender and social authority. His Punjabi is celebrated for its richness and expressive power. He drew from Sufi symbolism as well as folk storytelling. The poem became one of the defining works of Punjabi literature. Waris Shah's descriptions of Punjab preserve cultural memories of eighteenth-century life. His poetry continues to be performed and studied. Heer Ranjha became a cultural symbol of tragic love. Waris Shah remains central to Punjabi literary identity.",
-quotes:[
-"Ranjha is not only a lover; he is the search of the soul.",
-"Love breaks the walls built by society.",
-"The story of Heer is the story of the heart."
-]
-},
-
-/* MORE POETS */
-
-{
-name:"Langston Hughes",
-origin:"United States",
-category:"English & American",
-years:"1901–1967",
-works:"The Weary Blues, Harlem, I, Too",
-themes:"Race, dreams, identity, equality",
-bio:"Langston Hughes was a major African American poet and writer associated with the Harlem Renaissance. His poetry drew heavily on jazz and blues rhythms. He wrote about Black identity, inequality, dreams and everyday life. Hughes sought to create poetry accessible to ordinary people. His work frequently combines musicality with political awareness. The Harlem Renaissance provided an important cultural context for his writing. He also wrote fiction, drama, essays and children's literature. His poem Harlem asks what happens to a dream deferred. Hughes influenced generations of Black writers. He remains one of the most widely studied American poets.",
-quotes:[
-"What happens to a dream deferred?",
-"I, too, sing America.",
-"Hold fast to dreams."
-]
-},
-
-{
-name:"Mahmoud Darwish",
-origin:"Palestine",
-category:"African & Latin American",
-years:"1941–2008",
-works:"Memory for Forgetfulness, Why Did You Leave the Horse Alone?",
-themes:"Exile, homeland, identity, memory",
-bio:"Mahmoud Darwish was one of the most important Arabic poets of the modern era. His poetry explores homeland, exile, identity, memory and love. Personal experience and political history frequently intersect in his writing. Darwish transformed national experience into universal poetry. His language combines lyrical beauty with philosophical reflection. He wrote about belonging while also questioning the meaning of identity. His work became deeply associated with Palestinian cultural memory. Darwish resisted being reduced to political symbolism and emphasized the independence of poetry. His poems have been translated into many languages. He remains a major figure in contemporary Arabic literature. His influence extends across the Arab literary world.",
-quotes:[
-"Poetry is perhaps what makes us human.",
-"We have on this earth what makes life worth living.",
-"I belong there."
-]
-
+ id:"mahmouddarwish",
+ name:"Mahmoud Darwish",
+ region:"Arabic",
+ period:"Modern",
+ years:"1941–2008",
+ movement:"Modern Arabic Poetry",
+ genre:"Poetry",
+ bio:"Palestinian poet whose work became central to modern Arabic poetry.",
+ early:"Born in al-Birwa.",
+ education:"Schooling in Galilee and Haifa.",
+ career:"Poet, editor and cultural figure.",
+ context:"Palestinian displacement and modern Arab history.",
+ style:"Lyrical, symbolic and politically charged.",
+ themes:"Exile, homeland, identity, memory and love.",
+ works:["Mural","Unfortunately, It Was Paradise","Why Did You Leave the Horse Alone?"],
+ influence:"One of the most celebrated modern Arabic poets."
 }
 
 ];
 
 
-/* ============================================================
-   APP LOGIC
-   ============================================================ */
+/* =========================================================
+   WORKS
+   ========================================================= */
 
-const categories = [
-"All",
-"English & American",
-"Ancient & Classical",
-"Persian & Middle Eastern",
-"South Asian",
-"East Asian",
-"European",
-"African & Latin American",
-"Urdu & Punjabi"
+const works = [
+
+["Hamlet","William Shakespeare","British","1600","Tragedy","A revenge tragedy exploring hesitation, morality, madness and political corruption."],
+["Macbeth","William Shakespeare","British","1606","Tragedy","A tragedy centered on ambition, prophecy, guilt and political violence."],
+["Paradise Lost","John Milton","British","1667","Epic","A Christian epic dealing with rebellion, free will, temptation and the Fall."],
+["The Prelude","William Wordsworth","British","1850","Poetry","A major autobiographical poem about the growth of the poet's mind."],
+["Mrs Dalloway","Virginia Woolf","British","1925","Modernist Novel","A modernist novel using stream of consciousness to explore memory and identity."],
+
+["The Raven","Edgar Allan Poe","American","1845","Poetry","A Gothic poem about grief, memory and psychological obsession."],
+["Leaves of Grass","Walt Whitman","American","1855","Poetry","A groundbreaking collection celebrating self, democracy and the body."],
+["The Old Man and the Sea","Ernest Hemingway","American","1952","Novella","A story of endurance, dignity and struggle."],
+["Beloved","Toni Morrison","American","1987","Novel","A haunting exploration of slavery, memory and trauma."],
+
+["War and Peace","Leo Tolstoy","Russian","1869","Novel","An epic portrayal of Russian society during the Napoleonic wars."],
+["Crime and Punishment","Fyodor Dostoevsky","Russian","1866","Novel","A psychological exploration of crime, guilt, morality and redemption."],
+["The Cherry Orchard","Anton Chekhov","Russian","1904","Drama","A drama about social change, loss and the decline of an aristocratic family."],
+
+["Gitanjali","Rabindranath Tagore","South Asian","1910","Poetry","A collection of spiritual and lyrical poems."],
+["Bang-e-Dra","Muhammad Iqbal","South Asian","1924","Poetry","A major Urdu collection exploring selfhood and awakening."],
+["Diwan-e-Ghalib","Mirza Ghalib","South Asian","19th century","Poetry","A foundational collection of classical Urdu ghazals."],
+["Midnight's Children","Salman Rushdie","South Asian","1981","Novel","A postcolonial novel linking personal identity with Indian history."],
+
+["This Earth of Mankind","Pramoedya Ananta Toer","Southeast Asian","1980","Novel","A historical novel about colonial Indonesia."],
+["The Distant Stars","Lê Minh Khuê","Southeast Asian","1980s","Short Fiction","War fiction focused on young women and human resilience."],
+
+["Les Misérables","Victor Hugo","French","1862","Novel","A vast social novel about justice, poverty, love and redemption."],
+["The Stranger","Albert Camus","French","1942","Novel","A philosophical novel associated with absurdism."],
+
+["The Divine Comedy","Dante Alighieri","Italian","1320","Epic","An allegorical journey through Hell, Purgatory and Paradise."],
+["Canzoniere","Petrarch","Italian","14th century","Poetry","A landmark sonnet sequence centered on love and introspection."],
+
+["Faust","Goethe","German","1808/1832","Drama","A philosophical drama about knowledge, desire and human striving."],
+["The Metamorphosis","Franz Kafka","German","1915","Novella","A surreal story of alienation and transformation."],
+
+["Iliad","Homer","Greek","c. 8th century BCE","Epic","Greek epic centered on Achilles and the Trojan War."],
+["Odyssey","Homer","Greek","c. 8th century BCE","Epic","The long journey of Odysseus home after the Trojan War."],
+["Oedipus Rex","Sophocles","Greek","c. 429 BCE","Tragedy","A tragedy exploring fate, knowledge and tragic discovery."],
+
+["Aeneid","Virgil","Roman","c. 19 BCE","Epic","Rome's foundational epic about Aeneas and destiny."],
+["Metamorphoses","Ovid","Roman","8 CE","Poetry","A collection of myths structured around transformations."],
+
+["The Analects","Confucius","Chinese","5th–3rd century BCE","Philosophy","Collected sayings associated with Confucius and Confucian ethics."],
+["The Tale of Genji","Murasaki Shikibu","Japanese","c. 1008","Novel","A detailed psychological portrayal of Heian court life."],
+["The Narrow Road to the Deep North","Matsuo Bashō","Japanese","1689","Travel Literature","A poetic travel account blending landscape and reflection."],
+["The Vegetarian","Han Kang","Korean","2007","Novel","A psychologically intense novel concerning the body, violence and resistance."],
+["Children of Gebelawi","Naguib Mahfouz","Arabic","1959","Novel","A symbolic novel concerning faith, power and human society."]
 ];
 
-let currentCategory="All";
-let favorites=JSON.parse(localStorage.getItem("litverseFavorites")||"[]");
 
-/* Category buttons */
+/* =========================================================
+   REGIONS
+   ========================================================= */
 
-const categoryBox=document.getElementById("categories");
+const regions = [
 
-categories.forEach(cat=>{
-  const btn=document.createElement("button");
-  btn.className="category"+(cat==="All"?" active":"");
-  btn.textContent=cat;
+{
+ name:"British Literature",
+ icon:"🇬🇧",
+ desc:"From Old English and Medieval literature to Renaissance, Romantic, Victorian and Modern writing.",
+ periods:["Old English","Middle English","Renaissance","Neoclassical","Romantic","Victorian","Modernism","Postmodern"]
+},
 
-  btn.onclick=()=>{
-    currentCategory=cat;
+{
+ name:"American Literature",
+ icon:"🇺🇸",
+ desc:"Explore Puritan writing, Transcendentalism, Romanticism, Realism, Modernism and contemporary literature.",
+ periods:["Colonial","Romanticism","Transcendentalism","Realism","Modernism","Postmodern"]
+},
 
-    document.querySelectorAll(".category")
-      .forEach(x=>x.classList.remove("active"));
+{
+ name:"Russian Literature",
+ icon:"🇷🇺",
+ desc:"Study the major writers of Russian realism, symbolism and modern literature.",
+ periods:["Golden Age","Realism","Silver Age","Soviet","Post-Soviet"]
+},
 
-    btn.classList.add("active");
+{
+ name:"South Asian Literature",
+ icon:"🇵🇰",
+ desc:"Explore Urdu, Hindi, Bengali, Pakistani, Indian and postcolonial traditions.",
+ periods:["Classical","Colonial","Modern","Partition","Postcolonial","Contemporary"]
+},
 
-    renderAuthors();
-  };
+{
+ name:"Southeast Asian Literature",
+ icon:"🌏",
+ desc:"Explore Indonesian, Vietnamese, Filipino, Thai and other literary traditions.",
+ periods:["Classical","Colonial","Nationalist","Postcolonial","Contemporary"]
+},
 
-  categoryBox.appendChild(btn);
+{
+ name:"French Literature",
+ icon:"🇫🇷",
+ desc:"From medieval romance to Enlightenment, Romanticism, realism, symbolism and existentialism.",
+ periods:["Medieval","Renaissance","Enlightenment","Romantic","Realist","Modern","Contemporary"]
+},
+
+{
+ name:"Italian Literature",
+ icon:"🇮🇹",
+ desc:"Study Dante, Petrarch, Renaissance humanism and modern Italian writing.",
+ periods:["Medieval","Renaissance","Baroque","Romantic","Modern","Contemporary"]
+},
+
+{
+ name:"German Literature",
+ icon:"🇩🇪",
+ desc:"Explore German Enlightenment, Sturm und Drang, Romanticism, modernism and postwar writing.",
+ periods:["Medieval","Enlightenment","Sturm und Drang","Romantic","Modern","Postwar"]
+},
+
+{
+ name:"Greek Literature",
+ icon:"🇬🇷",
+ desc:"Study epic, lyric poetry, tragedy, comedy and classical philosophy.",
+ periods:["Archaic","Classical","Hellenistic","Byzantine","Modern"]
+},
+
+{
+ name:"Latin / Roman Literature",
+ icon:"🏛️",
+ desc:"Explore Roman epic, satire, rhetoric, philosophy and classical poetry.",
+ periods:["Republican","Augustan","Imperial","Late Antiquity"]
+},
+
+{
+ name:"Chinese Literature",
+ icon:"🇨🇳",
+ desc:"Explore ancient philosophy, Tang poetry, Song poetry, Ming-Qing fiction and modern literature.",
+ periods:["Pre-Qin","Han","Six Dynasties","Tang","Song","Yuan","Ming","Qing","Modern"]
+},
+
+{
+ name:"Japanese Literature",
+ icon:"🇯🇵",
+ desc:"From Heian court literature to samurai-era writing, haiku, modernism and contemporary fiction.",
+ periods:["Nara","Heian","Kamakura","Muromachi","Edo","Meiji","Taisho","Showa","Contemporary"]
+},
+
+{
+ name:"Korean Literature",
+ icon:"🇰🇷",
+ desc:"Explore classical Korean texts, colonial literature, postwar poetry and contemporary fiction.",
+ periods:["Three Kingdoms","Goryeo","Joseon","Colonial","Postwar","Contemporary"]
+},
+
+{
+ name:"Arabic Literature",
+ icon:"☪️",
+ desc:"Explore pre-Islamic poetry, Islamic Golden Age scholarship, classical prose and modern Arabic literature.",
+ periods:["Pre-Islamic","Early Islamic","Abbasid Golden Age","Andalusian","Ottoman","Nahda","Modern"]
+},
+
+{
+ name:"World Literature",
+ icon:"🌎",
+ desc:"Compare traditions, movements and masterpieces across cultures.",
+ periods:["Ancient","Medieval","Early Modern","Modern","Contemporary"]
+}
+
+];
+
+
+/* =========================================================
+   PERIODS
+   ========================================================= */
+
+const periods = [
+
+["Ancient Greek","c. 800–300 BCE","Greek","Epic, lyric, tragedy, comedy and philosophy.","Homer, Sappho, Sophocles, Plato, Aristotle"],
+["Roman Classical","c. 200 BCE–200 CE","Roman","Epic, satire, rhetoric, philosophy and lyric.","Virgil, Ovid, Horace, Cicero"],
+["Medieval","c. 500–1500","Europe / World","Religious writing, epic, romance and allegory.","Dante, Chaucer, Chrétien de Troyes"],
+["Renaissance","c. 14th–17th centuries","Europe","Humanism, classical revival and individualism.","Shakespeare, Petrarch, Erasmus"],
+["Neoclassicism","17th–18th centuries","Britain / Europe","Order, reason, decorum and classical models.","Pope, Dryden, Johnson"],
+["Romanticism","late 18th–19th centuries","Europe / America","Imagination, nature, emotion and individuality.","Wordsworth, Coleridge, Byron, Shelley, Keats"],
+["Victorian","1837–1901","Britain","Industrial society, morality, realism and social criticism.","Dickens, Eliot, Tennyson, Hardy"],
+["Realism","19th century","Europe / America / Russia","Detailed representation of ordinary social life.","Tolstoy, Dostoevsky, Dickens, Twain"],
+["Modernism","c. 1900–1945","International","Fragmentation, experimentation, interiority and crisis.","Woolf, Joyce, Eliot, Kafka"],
+["Postmodernism","c. 1945–present","International","Intertextuality, fragmentation, metafiction and irony.","Pynchon, Rushdie, Borges"],
+["Chinese Tang Period","618–907","China","Golden age of Chinese poetry.","Du Fu, Li Bai, Wang Wei"],
+["Chinese Song Period","960–1279","China","Poetry, ci poetry, essays and philosophical writing.","Su Shi, Li Qingzhao"],
+["Japanese Heian","794–1185","Japan","Court literature and refined aesthetics.","Murasaki Shikibu, Sei Shōnagon"],
+["Japanese Edo","1603–1868","Japan","Haiku, kabuki, ukiyo-zōshi and travel literature.","Bashō, Chikamatsu"],
+["Korean Joseon","1392–1897","Korea","Confucian culture, sijo and classical prose.","Yi Hwang, Heo Nanseolheon"],
+["Arabic Golden Age","8th–13th centuries","Arab World","Poetry, philosophy, science and prose flourished.","Al-Ma'arri, Al-Jahiz, Al-Mutanabbi"],
+["Nahda","19th–early 20th century","Arab World","Arabic cultural and literary renaissance.","Taha Hussein, Al-Manfaluti"],
+["Bengal Renaissance","19th–early 20th century","South Asia","Literary and intellectual transformation in Bengal.","Tagore, Bankim Chandra"],
+["Postcolonial","20th century–present","Global","Literature responding to colonialism and its aftermath.","Rushdie, Achebe, Walcott"]
+];
+
+
+/* =========================================================
+   TERMS
+   ========================================================= */
+
+const terms = [
+
+["Allegory","A narrative in which characters, events or settings represent deeper abstract ideas."],
+["Alliteration","Repetition of initial consonant sounds in nearby words."],
+["Allusion","An indirect reference to another text, person, event or cultural idea."],
+["Anagnorisis","A moment of recognition or discovery in a tragedy."],
+["Antagonist","A character or force opposing the protagonist."],
+["Aside","A dramatic remark intended to be heard by the audience but not other characters."],
+["Catharsis","Emotional release experienced by an audience, especially in tragedy."],
+["Characterization","The methods used by a writer to develop a character."],
+["Climax","The point of greatest intensity or turning point in a narrative."],
+["Conflict","A struggle between opposing forces."],
+["Conceit","An elaborate or extended metaphor."],
+["Dramatic Irony","When the audience knows something a character does not know."],
+["Elegy","A poem mourning death or loss."],
+["Enjambment","Continuation of a sentence beyond the end of a poetic line."],
+["Epic","A long narrative poem concerning heroic actions and cultural identity."],
+["Epigram","A brief, witty or pointed statement."],
+["Foreshadowing","Hints suggesting events that will happen later."],
+["Hyperbole","Deliberate exaggeration for emphasis."],
+["Imagery","Language that creates sensory or figurative impressions."],
+["Irony","A contrast between appearance and reality or expectation and outcome."],
+["Juxtaposition","Placing contrasting ideas or images close together."],
+["Metaphor","A direct comparison in which one thing is described as another."],
+["Metonymy","Replacing something with a related concept or attribute."],
+["Motif","A recurring element that contributes to a text's meaning."],
+["Narrator","The voice or figure that tells a story."],
+["Onomatopoeia","A word that imitates a sound."],
+["Oxymoron","A combination of apparently contradictory terms."],
+["Paradox","A seemingly contradictory statement that may contain truth."],
+["Personification","Giving human qualities to nonhuman things."],
+["Protagonist","The principal character in a story."],
+["Satire","Use of humor, irony or exaggeration to criticize society or human behavior."],
+["Soliloquy","A speech in which a dramatic character expresses private thoughts aloud."],
+["Stream of Consciousness","A narrative method representing the flow of thoughts and impressions."],
+["Symbolism","Using an object, image or action to represent a deeper meaning."],
+["Synecdoche","A figure in which a part represents the whole or vice versa."],
+["Tragic Flaw","A character trait contributing to a tragic hero's downfall."],
+["Unreliable Narrator","A narrator whose account cannot be fully trusted."],
+["Verisimilitude","The appearance of truth or realism in fiction."],
+["Zeugma","A construction in which one word governs two others in different senses."]
+];
+
+
+/* =========================================================
+   QUIZ DATABASE
+   ========================================================= */
+
+const questions = [
+
+{
+ q:"Who wrote Paradise Lost?",
+ options:["John Milton","William Shakespeare","John Donne","Alexander Pope"],
+ answer:0
+},
+
+{
+ q:"The Tale of Genji is traditionally attributed to:",
+ options:["Murasaki Shikibu","Sei Shōnagon","Bashō","Yosano Akiko"],
+ answer:0
+},
+
+{
+ q:"War and Peace was written by:",
+ options:["Dostoevsky","Tolstoy","Chekhov","Turgenev"],
+ answer:1
+},
+
+{
+ q:"Who wrote The Divine Comedy?",
+ options:["Petrarch","Boccaccio","Dante","Virgil"],
+ answer:2
+},
+
+{
+ q:"The Iliad is traditionally attributed to:",
+ options:["Sophocles","Homer","Aristotle","Ovid"],
+ answer:1
+},
+
+{
+ q:"Who is associated with the term 'stream of consciousness' in modern fiction?",
+ options:["Virginia Woolf","Milton","Homer","Chaucer"],
+ answer:0
+},
+
+{
+ q:"The Metamorphosis was written by:",
+ options:["Goethe","Kafka","Camus","Mann"],
+ answer:1
+},
+
+{
+ q:"Who wrote Crime and Punishment?",
+ options:["Tolstoy","Dostoevsky","Chekhov","Gorky"],
+ answer:1
+},
+
+{
+ q:"Gitanjali is associated with:",
+ options:["Muhammad Iqbal","Rabindranath Tagore","Mirza Ghalib","Faiz"],
+ answer:1
+},
+
+{
+ q:"The Stranger is associated with:",
+ options:["Albert Camus","Jean-Paul Sartre","Victor Hugo","Balzac"],
+ answer:0
+},
+
+{
+ q:"Who is famous for classical Japanese haiku?",
+ options:["Murasaki Shikibu","Matsuo Bashō","Kawabata","Akutagawa"],
+ answer:1
+},
+
+{
+ q:"Who wrote The Old Man and the Sea?",
+ options:["Fitzgerald","Hemingway","Faulkner","Steinbeck"],
+ answer:1
+},
+
+{
+ q:"Who wrote Les Misérables?",
+ options:["Victor Hugo","Camus","Flaubert","Molière"],
+ answer:0
+},
+
+{
+ q:"Who wrote the Aeneid?",
+ options:["Ovid","Virgil","Homer","Horace"],
+ answer:1
+},
+
+{
+ q:"Which term describes a speech revealing a character's private thoughts?",
+ options:["Aside","Soliloquy","Allegory","Satire"],
+ answer:1
+},
+
+{
+ q:"Which movement emphasizes nature, emotion and imagination?",
+ options:["Neoclassicism","Romanticism","Realism","Naturalism"],
+ answer:1
+},
+
+{
+ q:"Who wrote The Vegetarian?",
+ options:["Han Kang","Kim Soo-young","Kenzaburō Ōe","Kawabata"],
+ answer:0
+},
+
+{
+ q:"Naguib Mahfouz was a major writer of:",
+ options:["Arabic literature","Russian literature","Chinese literature","German literature"],
+ answer:0
+},
+
+{
+ q:"Who wrote Leaves of Grass?",
+ options:["Walt Whitman","Poe","Emerson","Longfellow"],
+ answer:0
+},
+
+{
+ q:"Which Chinese dynasty is famous for a golden age of poetry?",
+ options:["Tang","Qin","Yuan","Qing"],
+ answer:0
+}
+
+];
+
+
+/* =========================================================
+   QUOTES
+   ========================================================= */
+
+const quotes = [
+
+["“All the world's a stage, and all the men and women merely players.”","William Shakespeare"],
+["“The child is father of the man.”","William Wordsworth"],
+["“Hope is the thing with feathers.”","Emily Dickinson"],
+["“The only way out of the labyrinth of suffering is to forgive.”","John Green"],
+["“Not all those who wander are lost.”","J. R. R. Tolkien"],
+["“Whatever our souls are made of, his and mine are the same.”","Emily Brontë"],
+["“You must change your life.”","Rainer Maria Rilke"],
+["“The world is a book and those who do not travel read only one page.”","Commonly attributed to Augustine"],
+["“We are such stuff as dreams are made on.”","William Shakespeare"],
+["“The purpose of literature is to turn blood into ink.”","T. S. Eliot"]
+];
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+const timelineData = [
+
+["c. 8th century BCE","Homeric Epics","The Iliad and Odyssey become foundational works of Greek epic tradition."],
+["5th century BCE","Classical Greek Drama","Aeschylus, Sophocles, Euripides and Aristophanes shape Western drama."],
+["c. 19 BCE","Virgil's Aeneid","Roman epic links mythology, destiny and imperial identity."],
+["c. 1008","The Tale of Genji","Murasaki Shikibu produces a landmark Japanese court narrative."],
+["1320","Divine Comedy","Dante completes one of Europe's most influential allegorical epics."],
+["14th century","Petrarchan Poetry","Petrarch's sonnet tradition influences European lyric poetry."],
+["1600s","Shakespearean Drama","English Renaissance drama reaches extraordinary influence."],
+["1667","Paradise Lost","Milton publishes his major English epic."],
+["1789","Romantic Era","European literature increasingly emphasizes emotion, nature and imagination."],
+["1869","War and Peace","Tolstoy's epic realism becomes a landmark of world fiction."],
+["1915","The Metamorphosis","Kafka's modernist fiction explores alienation and absurdity."],
+["1925","Mrs Dalloway","Virginia Woolf advances modernist interior narration."],
+["1942","The Stranger","Camus explores absurdity, alienation and moral meaning."],
+["1981","Midnight's Children","Rushdie connects personal identity with postcolonial history."],
+["1987","Beloved","Toni Morrison explores memory and the legacy of slavery."],
+["2007","The Vegetarian","Han Kang publishes a major contemporary Korean novel."]
+];
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let state = JSON.parse(localStorage.getItem("litverseState")) || {
+
+  favorites:[],
+  notes:[],
+  progress:12,
+  quizScore:0,
+  quizAttempts:0,
+  cardsReviewed:0,
+  streak:1,
+  lastVisit:null,
+  theme:"dark"
+
+};
+
+let currentRegion="All";
+let currentQuiz=[];
+let quizIndex=0;
+let quizCorrect=0;
+let quizAnswered=false;
+let flashIndex=0;
+let flashFlipped=false;
+
+
+/* =========================================================
+   SAVE STATE
+   ========================================================= */
+
+function saveState(){
+
+  localStorage.setItem(
+    "litverseState",
+    JSON.stringify(state)
+  );
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+window.addEventListener("load",()=>{
+
+  setTimeout(()=>{
+    document.getElementById("loader").classList.add("hide");
+  },1200);
+
+  createParticles();
+  initializeTheme();
+  updateVisit();
+  renderDashboard();
+  renderRegions();
+  renderLearn();
+  renderAuthors();
+  renderWorks();
+  renderPeriods();
+  renderTerms();
+  renderTimeline();
+  renderNotes();
+  populateCompare();
+  setupNavigation();
+  setupFilters();
+  setupSearch();
+  initFlashcard();
+
 });
 
 
-/* Render authors */
+/* =========================================================
+   PARTICLES
+   ========================================================= */
 
-function renderAuthors(list=authors){
+function createParticles(){
 
-  const box=document.getElementById("authors");
-  box.innerHTML="";
+  const container=document.getElementById("particles");
 
-  let filtered=list.filter(a=>
-    currentCategory==="All" || a.category===currentCategory
-  );
+  for(let i=0;i<45;i++){
 
-  document.getElementById("noResults").style.display=
-    filtered.length ? "none":"block";
+    const p=document.createElement("span");
 
-  filtered.forEach((a,i)=>{
+    p.className="particle";
 
-    const saved=favorites.includes(a.name);
+    p.style.left=Math.random()*100+"%";
+    p.style.animationDuration=(12+Math.random()*25)+"s";
+    p.style.animationDelay=(-Math.random()*25)+"s";
+    p.style.opacity=.15+Math.random()*.45;
 
-    const card=document.createElement("article");
+    container.appendChild(p);
 
-    card.className="card";
-    card.style.animationDelay=(i*.035)+"s";
-
-    card.onclick=()=>openAuthor(a);
-
-    card.innerHTML=`
-      <button class="favorite ${saved?"saved":""}"
-        onclick="event.stopPropagation();toggleFavorite('${escapeQuotes(a.name)}')">
-        ${saved?"♥":"♡"}
-      </button>
-
-      <div class="initial">
-        ${a.name.charAt(0)}
-      </div>
-
-      <div class="origin">${a.origin}</div>
-
-      <h3>${a.name}</h3>
-
-      <p>${a.themes}</p>
-    `;
-
-    box.appendChild(card);
-  });
-}
-
-
-/* Search */
-
-function searchAuthors(){
-
-  const q=document.getElementById("search")
-    .value.toLowerCase()
-    .trim();
-
-  const results=authors.filter(a=>
-    a.name.toLowerCase().includes(q) ||
-    a.origin.toLowerCase().includes(q) ||
-    a.category.toLowerCase().includes(q) ||
-    a.themes.toLowerCase().includes(q)
-  );
-
-  renderAuthors(results);
-}
-
-
-/* Author modal */
-
-function openAuthor(a){
-
-  const modal=document.getElementById("modal");
-
-  const quoteHTML=a.quotes.map(q=>
-    `<div class="miniQuote">“${q}”</div>`
-  ).join("");
-
-  document.getElementById("modalBody").innerHTML=`
-
-    <div class="initial">${a.name.charAt(0)}</div>
-
-    <div class="origin">${a.origin} • ${a.category}</div>
-
-    <h2>${a.name}</h2>
-
-    <div class="infoGrid">
-
-      <div class="info">
-        <strong>Era</strong>
-        ${a.years}
-      </div>
-
-      <div class="info">
-        <strong>Major Works</strong>
-        ${a.works}
-      </div>
-
-      <div class="info">
-        <strong>Themes</strong>
-        ${a.themes}
-      </div>
-
-    </div>
-
-    <div class="bio">
-      ${a.bio}
-    </div>
-
-    <div class="quotes">
-      <h3>Selected Words</h3>
-      ${quoteHTML}
-    </div>
-  `;
-
-  modal.classList.add("show");
-  document.body.style.overflow="hidden";
-}
-
-
-/* Modal */
-
-function closeModal(){
-  document.getElementById("modal").classList.remove("show");
-  document.body.style.overflow="";
-}
-
-function closeOutside(e){
-  if(e.target.id==="modal") closeModal();
-}
-
-
-/* Favorites */
-
-function toggleFavorite(name){
-
-  if(favorites.includes(name)){
-    favorites=favorites.filter(x=>x!==name);
-  }else{
-    favorites.push(name);
   }
 
-  localStorage.setItem(
-    "litverseFavorites",
-    JSON.stringify(favorites)
-  );
-
-  renderAuthors();
-}
-
-function showFavorites(){
-
-  currentCategory="__favorites__";
-
-  document.querySelectorAll(".category")
-    .forEach(x=>x.classList.remove("active"));
-
-  const list=authors.filter(a=>favorites.includes(a.name));
-
-  renderAuthors(list);
 }
 
 
-/* Theme */
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function initializeTheme(){
+
+  if(state.theme==="light"){
+    document.body.classList.add("light");
+    document.getElementById("themeLabel").textContent="Light";
+  }
+
+}
 
 function toggleTheme(){
 
-  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 
-  localStorage.setItem(
-    "litverseTheme",
-    document.body.classList.contains("dark")
-      ?"dark":"light"
+  state.theme=
+    document.body.classList.contains("light")
+    ?"light"
+    :"dark";
+
+  document.getElementById("themeLabel").textContent=
+    state.theme==="light"?"Light":"Dark";
+
+  saveState();
+
+}
+
+document.getElementById("themeBtn")
+.addEventListener("click",toggleTheme);
+
+document.getElementById("quickTheme")
+.addEventListener("click",toggleTheme);
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+document.getElementById("motionBtn")
+.addEventListener("click",()=>{
+
+  document.body.classList.toggle("reduce-motion");
+
+  showToast(
+    document.body.classList.contains("reduce-motion")
+    ?"Reduced motion enabled"
+    :"Animations enabled"
   );
+
+});
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function setupNavigation(){
+
+  document.querySelectorAll("[data-page]")
+  .forEach(btn=>{
+
+    btn.addEventListener("click",()=>{
+
+      showPage(btn.dataset.page);
+
+    });
+
+  });
+
 }
 
-if(localStorage.getItem("litverseTheme")==="dark"){
-  document.body.classList.add("dark");
+function showPage(page){
+
+  document.querySelectorAll(".page")
+  .forEach(p=>p.classList.remove("active"));
+
+  const target=document.getElementById("page-"+page);
+
+  if(target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-item")
+  .forEach(n=>{
+    n.classList.toggle(
+      "active",
+      n.dataset.page===page
+    );
+  });
+
+  document.querySelectorAll(".mobile-nav button")
+  .forEach(n=>{
+    n.classList.toggle(
+      "active",
+      n.dataset.page===page
+    );
+  });
+
+  document.getElementById("sidebar")
+    .classList.remove("open");
+
+  window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+document.getElementById("mobileMenu")
+.addEventListener("click",()=>{
+
+  document.getElementById("sidebar")
+  .classList.toggle("open");
+
+});
+
+
+/* =========================================================
+   VISIT / STREAK
+   ========================================================= */
+
+function updateVisit(){
+
+  const today=new Date().toDateString();
+
+  if(state.lastVisit!==today){
+
+    state.lastVisit=today;
+
+    if(state.streak<1)
+      state.streak=1;
+
+    saveState();
+
+  }
+
 }
 
 
-/* Daily quote */
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
 
-const dailyQuotes=[
+function renderDashboard(){
 
-["The mind is its own place.","John Milton"],
+  document.getElementById("statAuthors").textContent=
+    authors.length;
 
-["Poetry is the spontaneous overflow of powerful feelings.","William Wordsworth"],
+  document.getElementById("statWorks").textContent=
+    works.length;
 
-["A thing of beauty is a joy for ever.","John Keats"],
+  document.getElementById("statTerms").textContent=
+    terms.length;
 
-["If Winter comes, can Spring be far behind?","Percy Bysshe Shelley"],
+  document.getElementById("statStreak").textContent=
+    state.streak;
 
-["Hope is the thing with feathers.","Emily Dickinson"],
+  document.getElementById("progressText").textContent=
+    state.progress+"%";
 
-["I celebrate myself, and sing myself.","Walt Whitman"],
+  document.getElementById("progressBar").style.width=
+    state.progress+"%";
 
-["The woods are lovely, dark and deep.","Robert Frost"],
+  document.getElementById("quizScore").textContent=
+    state.quizScore+"%";
 
-["Things fall apart; the centre cannot hold.","W. B. Yeats"],
+  document.getElementById("cardsReviewed").textContent=
+    state.cardsReviewed;
 
-["What happens to a dream deferred?","Langston Hughes"],
+  const q=
+    quotes[
+      new Date().getDate()%quotes.length
+    ];
 
-["Where the mind is without fear and the head is held high.","Rabindranath Tagore"],
+  document.getElementById("dailyQuote").textContent=q[0];
+  document.getElementById("quoteAuthor").textContent="— "+q[1];
 
-["The wound is the place where the Light enters you.","Rumi"],
+  renderRecommendations();
 
-["Raise your words, not your voice.","Hafez"],
-
-["I loved you; and perhaps I love you still.","Alexander Pushkin"],
-
-["Work is love made visible.","Khalil Gibran"],
-
-["The love that moves the sun and the other stars.","Dante Alighieri"]
-
-];
-
-const today=new Date();
-
-const index=
-  (today.getFullYear()+
-   today.getMonth()+
-   today.getDate())
-  %dailyQuotes.length;
-
-document.getElementById("dailyQuote").textContent=
-  "“"+dailyQuotes[index][0]+"”";
-
-document.getElementById("quoteAuthor").textContent=
-  "— "+dailyQuotes[index][1];
-
-
-/* Utility */
-
-function escapeQuotes(str){
-  return str.replace(/'/g,"\\'");
 }
 
 
-/* Keyboard shortcuts */
+/* =========================================================
+   RECOMMENDATIONS
+   ========================================================= */
+
+function renderRecommendations(){
+
+  const selected=[
+    authors.find(a=>a.id==="shakespeare"),
+    authors.find(a=>a.id==="murasaki"),
+    authors.find(a=>a.id==="dostoevsky")
+  ];
+
+  document.getElementById("recommendations")
+  .innerHTML=selected.map(authorCard).join("");
+
+}
+
+
+/* =========================================================
+   REGION CARDS
+   ========================================================= */
+
+function renderRegions(){
+
+  document.getElementById("regionGrid")
+  .innerHTML=regions.map(r=>`
+
+    <div class="card library-card"
+         onclick="openRegion('${escapeQuotes(r.name)}')">
+
+      <span class="count">
+        ${r.periods.length} periods
+      </span>
+
+      <div class="library-icon">${r.icon}</div>
+
+      <h4>${r.name}</h4>
+
+      <p>${r.desc}</p>
+
+      <div class="tags">
+        ${r.periods.slice(0,3)
+          .map(x=>`<span class="tag">${x}</span>`)
+          .join("")}
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================================================
+   LEARN
+   ========================================================= */
+
+function renderLearn(){
+
+  const filters=document.getElementById("regionFilters");
+
+  filters.innerHTML=
+    `<button class="filter ${currentRegion==="All"?"active":""}"
+       onclick="setRegion('All')">All</button>`+
+    regions.map(r=>`
+      <button class="filter ${currentRegion===r.name?"active":""}"
+        onclick="setRegion('${escapeQuotes(r.name)}')">
+        ${r.icon} ${r.name.replace(" Literature","")}
+      </button>
+    `).join("");
+
+  const data=
+    currentRegion==="All"
+    ?regions
+    :regions.filter(r=>r.name===currentRegion);
+
+  document.getElementById("learnGrid").innerHTML=
+    data.map(r=>`
+
+      <div class="card library-card"
+           onclick="openRegion('${escapeQuotes(r.name)}')">
+
+        <div class="library-icon">${r.icon}</div>
+
+        <h4>${r.name}</h4>
+
+        <p>${r.desc}</p>
+
+        <div class="tags">
+
+          ${r.periods.map(p=>
+            `<span class="tag">${p}</span>`
+          ).join("")}
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+function setRegion(region){
+
+  currentRegion=region;
+  renderLearn();
+
+}
+
+
+/* =========================================================
+   AUTHORS
+   ========================================================= */
+
+function authorCard(a){
+
+  const initials=
+    a.name.split(" ")
+      .filter(x=>x.length)
+      .slice(0,2)
+      .map(x=>x[0])
+      .join("");
+
+  const fav=state.favorites.includes(a.id);
+
+  return `
+
+    <div class="card author-card"
+         onclick="openAuthor('${a.id}')">
+
+      <div style="display:flex;justify-content:space-between">
+
+        <div class="author-avatar">${initials}</div>
+
+        <button
+          class="icon-btn"
+          style="width:36px;height:36px"
+          onclick="event.stopPropagation();toggleFavorite('${a.id}')">
+          ${fav?"⭐":"☆"}
+        </button>
+
+      </div>
+
+      <h4>${a.name}</h4>
+
+      <div class="meta">
+        ${a.region} • ${a.years}
+      </div>
+
+      <div class="tags">
+        <span class="tag">${a.period}</span>
+        <span class="tag">${a.movement}</span>
+        <span class="tag">${a.genre}</span>
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+function renderAuthors(filter="All"){
+
+  let data=
+    filter==="All"
+    ?authors
+    :authors.filter(a=>a.region===filter);
+
+  document.getElementById("authorsGrid")
+    .innerHTML=data.map(authorCard).join("");
+
+}
+
+function setupFilters(){
+
+  document.querySelectorAll("[data-author-filter]")
+  .forEach(btn=>{
+
+    btn.addEventListener("click",()=>{
+
+      document.querySelectorAll("[data-author-filter]")
+        .forEach(x=>x.classList.remove("active"));
+
+      btn.classList.add("active");
+
+      renderAuthors(btn.dataset.authorFilter);
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   AUTHOR PROFILE
+   ========================================================= */
+
+function openAuthor(id){
+
+  const a=authors.find(x=>x.id===id);
+
+  if(!a)return;
+
+  const fav=state.favorites.includes(a.id);
+
+  document.getElementById("modalTitle").textContent=
+    a.name;
+
+  document.getElementById("modalBody").innerHTML=`
+
+    <div class="profile-hero card">
+
+      <div class="profile-avatar">
+        ${a.name.split(" ").map(x=>x[0]).slice(0,2).join("")}
+      </div>
+
+      <div class="profile-info">
+
+        <h2>${a.name}</h2>
+
+        <p>${a.region} • ${a.years}</p>
+
+        <div class="tags">
+          <span class="tag">${a.period}</span>
+          <span class="tag">${a.movement}</span>
+          <span class="tag">${a.genre}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div style="margin-top:22px">
+
+      <div class="section-head">
+        <div><h3>Biography</h3></div>
+      </div>
+
+      <p class="prose">${a.bio}</p>
+
+    </div>
+
+    <div class="detail-list">
+
+      <div class="detail">
+        <small>Early Life</small>
+        <strong>${a.early}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Education</small>
+        <strong>${a.education}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Career</small>
+        <strong>${a.career}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Historical Context</small>
+        <strong>${a.context}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Literary Movement</small>
+        <strong>${a.movement}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Writing Style</small>
+        <strong>${a.style}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Major Themes</small>
+        <strong>${a.themes}</strong>
+      </div>
+
+      <div class="detail">
+        <small>Influence</small>
+        <strong>${a.influence}</strong>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-head">
+        <div><h3>📚 Major Works</h3></div>
+      </div>
+
+      <div class="grid grid-2">
+
+        ${a.works.map(w=>`
+
+          <div class="work">
+            <h4>${w}</h4>
+            <p>Major work by ${a.name}.</p>
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-head">
+        <div><h3>👥 Important Characters</h3></div>
+      </div>
+
+      <div class="tags">
+        ${(a.characters||[])
+          .map(x=>`<span class="tag">${x}</span>`)
+          .join("")}
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+
+      <h3>🎯 Exam Notes</h3>
+
+      <p class="prose" style="margin-top:10px">
+        ${a.notes}
+      </p>
+
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+
+      <button class="btn btn-primary"
+        onclick="toggleFavorite('${a.id}');openAuthor('${a.id}')">
+        ${fav?"★ Remove Favorite":"☆ Add Favorite"}
+      </button>
+
+      <button class="btn btn-secondary"
+        onclick="closeModal()">
+        Close
+      </button>
+
+    </div>
+
+  `;
+
+  openModal();
+
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+function toggleFavorite(id){
+
+  if(state.favorites.includes(id)){
+
+    state.favorites=
+      state.favorites.filter(x=>x!==id);
+
+    showToast("Removed from favorites");
+
+  }else{
+
+    state.favorites.push(id);
+
+    showToast("Added to favorites ⭐");
+
+  }
+
+  saveState();
+
+  renderAuthors();
+
+  renderFavorites();
+
+}
+
+function renderFavorites(){
+
+  const container=
+    document.getElementById("favoritesGrid");
+
+  const favs=
+    authors.filter(a=>state.favorites.includes(a.id));
+
+  if(!favs.length){
+
+    container.innerHTML=`
+
+      <div class="card empty">
+        <div class="empty-icon">⭐</div>
+        <h3>No favorites yet</h3>
+        <p>Open an author and add them to favorites.</p>
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML=
+    `<div class="grid grid-3">
+      ${favs.map(authorCard).join("")}
+    </div>`;
+
+}
+
+
+/* =========================================================
+   WORKS
+   ========================================================= */
+
+function renderWorks(){
+
+  document.getElementById("worksGrid")
+  .innerHTML=works.map((w,i)=>`
+
+    <div class="card work">
+
+      <div class="year">${w[3]}</div>
+
+      <h4>${w[0]}</h4>
+
+      <p style="margin-top:5px">
+        ${w[1]} • ${w[2]}
+      </p>
+
+      <div class="tags">
+        <span class="tag">${w[4]}</span>
+      </div>
+
+      <p style="margin-top:12px;line-height:1.6">
+        ${w[5]}
+      </p>
+
+      <button class="link-btn"
+        style="margin-top:12px"
+        onclick="openWork(${i})">
+        Explore →
+      </button>
+
+    </div>
+
+  `).join("");
+
+}
+
+function openWork(index){
+
+  const w=works[index];
+
+  document.getElementById("modalTitle").textContent=w[0];
+
+  document.getElementById("modalBody").innerHTML=`
+
+    <div class="card">
+
+      <div class="eyebrow">${w[2]} • ${w[4]}</div>
+
+      <h2>${w[0]}</h2>
+
+      <p style="color:var(--muted);margin-top:5px">
+        ${w[1]} • ${w[3]}
+      </p>
+
+      <p class="prose" style="margin-top:20px">
+        ${w[5]}
+      </p>
+
+      <div class="section">
+
+        <h3>📖 Study Approach</h3>
+
+        <p class="prose" style="margin-top:10px">
+          Identify the historical period, literary movement, genre,
+          major themes, characters and stylistic features. Then connect
+          the work to its author's wider literary context.
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
+  openModal();
+
+}
+
+
+/* =========================================================
+   PERIODS
+   ========================================================= */
+
+function renderPeriods(){
+
+  document.getElementById("periodsGrid")
+  .innerHTML=periods.map(p=>`
+
+    <div class="card">
+
+      <div class="eyebrow">${p[2]}</div>
+
+      <h3>${p[0]}</h3>
+
+      <div class="year">${p[1]}</div>
+
+      <p style="color:var(--muted);line-height:1.6;margin-top:10px">
+        ${p[3]}
+      </p>
+
+      <div class="tags">
+
+        ${p[4].split(",")
+          .map(x=>`<span class="tag">${x.trim()}</span>`)
+          .join("")}
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================================================
+   TERMS
+   ========================================================= */
+
+function renderTerms(){
+
+  document.getElementById("termsGrid")
+  .innerHTML=terms.map((t,i)=>`
+
+    <div class="card">
+
+      <div style="display:flex;gap:10px;align-items:center">
+
+        <div class="author-avatar"
+             style="width:40px;height:40px;font-size:15px">
+          ${i+1}
+        </div>
+
+        <h3>${t[0]}</h3>
+
+      </div>
+
+      <p style="color:var(--muted);line-height:1.7;margin-top:14px">
+        ${t[1]}
+      </p>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+function renderTimeline(){
+
+  document.getElementById("timeline")
+    .innerHTML=timelineData.map(t=>`
+
+      <div class="timeline-item">
+
+        <strong>${t[0]} — ${t[1]}</strong>
+
+        <p>${t[2]}</p>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+
+function startQuiz(){
+
+  currentQuiz=
+    [...questions]
+      .sort(()=>Math.random()-.5)
+      .slice(0,10);
+
+  quizIndex=0;
+  quizCorrect=0;
+  quizAnswered=false;
+
+  renderQuestion();
+
+}
+
+function renderQuestion(){
+
+  if(quizIndex>=currentQuiz.length){
+
+    finishQuiz();
+    return;
+
+  }
+
+  const q=currentQuiz[quizIndex];
+
+  document.getElementById("quizBox").innerHTML=`
+
+    <div class="quiz-progress">
+
+      <span>Question ${quizIndex+1} / ${currentQuiz.length}</span>
+
+      <span>Score: ${quizCorrect}</span>
+
+    </div>
+
+    <div class="progress">
+      <span style="width:${quizIndex/currentQuiz.length*100}%"></span>
+    </div>
+
+    <h2 style="margin-top:22px;line-height:1.35">
+      ${q.q}
+    </h2>
+
+    <div id="options">
+
+      ${q.options.map((option,i)=>`
+
+        <button class="quiz-option"
+                onclick="answerQuestion(${i})">
+          ${String.fromCharCode(65+i)}.
+          ${option}
+        </button>
+
+      `).join("")}
+
+    </div>
+
+  `;
+
+}
+
+function answerQuestion(index){
+
+  if(quizAnswered)return;
+
+  quizAnswered=true;
+
+  const q=currentQuiz[quizIndex];
+
+  const buttons=
+    document.querySelectorAll(".quiz-option");
+
+  buttons.forEach((b,i)=>{
+
+    if(i===q.answer)
+      b.classList.add("correct");
+
+    if(i===index && i!==q.answer)
+      b.classList.add("wrong");
+
+  });
+
+  if(index===q.answer)
+    quizCorrect++;
+
+  setTimeout(()=>{
+
+    quizIndex++;
+    quizAnswered=false;
+    renderQuestion();
+
+  },700);
+
+}
+
+function finishQuiz(){
+
+  const score=
+    Math.round(
+      quizCorrect/currentQuiz.length*100
+    );
+
+  state.quizScore=score;
+  state.quizAttempts++;
+  state.progress=Math.min(
+    100,
+    state.progress+Math.max(1,Math.round(score/20))
+  );
+
+  saveState();
+  renderDashboard();
+
+  document.getElementById("quizBox").innerHTML=`
+
+    <div class="empty">
+
+      <div class="empty-icon">
+        ${score>=80?"🏆":score>=60?"🎉":"📚"}
+      </div>
+
+      <h2>Quiz Complete!</h2>
+
+      <p style="font-size:25px;font-weight:800;margin:12px">
+        ${score}%
+      </p>
+
+      <p>
+        You answered
+        <strong>${quizCorrect}</strong>
+        out of
+        <strong>${currentQuiz.length}</strong>
+        correctly.
+      </p>
+
+      <button class="btn btn-primary"
+        style="margin-top:20px"
+        onclick="startQuiz()">
+        Try Again
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   FLASHCARDS
+   ========================================================= */
+
+const flashcards=terms.map(t=>({
+  front:t[0],
+  back:t[1]
+}));
+
+function initFlashcard(){
+
+  flashIndex=0;
+  flashFlipped=false;
+  renderFlashcard();
+
+}
+
+function renderFlashcard(){
+
+  const c=flashcards[flashIndex];
+
+  document.getElementById("flashFront")
+    .textContent=
+    flashFlipped?c.back:c.front;
+
+  document.getElementById("flashBack")
+    .textContent=
+    flashFlipped
+    ?"Click again or use Next Card."
+    :"Click to reveal definition.";
+
+  document.getElementById("flashLabel")
+    .textContent=
+    flashFlipped?"DEFINITION":"LITERARY TERM";
+
+  document.getElementById("flashCount")
+    .textContent=
+    `Card ${flashIndex+1} of ${flashcards.length}`;
+
+}
+
+function flipCard(){
+
+  flashFlipped=!flashFlipped;
+
+  if(flashFlipped){
+
+    state.cardsReviewed++;
+    state.progress=Math.min(100,state.progress+1);
+
+    saveState();
+    renderDashboard();
+
+  }
+
+  renderFlashcard();
+
+}
+
+function nextCard(){
+
+  flashIndex=
+    (flashIndex+1)%flashcards.length;
+
+  flashFlipped=false;
+
+  renderFlashcard();
+
+}
+
+
+/* =========================================================
+   COMPARE
+   ========================================================= */
+
+function populateCompare(){
+
+  const html=
+    `<option value="">Select author...</option>`+
+    authors.map(a=>
+      `<option value="${a.id}">${a.name}</option>`
+    ).join("");
+
+  document.getElementById("compareA").innerHTML=html;
+  document.getElementById("compareB").innerHTML=html;
+
+}
+
+function compareAuthors(){
+
+  const a=
+    authors.find(x=>
+      x.id===document.getElementById("compareA").value);
+
+  const b=
+    authors.find(x=>
+      x.id===document.getElementById("compareB").value);
+
+  if(!a||!b){
+
+    showToast("Select two authors first.");
+
+    return;
+
+  }
+
+  document.getElementById("compareResult")
+    .innerHTML=`
+
+      <div class="grid grid-2">
+
+        <div class="card">
+
+          <div class="author-avatar">
+            ${a.name[0]}
+          </div>
+
+          <h2>${a.name}</h2>
+
+          <div class="tags">
+            <span class="tag">${a.region}</span>
+            <span class="tag">${a.period}</span>
+            <span class="tag">${a.movement}</span>
+          </div>
+
+          <div class="detail-list">
+
+            <div class="detail">
+              <small>Genre</small>
+              <strong>${a.genre}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Years</small>
+              <strong>${a.years}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Themes</small>
+              <strong>${a.themes}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Style</small>
+              <strong>${a.style}</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="author-avatar">
+            ${b.name[0]}
+          </div>
+
+          <h2>${b.name}</h2>
+
+          <div class="tags">
+            <span class="tag">${b.region}</span>
+            <span class="tag">${b.period}</span>
+            <span class="tag">${b.movement}</span>
+          </div>
+
+          <div class="detail-list">
+
+            <div class="detail">
+              <small>Genre</small>
+              <strong>${b.genre}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Years</small>
+              <strong>${b.years}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Themes</small>
+              <strong>${b.themes}</strong>
+            </div>
+
+            <div class="detail">
+              <small>Style</small>
+              <strong>${b.style}</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   NOTES
+   ========================================================= */
+
+function saveNote(){
+
+  const title=
+    document.getElementById("noteTitle").value.trim();
+
+  const text=
+    document.getElementById("noteText").value.trim();
+
+  if(!title||!text){
+
+    showToast("Please write a title and note.");
+
+    return;
+
+  }
+
+  state.notes.unshift({
+
+    id:Date.now(),
+    title,
+    text,
+    date:new Date().toLocaleDateString()
+
+  });
+
+  saveState();
+
+  document.getElementById("noteTitle").value="";
+  document.getElementById("noteText").value="";
+
+  renderNotes();
+
+  showToast("Note saved 🗒️");
+
+}
+
+function renderNotes(){
+
+  const container=
+    document.getElementById("notesGrid");
+
+  if(!state.notes.length){
+
+    container.innerHTML=`
+
+      <div class="card empty">
+        <div class="empty-icon">🗒️</div>
+        <h3>Your notes will appear here.</h3>
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML=
+    state.notes.map(n=>`
+
+      <div class="card">
+
+        <div style="display:flex;justify-content:space-between">
+
+          <h3>${escapeHTML(n.title)}</h3>
+
+          <button class="icon-btn"
+            style="width:35px;height:35px"
+            onclick="deleteNote(${n.id})">
+            🗑
+          </button>
+
+        </div>
+
+        <small style="color:var(--muted)">
+          ${n.date}
+        </small>
+
+        <p class="prose" style="margin-top:12px">
+          ${escapeHTML(n.text)}
+        </p>
+
+      </div>
+
+    `).join("");
+
+}
+
+function deleteNote(id){
+
+  state.notes=
+    state.notes.filter(n=>n.id!==id);
+
+  saveState();
+  renderNotes();
+
+  showToast("Note deleted");
+
+}
+
+
+/* =========================================================
+   REGION MODAL
+   ========================================================= */
+
+function openRegion(name){
+
+  const r=
+    regions.find(x=>x.name===name);
+
+  if(!r)return;
+
+  const regionalAuthors=
+    authors.filter(a=>
+      a.region===name.replace(" Literature","")
+    );
+
+  document.getElementById("modalTitle")
+    .textContent=r.name;
+
+  document.getElementById("modalBody").innerHTML=`
+
+    <div class="card">
+
+      <div style="font-size:45px">${r.icon}</div>
+
+      <h2 style="margin-top:10px">${r.name}</h2>
+
+      <p class="prose" style="margin-top:12px">
+        ${r.desc}
+      </p>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-head">
+        <div>
+          <h3>⌛ Major Periods</h3>
+        </div>
+      </div>
+
+      <div class="tags">
+
+        ${r.periods.map(p=>
+          `<span class="tag" style="font-size:12px;padding:8px 12px">
+            ${p}
+          </span>`
+        ).join("")}
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-head">
+        <div>
+          <h3>✒️ Featured Authors</h3>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+
+        ${regionalAuthors.length
+          ?regionalAuthors.map(a=>`
+
+            <div class="work"
+              onclick="closeModal();openAuthor('${a.id}')"
+              style="cursor:pointer">
+
+              <h4>${a.name}</h4>
+
+              <p>
+                ${a.period} • ${a.movement}
+              </p>
+
+            </div>
+
+          `).join("")
+          :`
+            <div class="empty">
+              More authors coming soon.
+            </div>
+          `
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+  openModal();
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function setupSearch(){
+
+  document.getElementById("globalSearch")
+    .addEventListener("keydown",e=>{
+
+      if(e.key!=="Enter")return;
+
+      const query=e.target.value.trim().toLowerCase();
+
+      if(!query)return;
+
+      const authorMatch=
+        authors.find(a=>
+          JSON.stringify(a)
+            .toLowerCase()
+            .includes(query)
+        );
+
+      if(authorMatch){
+
+        showPage("authors");
+        openAuthor(authorMatch.id);
+
+        return;
+
+      }
+
+      const workIndex=
+        works.findIndex(w=>
+          w.join(" ")
+            .toLowerCase()
+            .includes(query)
+        );
+
+      if(workIndex>=0){
+
+        showPage("works");
+        openWork(workIndex);
+
+        return;
+
+      }
+
+      const term=
+        terms.find(t=>
+          t.join(" ")
+            .toLowerCase()
+            .includes(query)
+        );
+
+      if(term){
+
+        showPage("terms");
+
+        showToast(
+          term[0]+": "+term[1]
+        );
+
+        return;
+
+      }
+
+      const region=
+        regions.find(r=>
+          r.name.toLowerCase().includes(query)
+        );
+
+      if(region){
+
+        showPage("learn");
+        setRegion(region.name);
+
+        return;
+
+      }
+
+      showToast("No result found.");
+
+    });
+
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function openModal(){
+
+  document.getElementById("modal")
+    .classList.add("show");
+
+  document.body.style.overflow="hidden";
+
+}
+
+function closeModal(){
+
+  document.getElementById("modal")
+    .classList.remove("show");
+
+  document.body.style.overflow="";
+
+}
+
+document.getElementById("modal")
+.addEventListener("click",e=>{
+
+  if(e.target.id==="modal")
+    closeModal();
+
+});
 
 document.addEventListener("keydown",e=>{
 
-  if(e.key==="Escape"){
+  if(e.key==="Escape")
     closeModal();
-  }
 
-  if(e.key==="/" && document.activeElement.tagName!=="INPUT"){
+});
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast=
+    document.getElementById("toast");
+
+  toast.textContent=message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2500);
+
+}
+
+
+/* =========================================================
+   SECURITY / TEXT HELPERS
+   ========================================================= */
+
+function escapeHTML(str){
+
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function escapeQuotes(str){
+
+  return String(str)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================================================
+   INITIAL FAVORITES RENDER
+   ========================================================= */
+
+renderFavorites();
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+  /* Ctrl/Cmd + K = search */
+
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){
+
     e.preventDefault();
-    document.getElementById("search").focus();
+
+    document.getElementById("globalSearch").focus();
+
   }
 
 });
 
 
-/* Initial render */
+/* =========================================================
+   MAKE DASHBOARD PROGRESS ANIMATED
+   ========================================================= */
 
-renderAuthors();
+setTimeout(()=>{
+
+  const bar=
+    document.getElementById("progressBar");
+
+  if(bar)
+    bar.style.width=state.progress+"%";
+
+},500);
 
 </script>
 
